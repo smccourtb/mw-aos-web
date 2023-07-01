@@ -1,11 +1,11 @@
 import '@/styles/global.css';
 
-import { Inter } from '@next/font/google';
+// import { Inter } from '@next/font/google';
 
 import Landing from '@/components/Landing';
 import { userSession } from '@/firebase/serverUserSessionUtils';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export default async function RootLayout({
   children,

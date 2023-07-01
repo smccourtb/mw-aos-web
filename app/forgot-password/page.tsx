@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
-import { sendPasswordResetEmail } from '../../firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 

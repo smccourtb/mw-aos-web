@@ -5,7 +5,7 @@ import {
   signInWithEmailAndPassword,
   verifyPasswordResetCode,
 } from '@firebase/auth';
-import type { User } from '../../firebase/auth';
+import type { User } from 'firebase/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
