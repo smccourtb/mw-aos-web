@@ -1,0 +1,136 @@
+/*ROBOTO*/
+
+/* Webfont: Roboto-Regular */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/roboto-regular.woff2') format('woff2');
+  text-rendering: optimizeLegibility;
+}
+
+/* Webfont: RobotoItalic */
+@font-face {
+  font-family: 'RobotoItalic';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/roboto-italic.woff2') format('woff2');
+  text-rendering: optimizeLegibility;
+}
+
+/* Webfont: Roboto-Bold */
+@font-face {
+  font-family: 'RobotoBold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/roboto-500.woff2') format('woff2');
+  text-rendering: optimizeLegibility;
+}
+
+/* Webfont: Roboto-Bold-Italic */
+@font-face {
+  font-family: 'RobotoBoldItalic';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/roboto-500-italic.woff2') format('woff2');
+  text-rendering: optimizeLegibility;
+}
+
+/* Webfont: Roboto-Mono */
+@font-face {
+  font-family: 'RobotoMono';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/roboto-mono-regular.woff2') format('woff2');
+  text-rendering: optimizeLegibility;
+}
+
+/* Webfont: Roboto-Mono-Bold */
+@font-face {
+  font-family: 'RobotoMonoBold';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/roboto-mono-500.woff2') format('woff2');
+  text-rendering: optimizeLegibility;
+}
+
+/*MINION PRO*/
+
+@font-face {
+  font-family: 'Minion Pro Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Regular'), url('fonts/MinionPro-Regular.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Italic'), url('fonts/MinionPro-It.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Medium';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Medium'), url('fonts/MinionPro-Medium.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Medium Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Medium Italic'), url('fonts/MinionPro-MediumIt.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Semibold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Semibold'), url('fonts/MinionPro-Semibold.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Semibold Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Semibold Italic'), url('fonts/MinionPro-SemiboldIt.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Bold Condensed';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Bold Condensed'), url('fonts/MinionPro-BoldCn.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Bold';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Bold'), url('fonts/MinionPro-Bold.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Bold Condensed Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Bold Condensed Italic'), url('fonts/MinionPro-BoldCnIt.woff') format('woff');
+}
+
+
+@font-face {
+  font-family: 'Minion Pro Bold Italic';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Minion Pro Bold Italic'), url('fonts/MinionPro-BoldIt.woff') format('woff');
+}
