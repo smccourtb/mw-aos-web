@@ -28,6 +28,10 @@ export const isUserSubscriber = async (
   return !!succeeded;
 };
 
+export const isUserAdmin = async (user_uid: string | undefined) => {
+  return user_uid === process.env.MY_UID;
+};
+
 export const userSession = async () => {
   const nextCookies = cookies();
   if (!nextCookies.has(tokenName)) {
@@ -43,6 +47,10 @@ export const userSession = async () => {
 
   if (authData) {
     const isSubscriber = await isUserSubscriber(authData.uid);
+    const isAdmin = await isUserAdmin(authData.uid);
+
+    isAdmin &&
+      (await getAuth().setCustomUserClaims(authData.uid, { admin: true }));
     if (isSubscriber) {
       await getAuth().setCustomUserClaims(authData.uid, { subscriber: true });
     }
