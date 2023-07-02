@@ -32,8 +32,6 @@ export default function Page() {
           return res.json();
         })
         .then((data) => {
-          console.log('data', data);
-
           const { choices } = data;
           addMessage('assistant', choices[0].message.content);
           setIsLoading(false);

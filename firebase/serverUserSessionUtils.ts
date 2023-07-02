@@ -46,14 +46,14 @@ export const userSession = async () => {
     .catch(() => null);
 
   if (authData) {
-    const isSubscriber = await isUserSubscriber(authData.uid);
+    // const isSubscriber = await isUserSubscriber(authData.uid);
     const isAdmin = await isUserAdmin(authData.uid);
 
     isAdmin &&
       (await getAuth().setCustomUserClaims(authData.uid, { admin: true }));
-    if (isSubscriber) {
-      await getAuth().setCustomUserClaims(authData.uid, { subscriber: true });
-    }
+    // if (isSubscriber) {
+    //   await getAuth().setCustomUserClaims(authData.uid, { subscriber: true });
+    // }
   }
 
   return authData;
