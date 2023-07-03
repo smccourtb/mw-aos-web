@@ -22,5 +22,8 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@headlessui/tailwindcss')({ prefix: 'ui' }), // the prefix is customizable
+  ],
 };
