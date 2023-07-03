@@ -1,10 +1,10 @@
 'use client';
 import React, { useState } from 'react';
-import TextInput from '@/components/inputs/TextInput';
 import { Control, useForm } from 'react-hook-form';
 import { DocumentAddIcon, DocumentRemoveIcon } from '@heroicons/react/outline';
 import { sanitizeInput } from '@/utils/input-helpers';
 import AlertDatabaseError from '@/components/AlertDatabaseError';
+import Input from '@/components/inputs/Input';
 
 type AddKeywordProps = {
   keywords: { ref: string; name: string }[];
@@ -80,7 +80,7 @@ const FirestoreKeywordForm = ({ keywords }: AddKeywordProps) => {
   return (
     <>
       <div className="flex w-fit gap-4 pt-2 pb-5">
-        <TextInput
+        <Input
           control={control as Control<FormValues>}
           name="keyword"
           rules={{
