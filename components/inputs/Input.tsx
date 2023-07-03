@@ -1,7 +1,10 @@
 import React from 'react';
 import { useController, UseControllerProps } from 'react-hook-form';
 
-const TextInput = (props: UseControllerProps<any>) => {
+type InputProps = {
+  type?: string;
+};
+const Input = (props: UseControllerProps<any> & InputProps) => {
   const { field, fieldState } = useController(props);
   const label = props.name.charAt(0).toUpperCase() + props.name.slice(1);
   return (
@@ -9,10 +12,10 @@ const TextInput = (props: UseControllerProps<any>) => {
       <input
         {...field}
         placeholder={label}
-        type="text"
+        type={props.type || 'text'}
         className="peer rounded-md focus:outline-none"
       />
-      <div className="peer-placeholder-show:text-gray-400 absolute -translate-y-2.5 translate-x-3 bg-white px-1 text-sm font-medium text-blue-700 opacity-100 transition-all peer-placeholder-shown:translate-y-1 peer-placeholder-shown:opacity-0">
+      <div className="peer-placeholder-show:text-gray-400 pointer-events-none absolute -translate-y-2.5 translate-x-3 select-none bg-white px-1 text-sm font-medium text-blue-700 opacity-100 transition-all peer-placeholder-shown:translate-y-1 peer-placeholder-shown:opacity-0">
         <label>{label}</label>
       </div>
 
@@ -23,4 +26,4 @@ const TextInput = (props: UseControllerProps<any>) => {
   );
 };
 
-export default TextInput;
+export default Input;
