@@ -5,7 +5,7 @@ export const getFactions = async () => {
   const response = await db.collection('factions').get();
   if (response.empty) {
     console.log('No matching documents.');
-    return null;
+    return [];
   }
   const factions: FirestoreBaseData[] = [];
   response.forEach((doc) => {
@@ -13,6 +13,5 @@ export const getFactions = async () => {
     factions.push({ ref: `/factions/${doc.id}`, name });
   });
 
-  const names = factions.map((faction) => faction.name);
-  return { names, factions };
+  return factions;
 };
