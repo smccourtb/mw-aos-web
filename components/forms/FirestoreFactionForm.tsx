@@ -84,6 +84,7 @@ const FirestoreFactionForm = ({ factions }: FirestoreFactionFormProps) => {
         <Input
           control={control as Control<FormValues>}
           name="faction"
+          label="Faction"
           rules={{
             required: true,
             minLength: 4,

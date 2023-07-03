@@ -83,6 +83,7 @@ const FirestoreKeywordForm = ({ keywords }: AddKeywordProps) => {
         <Input
           control={control as Control<FormValues>}
           name="keyword"
+          label={'Keyword'}
           rules={{
             required: true,
             minLength: 4,
