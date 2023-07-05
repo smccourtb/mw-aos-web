@@ -61,7 +61,7 @@ export default function Page() {
         </article>
 
         <div className="flex flex-col items-center justify-center gap-6 self-center p-10">
-          {isAdmin && <Link href={'/firestore'}>Firestore</Link>}
+          {isAdmin && user && <Link href={'/firestore'}>Firestore</Link>}
         </div>
 
         <div className="mt-10 flex flex-col gap-4 text-center text-sm text-neutral-400">
