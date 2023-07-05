@@ -10,15 +10,15 @@ import { clientAuth } from '@/firebase/clientFirebaseApps';
 export default function Page() {
   const user = useContext(AuthContext);
 
-  const [isSubscriber, setIsSubscriber] = useState<boolean>();
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  // const [isSubscriber, setIsSubscriber] = useState<boolean>();
+  // const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState(false);
 
   clientAuth.onAuthStateChanged(async (authData) => {
     authData?.getIdTokenResult(true).then((idTokenResult) => {
-      setIsSubscriber(!!idTokenResult?.claims?.subscriber);
+      // setIsSubscriber(!!idTokenResult?.claims?.subscriber);
       setIsAdmin(!!idTokenResult?.claims?.admin);
-      setIsLoading(false);
+      // setIsLoading(false);
     });
   });
 
@@ -60,7 +60,7 @@ export default function Page() {
           </div>
         </article>
 
-        <div className="flex flex-col items-center justify-center gap-6 p-10 self-center">
+        <div className="flex flex-col items-center justify-center gap-6 self-center p-10">
           {isAdmin && <Link href={'/firestore'}>Firestore</Link>}
         </div>
 
