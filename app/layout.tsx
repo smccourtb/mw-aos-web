@@ -16,7 +16,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head />
-      <body className={`bg-white`}>
+      <body className={`w-screen bg-white`}>
         <Landing user={userData}>{children}</Landing>
       </body>
     </html>
