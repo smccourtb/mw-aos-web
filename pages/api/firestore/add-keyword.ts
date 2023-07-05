@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 const addKeyword = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    console.log('response', req.body);
     await db.collection('keywords').add({ name: req.body });
     return res.status(200).json({ message: 'success' });
   } catch (error) {
