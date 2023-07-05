@@ -8,7 +8,10 @@ export type FirestoreUnit = {
   factionRef: string;
   ref: string;
   keywords: { name: string; ref: string }[];
-  baseSize: { width: number; length: number; measurement: string }[];
+  baseSize: {
+    width: number;
+    length: number;
+  };
   baseStats: {
     wounds: number;
     move: number;
@@ -26,12 +29,14 @@ export type FirestoreUnit = {
   points: number;
   weapons: {
     name: string;
-    type: 'ranged' | 'melee';
+    type: 'missile' | 'melee';
     stats: {
-      value: number;
+      value: number | null;
       name: string;
-      unit: string | null;
-      damageTable: [{ name: string; damageValues: number[]; move: number }];
+      damageTable: {
+        damageValues: number[];
+        moveValues: number[];
+      } | null;
     }[];
     choice: boolean;
   }[];
@@ -56,4 +61,14 @@ export type FirestoreUnit = {
     };
   };
   canFly: boolean;
+  specialAttack: {
+    name: string;
+    targetCondition: string; // 'range',
+    dicePerCondition: number | null; // account for target unit role ex. 'monsters' keyword gets 5 dice
+    rollThreshold: number;
+    range: number;
+    mortalWounds: boolean;
+    damage: number; // 'models in unit', 'roll result'
+    canModify: boolean;
+  };
 };
