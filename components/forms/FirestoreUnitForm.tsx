@@ -80,24 +80,8 @@ const FirestoreUnitForm = ({ factions }: FirestoreUnitFormProps) => {
   const handleAdd = async (data: FormValues) => {
     console.log('data', data);
 
-    // call api to add faction to database
-    // const response = await fetch('/api/firestore/add-unit', {
-    //   method: 'POST',
-    //   body: '',
-    // });
-    // // if api call fails, alert user
-    // if (!response.ok) {
-    //   setSubmissionFailed(true);
-    // }
-    reset();
-  };
-
-  const handleDelete = async (data: FormValues) => {
-    const sanitizedFaction = sanitizeInput(data.faction);
-    // get the ref of the faction to be deleted
-
-    // call api to delete faction from database
-    const response = await fetch('/api/firestore/delete-unit', {
+    // call api to add unit to database
+    const response = await fetch('/api/firestore/add-unit', {
       method: 'POST',
       body: '',
     });
