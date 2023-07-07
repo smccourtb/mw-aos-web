@@ -1,0 +1,30 @@
+{
+  "name": "Skink Starpriest",
+  "points": 130,
+  "role": ["leader"],
+  "faction": "seraphon",
+  "baseStats": {
+    "move": 8,
+    "wounds": 5,
+    "save": 5,
+    "bravery": 6
+  },
+  "isUnique": false,
+  "unitSize": 1,
+  "keywords": ["order", "seraphon", "skink", "hero", "wizard", "starpriest"],
+  "weapons": [
+    {
+      "name": "Serpent Staff",
+      "type": "missile",
+      "range": 2,
+      "attacks": 2,
+      "toHit": 4,
+      "toWound": 3,
+      "rend": -1,
+      "damage": "D3",
+      "choice": false
+    }
+  ],
+  "canFly": false,
+  "isWizard": true
+}

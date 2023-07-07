@@ -1,0 +1,30 @@
+{
+  "name": "Slann Starmaster",
+  "points": 275,
+  "role": ["leader"],
+  "faction": "seraphon",
+  "baseStats": {
+    "move": 5,
+    "wounds": 9,
+    "save": 4,
+    "bravery": 9
+  },
+  "isUnique": false,
+  "unitSize": 1,
+  "keywords": ["order", "seraphon", "skink", "hero", "wizard", "starpriest"],
+  "weapons": [
+    {
+      "name": "Azure Lightning",
+      "type": "melee",
+      "range": 3,
+      "attacks": 6,
+      "toHit": 3,
+      "toWound": 3,
+      "rend": -1,
+      "damage": 1,
+      "choice": false
+    }
+  ],
+  "canFly": true,
+  "isWizard": true
+}

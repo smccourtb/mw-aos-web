@@ -1,0 +1,52 @@
+{
+  "name": "Bastiladon",
+  "points": 265,
+  "role": ["behemoth"],
+  "faction": "seraphon",
+  "baseStats": {
+    "move": 5,
+    "wounds": 12,
+    "save": 2,
+    "bravery": 6
+  },
+  "isUnique": false,
+  "unitSize": 1,
+  "keywords": ["order", "seraphon", "monster", "bastiladon"],
+  "weapons": [
+    {
+      "name": "Solar Engine",
+      "type": "missile",
+      "range": 24,
+      "attacks": 3,
+      "toHit": 3,
+      "toWound": 3,
+      "rend": -3,
+      "damage": 3,
+      "choice": false
+    },
+    {
+      "name": "Meteoric Javelins",
+      "type": "missile",
+      "range": 8,
+      "attacks": 4,
+      "toHit": 4,
+      "toWound": 5,
+      "rend": -1,
+      "damage": 1,
+      "choice": false
+    },
+    {
+      "name": "Bludgeoning Tail",
+      "type": "melee",
+      "range": 2,
+      "attacks": 3,
+      "toHit": 3,
+      "toWound": 3,
+      "rend": -1,
+      "damage": "D3",
+      "choice": false
+    }
+  ],
+  "canFly": false,
+  "isWizard": false
+}
