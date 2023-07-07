@@ -13,3 +13,16 @@ body {
   @apply font-normal;
   @apply antialiased;
 }
+
+@layer components {
+  .button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem 2.5rem;
+    font-weight: bold;
+    border: 1px solid #00000080;
+    border-radius: 0.375rem;
+    width: fit-content;
+  }
+}
