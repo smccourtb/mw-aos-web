@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { seedEmulatedFirestore } from '@/components/firestore/seedEmulatedFirestore';
 
-const addFaction = async (_req: NextApiRequest, res: NextApiResponse) => {
+const seed = async (_req: NextApiRequest, res: NextApiResponse) => {
   try {
     await seedEmulatedFirestore();
     return res.status(200).json({ message: 'success' });
@@ -11,4 +11,4 @@ const addFaction = async (_req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default addFaction;
+export default seed;
