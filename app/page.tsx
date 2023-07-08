@@ -11,14 +11,13 @@ export default function Page() {
   const user = useContext(AuthContext);
 
   // const [isSubscriber, setIsSubscriber] = useState<boolean>();
-  // const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAdmin, setIsAdmin] = useState(false);
-
   clientAuth.onAuthStateChanged(async (authData) => {
     authData?.getIdTokenResult(true).then((idTokenResult) => {
       // setIsSubscriber(!!idTokenResult?.claims?.subscriber);
-      setIsAdmin(!!idTokenResult?.claims?.admin);
-      // setIsLoading(false);
+      setIsAdmin(idTokenResult?.claims?.firestoreUser.role === 0);
+      setIsLoading(false);
     });
   });
 
@@ -61,7 +60,7 @@ export default function Page() {
         </article>
 
         <div className="flex flex-col items-center justify-center gap-6 self-center p-10">
-          {isAdmin && user && <Link href={'/firestore'}>Firestore</Link>}
+          {isAdmin && <Link href={'/firestore'}>Firestore</Link>}
         </div>
 
         <div className="mt-10 flex flex-col gap-4 text-center text-sm text-neutral-400">

@@ -1,0 +1,72 @@
+{
+  "name": "Saurus Oldblood on Carnosaur",
+  "points": 285,
+  "role": ["leader", "behemoth"],
+  "faction": "seraphon",
+  "baseStats": {
+    "move": null,
+    "wounds": 15,
+    "save": 4,
+    "bravery": 8
+  },
+  "isUnique": true,
+  "unitSize": 1,
+  "keywords": [
+    "order",
+    "seraphon",
+    "saurus",
+    "hero",
+    "monster",
+    "carnosaur",
+    "oldblood"
+  ],
+  "weapons": [
+    {
+      "name": "Sunbolt Gauntlet",
+      "type": "missile",
+      "range": 18,
+      "attacks": "D6",
+      "toHit": 3,
+      "toWound": 3,
+      "rend": -1,
+      "damage": 1,
+      "choice": false
+    },
+    {
+      "name": "Relic Celestite Weapon",
+      "type": "melee",
+      "range": 2,
+      "attacks": 5,
+      "toHit": 3,
+      "toWound": 3,
+      "rend": -1,
+      "damage": 2,
+      "choice": false
+    },
+    {
+      "name": "Clawed Forelimbs",
+      "type": "melee",
+      "range": 2,
+      "attacks": 2,
+      "toHit": null,
+      "toWound": 3,
+      "rend": -1,
+      "damage": 2,
+      "choice": false
+    },
+    {
+      "name": "Massive Jaws",
+      "type": "melee",
+      "range": 2,
+      "attacks": 3,
+      "toHit": 4,
+      "toWound": 3,
+      "rend": -2,
+      "damage": null,
+      "choice": false
+    }
+  ],
+  "damageTable": [],
+  "canFly": false,
+  "isWizard": false
+}

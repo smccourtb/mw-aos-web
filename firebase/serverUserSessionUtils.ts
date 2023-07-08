@@ -28,8 +28,23 @@ export const isUserSubscriber = async (
   return !!succeeded;
 };
 
-export const isUserAdmin = async (user_uid: string | undefined) => {
-  return user_uid === process.env.MY_UID;
+export const getOrCreateFirestoreUser = async (uid: string | undefined) => {
+  if (!uid) return null;
+
+  const firestoreUser = await db.collection('users').doc(uid).get();
+
+  if (!firestoreUser.exists) {
+    const user = {
+      games: [],
+      userName: '',
+      role: 1,
+    };
+
+    await db.collection('users').doc(uid).set(user);
+    return user;
+  }
+
+  return firestoreUser.data();
 };
 
 export const userSession = async () => {
@@ -46,11 +61,9 @@ export const userSession = async () => {
     .catch(() => null);
 
   if (authData) {
+    const firestoreUser = await getOrCreateFirestoreUser(authData.uid);
+    await getAuth().setCustomUserClaims(authData.uid, { firestoreUser });
     // const isSubscriber = await isUserSubscriber(authData.uid);
-    const isAdmin = await isUserAdmin(authData.uid);
-
-    isAdmin &&
-      (await getAuth().setCustomUserClaims(authData.uid, { admin: true }));
     // if (isSubscriber) {
     //   await getAuth().setCustomUserClaims(authData.uid, { subscriber: true });
     // }

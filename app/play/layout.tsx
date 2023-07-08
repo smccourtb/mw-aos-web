@@ -11,8 +11,7 @@ export default async function FirebaseLayout({
   children: React.ReactNode;
 }) {
   const userData = await userSession();
-
-  if (!userData || userData?.firestoreUser.role !== 0) {
+  if (!userData) {
     redirect('/');
   }
 

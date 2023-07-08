@@ -1,0 +1,63 @@
+{
+  "name": "Terradon Riders",
+  "points": 120,
+  "role": [],
+  "faction": "seraphon",
+  "baseStats": {
+    "move": 16,
+    "wounds": 3,
+    "save": 6,
+    "bravery": 5
+  },
+  "unitSize": 3,
+  "isUnique": false,
+  "keywords": ["order", "seraphon", "skin", "terradon", "terradon riders"],
+  "weapons": [
+    {
+      "name": "Starstrike Javelin",
+      "type": "missile",
+      "range": 12,
+      "attacks": 2,
+      "toHit": 4,
+      "toWound": 3,
+      "rend": -1,
+      "damage": 1,
+      "choice": true
+    },
+    {
+      "name": "Sunleech Bolas",
+      "type": "missile",
+      "range": 6,
+      "attacks": 4,
+      "toHit": 4,
+      "toWound": 4,
+      "rend": 0,
+      "damage": 1,
+      "choice": true
+    },
+    {
+      "name": "Razor-sharp Jaws",
+      "type": "melee",
+      "range": 1,
+      "attacks": 4,
+      "toHit": 4,
+      "toWound": 4,
+      "rend": 0,
+      "damage": 1,
+      "choice": false
+    }
+  ],
+  "specialModels": [
+    {
+      "name": "Champion",
+      "amount": 1,
+      "effect": {
+        "modStat": "attacks",
+        "modAmount": 1,
+        "target": ["Sunleech Bolas", "Starstrike Javelin"]
+      }
+    }
+  ],
+  "canFly": true,
+  "isWizard": false
+}
