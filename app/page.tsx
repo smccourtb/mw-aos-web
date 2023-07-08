@@ -31,12 +31,12 @@ export default function Page() {
         <article className="flex flex-col items-center justify-center gap-6 p-10">
           <div
             className="
+            text-center
             text-3xl
             font-normal
-            text-black
-            lg:text-4xl"
+            text-black lg:text-4xl"
           >
-            Start a{' '}
+            <p>Start and play a</p>
             <TypeAnimation
               className="type block font-extrabold sm:inline"
               sequence={[
