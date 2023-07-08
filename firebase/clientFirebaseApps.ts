@@ -12,8 +12,7 @@ function shouldConnectAuthEmulator(): boolean {
 }
 
 function getAuthEmulatorHost(): string {
-  // You'd read this from config/environment variable/etc.
-  return `http://${process.env.FIREBASE_AUTH_EMULATOR_HOST}` as string;
+  return process.env.NEXT_PUBLIC_AUTH_EMULATOR_HOST as string;
 }
 
 if (shouldConnectAuthEmulator()) {
