@@ -3,7 +3,10 @@ import { seedEmulatedFirestore } from '@/components/firestore/seedEmulatedFirest
 
 const seed = async (_req: NextApiRequest, res: NextApiResponse) => {
   try {
-    await seedEmulatedFirestore();
+    const seed = await seedEmulatedFirestore();
+    if (!seed) {
+      return res.status(200).json({ message: 'already seeded' });
+    }
     return res.status(200).json({ message: 'success' });
   } catch (error) {
     console.log('error', error);

@@ -6,23 +6,21 @@ import { TypeAnimation } from 'react-type-animation';
 import LandingHeader from '@/components/header/LandingHeader';
 import AuthContext from '@/context/AuthContext';
 import { clientAuth } from '@/firebase/clientFirebaseApps';
+import SeedEmulatedFirestoreButton from '@/components/buttons/SeedEmulatedFirestoreButton';
 
 export default function Page() {
   const user = useContext(AuthContext);
-
   // const [isSubscriber, setIsSubscriber] = useState<boolean>();
   const [isAdmin, setIsAdmin] = useState(false);
   React.useEffect(() => {
-    const unsubscribe = clientAuth?.onAuthStateChanged(async (authData) => {
+    const unsubscribe = clientAuth.onAuthStateChanged(async (authData) => {
       authData?.getIdTokenResult(true).then((idTokenResult) => {
         // setIsSubscriber(!!idTokenResult?.claims?.subscriber);
         setIsAdmin(idTokenResult?.claims?.firestoreUser.role === 0);
       });
     });
-    return () => unsubscribe && unsubscribe();
+    return () => unsubscribe();
   }, [user]);
-
-  console.log('user', user);
 
   return (
     <AuthContext.Provider value={user}>
@@ -66,13 +64,9 @@ export default function Page() {
           {user && isAdmin && <Link href={'/firestore'}>Firestore</Link>}
         </div>
         {process.env.NODE_ENV === 'development' && (
-          <button
-            onClick={async () => {
-              await fetch('/api/firestore/seed');
-            }}
-          >
-            Seed Firestore
-          </button>
+          <div className="self-center">
+            <SeedEmulatedFirestoreButton />
+          </div>
         )}
 
         <div className="mt-10 flex flex-col gap-4 text-center text-sm text-neutral-400">

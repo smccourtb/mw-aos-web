@@ -3,6 +3,11 @@ import { db } from '@/firebase/serverFirebaseApps';
 import { seraphon } from '@/mocks/factions/seraphon';
 
 export const seedEmulatedFirestore = async () => {
+  const seedRef = await db.collection('seeded').get();
+  if (!seedRef.empty) {
+    return false;
+  }
+  await db.collection('seeded').doc().set({ seeded: true });
   return await setUpFactions();
 };
 
