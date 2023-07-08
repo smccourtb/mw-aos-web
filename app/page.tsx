@@ -24,7 +24,7 @@ export default function Page() {
 
   return (
     <AuthContext.Provider value={user}>
-      <div className="flex flex-col">
+      <div className="flex h-screen flex-col">
         <LandingHeader />
         <article className="flex flex-col items-center justify-center gap-6 p-10">
           <div
@@ -68,8 +68,13 @@ export default function Page() {
             <SeedEmulatedFirestoreButton />
           </div>
         )}
+        <div className={'mt-4 self-center'}>
+          <Link className="button" href={'/play'}>
+            Play
+          </Link>
+        </div>
 
-        <div className="mt-10 flex flex-col gap-4 text-center text-sm text-neutral-400">
+        <div className="mt-auto flex flex-col gap-4 text-center text-sm text-neutral-400">
           <p>Copyright © {new Date().getFullYear()}</p>
         </div>
       </div>
