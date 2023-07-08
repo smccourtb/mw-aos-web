@@ -1,28 +1,27 @@
 import { db } from '@/firebase/serverFirebaseApps';
 
-const bastiladon = require('../../mocks/units/bastiladon.json');
-const carnosaur = require('../../mocks/units/saurusOldbloodOnCarnosaur.json');
-const saurusWarriors = require('../../mocks/units/saurusWarrior.json');
-const terradon = require('../../mocks/units/terradonRider.json');
-const ripperdactyl = require('../../mocks/units/ripperdactylRider.json');
-const starpriest = require('../../mocks/units/skinkStarpriest.json');
-const slannStarmaster = require('../../mocks/units/slannStarmaster.json');
+import { seraphon } from '@/mocks/factions/seraphon';
 
 export const seedEmulatedFirestore = async () => {
-  const collection = 'units';
+  return await setUpFactions();
+};
+
+const setUpFactions = async () => {
+  const collection = 'factions';
+  const factions = [seraphon];
   const batch = db.batch();
-  const units = [
-    bastiladon,
-    carnosaur,
-    saurusWarriors,
-    terradon,
-    ripperdactyl,
-    starpriest,
-    slannStarmaster,
-  ];
-  units.forEach((unit) => {
+  await factions.forEach((faction) => {
     const docRef = db.collection(collection).doc();
-    batch.set(docRef, unit);
+    const unitsRef = docRef.collection('units');
+    const { name, units } = faction;
+    console.log('name', name);
+
+    units.forEach((unit) => {
+      const unitRef = unitsRef.doc();
+      batch.set(unitRef, unit);
+    });
+    batch.set(docRef, { name });
   });
+
   await batch.commit();
 };
