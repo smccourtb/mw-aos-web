@@ -17,8 +17,14 @@ type FormValues = {
   };
 };
 
-type NewGameFormProps = {};
-const NewGameForm = ({}: NewGameFormProps) => {
+type NewGameFormProps = {
+  armyBuilderData: {
+    factions: string[];
+    units: { [K in FactionName]: Unit[] };
+  };
+};
+
+const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
   const [openModal, setOpenModal] = React.useState(false);
   const defaultValues = {
     type: 'Matched Play',
