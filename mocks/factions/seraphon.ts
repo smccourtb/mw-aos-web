@@ -12,7 +12,6 @@ export const seraphon = {
     bastiladon,
     carnosaur,
     saurusWarriors,
-    saurusWarriors,
     terradon,
     ripperdactyl,
     starpriest,
