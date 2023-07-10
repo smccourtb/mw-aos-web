@@ -18,7 +18,7 @@ export interface Unit {
   role: RoleName[];
   points: number;
   weapons: UnitWeapon[];
-  equipOptions?: string[][];
+  equipOptions?: { id: string; weapons: string[] }[];
   specialModels: {
     name: SpecialUnitNames;
     amount: number;
