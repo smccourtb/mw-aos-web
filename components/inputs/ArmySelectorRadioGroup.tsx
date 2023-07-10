@@ -4,11 +4,11 @@ import { CheckCircleIcon } from '@heroicons/react/solid';
 import { useController, UseControllerProps } from 'react-hook-form';
 
 type ArmySelectorRadioGroupProps = {
-  openModal: React.Dispatch<React.SetStateAction<boolean>>;
   options: {
     id: string;
     name: string;
     faction: string;
+    points: number;
   }[];
   label?: string;
 };
@@ -75,9 +75,6 @@ const ArmySelectorRadioGroup = (
               )}
             </RadioGroup.Option>
           ))}
-          <button onClick={() => props.openModal(true)}>
-            Create a new army
-          </button>
         </div>
       </RadioGroup>
     </div>
