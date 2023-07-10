@@ -46,6 +46,7 @@ const ArmyBuilderModal = ({
                   factionNames={data.factions}
                   units={data.units}
                   pointLimit={pointLimit}
+                  closeModal={closeModal}
                 />
               </Dialog.Panel>
             </Transition.Child>
