@@ -68,10 +68,12 @@ export interface Unit {
   };
 }
 
-export interface PlayerArmyUnit extends Unit {
+type ExcludedUnitProperties = 'weapons' | 'equipOptions' | 'specialModels';
+
+export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
   isGeneral: boolean;
-  equippedWeapons: UnitWeapon[];
   equippedSpecialModels: SpecialUnitModel[];
+  weapons: Omit<UnitWeapon, 'choice'>[];
 }
 
 export type SpecialUnitModel = {
