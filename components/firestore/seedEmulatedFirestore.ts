@@ -19,7 +19,6 @@ const setUpFactions = async () => {
     const docRef = db.collection(collection).doc();
     const unitsRef = docRef.collection('units');
     const { name, units } = faction;
-    console.log('name', name);
 
     units.forEach((unit) => {
       const unitRef = unitsRef.doc();
