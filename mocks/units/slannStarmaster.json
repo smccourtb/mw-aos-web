@@ -16,12 +16,44 @@
     {
       "name": "Azure Lightning",
       "type": "melee",
-      "range": 3,
-      "attacks": 6,
-      "toHit": 3,
-      "toWound": 3,
-      "rend": -1,
-      "damage": 1,
+      "stats": [
+        {
+          "range": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "6",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "-1",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "1",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": false
     }
   ],

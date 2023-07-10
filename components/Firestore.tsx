@@ -2,11 +2,11 @@
 import { Tab } from '@headlessui/react';
 import React from 'react';
 import FirestoreKeywordForm from '@/components/forms/FirestoreKeywordForm';
-import { FirestoreBaseData } from '@/components/firestore/types';
 import FirestoreFactionForm from '@/components/forms/FirestoreFactionForm';
 import FirestoreUnitForm from '@/components/forms/FirestoreUnitForm';
+import { Faction } from '@/components/firestore/types';
 type FirestoreProps = {
-  data: { keywords: FirestoreBaseData[]; factions: FirestoreBaseData[] };
+  data: { keywords: { name: string; ref: string }[]; factions: Faction[] };
 };
 const Firestore = ({ data }: FirestoreProps) => {
   const tabNames = ['Parent Collection', 'Unit'];

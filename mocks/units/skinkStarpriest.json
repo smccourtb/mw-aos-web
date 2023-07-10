@@ -16,12 +16,44 @@
     {
       "name": "Serpent Staff",
       "type": "missile",
-      "range": 2,
-      "attacks": 2,
-      "toHit": 4,
-      "toWound": 3,
-      "rend": -1,
-      "damage": "D3",
+      "stats": [
+        {
+          "range": {
+            "value": "2",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "2",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "-1",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "D3",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": false
     }
   ],

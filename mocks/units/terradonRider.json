@@ -1,49 +1,155 @@
 {
-  "name": "Terradon Riders",
-  "points": 120,
-  "role": [],
   "faction": "seraphon",
+  "name": "Terradon Riders",
+  "keywords": ["order", "seraphon", "skin", "terradon", "terradon riders"],
   "baseStats": {
     "move": 16,
     "wounds": 3,
     "save": 6,
     "bravery": 5
   },
-  "unitSize": 3,
   "isUnique": false,
-  "keywords": ["order", "seraphon", "skin", "terradon", "terradon riders"],
+  "unitSize": 3,
+  "role": [],
+  "points": 120,
+  "equipOptions": [
+    {
+      "id": "0",
+      "weapons": ["Sunleech Bolas"]
+    },
+    {
+      "id": "1",
+      "weapons": ["Starstrike Javelin"]
+    }
+  ],
   "weapons": [
     {
       "name": "Starstrike Javelin",
       "type": "missile",
-      "range": 12,
-      "attacks": 2,
-      "toHit": 4,
-      "toWound": 3,
-      "rend": -1,
-      "damage": 1,
+      "stats": [
+        {
+          "range": {
+            "value": "12",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "2",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "-1",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "1",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": true
     },
     {
       "name": "Sunleech Bolas",
       "type": "missile",
-      "range": 6,
-      "attacks": 4,
-      "toHit": 4,
-      "toWound": 4,
-      "rend": 0,
-      "damage": 1,
+      "stats": [
+        {
+          "range": {
+            "value": "12",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "6",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "0",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "1",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": true
     },
     {
       "name": "Razor-sharp Jaws",
       "type": "melee",
-      "range": 1,
-      "attacks": 4,
-      "toHit": 4,
-      "toWound": 4,
-      "rend": 0,
-      "damage": 1,
+      "stats": [
+        {
+          "range": {
+            "value": "12",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "1",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "0",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "1",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": false
     }
   ],

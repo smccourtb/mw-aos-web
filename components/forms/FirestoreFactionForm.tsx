@@ -4,11 +4,11 @@ import { Control, useForm } from 'react-hook-form';
 import { DocumentAddIcon, DocumentRemoveIcon } from '@heroicons/react/outline';
 import { sanitizeInput } from '@/utils/input-helpers';
 import AlertDatabaseError from '@/components/AlertDatabaseError';
-import { FirestoreBaseData } from '@/components/firestore/types';
 import Input from '@/components/inputs/Input';
+import { Faction } from '@/components/firestore/types';
 
 type FirestoreFactionFormProps = {
-  factions: FirestoreBaseData[];
+  factions: Faction[];
 };
 
 type FormValues = {

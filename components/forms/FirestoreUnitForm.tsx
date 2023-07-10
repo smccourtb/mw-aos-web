@@ -1,15 +1,14 @@
 'use client';
 import React, { useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
-import { sanitizeInput } from '@/utils/input-helpers';
 import AlertDatabaseError from '@/components/AlertDatabaseError';
-import { FirestoreBaseData } from '@/components/firestore/types';
 import Select from '@/components/inputs/Select';
 import Input from '@/components/inputs/Input';
 import InputArray from '@/components/forms/InputArray';
+import { Faction } from '@/components/firestore/types';
 
 type FirestoreUnitFormProps = {
-  factions: FirestoreBaseData[];
+  factions: Faction[];
 };
 
 type FormValues = {

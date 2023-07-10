@@ -22,23 +22,87 @@
     {
       "name": "Moonstone Warspear",
       "type": "melee",
-      "range": 2,
-      "attacks": 2,
-      "toHit": 4,
-      "toWound": 4,
-      "rend": 0,
-      "damage": 1,
+      "stats": [
+        {
+          "range": {
+            "value": "2",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "2",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "0",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "1",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": false
     },
     {
       "name": "Tearing Jaws",
       "type": "melee",
-      "range": 1,
-      "attacks": 3,
-      "toHit": 4,
-      "toWound": 3,
-      "rend": -1,
-      "damage": 2,
+      "stats": [
+        {
+          "range": {
+            "value": "1",
+            "damageTable": null
+          }
+        },
+        {
+          "attacks": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "to hit": {
+            "value": "4",
+            "damageTable": null
+          }
+        },
+        {
+          "to wound": {
+            "value": "3",
+            "damageTable": null
+          }
+        },
+        {
+          "rend": {
+            "value": "-1",
+            "damageTable": null
+          }
+        },
+        {
+          "damage": {
+            "value": "2",
+            "damageTable": null
+          }
+        }
+      ],
       "choice": false
     }
   ],
