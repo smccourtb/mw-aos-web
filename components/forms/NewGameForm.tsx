@@ -3,6 +3,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
+import { FactionName, Unit } from '@/components/firestore/types';
+import ArmyBuilderModal from '@/app/modals/ArmyBuilderModal';
 
 type FormValues = {
   type: string;
@@ -44,6 +46,7 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
     defaultValues,
   });
   const watchType = watch('type');
+  const points = watch('points');
   return (
     <>
       <div className="grid w-full grid-cols-2 gap-4">
@@ -73,8 +76,10 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
             options={[]}
             label="Army"
             name="army"
-            openModal={setOpenModal}
           />
+          <button className="button" onClick={() => setOpenModal(true)}>
+            Build Army
+          </button>
         </div>
         <div className="flex flex-col items-center">
           <span className="self-end text-lg font-bold">Player 2</span>
@@ -83,7 +88,14 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
       <button className="button mt-auto mb-10" onClick={handleSubmit(onSubmit)}>
         Submit
       </button>
-      {openModal && <></>}
+      {openModal && (
+        <ArmyBuilderModal
+          isOpen={openModal}
+          closeModal={setOpenModal}
+          data={armyBuilderData}
+          pointLimit={Number(points) || null}
+        />
+      )}
     </>
   );
 };
