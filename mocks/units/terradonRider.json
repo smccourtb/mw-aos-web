@@ -12,6 +12,7 @@
   "unitSize": 3,
   "role": [],
   "points": 120,
+  "equipOptions": [["Sunleech Bolas"], ["Starstrike Javelin"]],
   "weapons": [
     {
       "name": "Starstrike Javelin",

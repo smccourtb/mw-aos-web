@@ -12,6 +12,7 @@
   "unitSize": 10,
   "isUnique": false,
   "keywords": ["order", "seraphon", "saurus", "saurus warriors"],
+  "equipOptions": [["Celestite Club"], ["Celestite Spear"]],
   "weapons": [
     {
       "name": "Celestite Club",

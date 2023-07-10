@@ -3,7 +3,7 @@ export type Faction = {
   name: string;
 };
 
-export type Unit = {
+export interface Unit {
   faction: string;
   keywords: string[];
   name: string;
@@ -18,15 +18,16 @@ export type Unit = {
   role: RoleName[];
   points: number;
   weapons: UnitWeapon[];
+  equipOptions?: string[][];
   specialModels: {
-    name: string;
+    name: SpecialUnitNames;
     amount: number;
     effect: {
       modStat: string;
       modAmount: number;
       target: string[];
     };
-  };
+  }[];
   canFly: boolean;
   isWizard: boolean;
   isSingle: boolean;
@@ -65,10 +66,16 @@ export type Unit = {
     damage: number; // 'models in unit', 'roll result'
     canModify: boolean;
   };
-};
+}
+
+export interface PlayerArmyUnit extends Unit {
+  isGeneral: boolean;
+  equippedWeapons: UnitWeapon[];
+  equippedSpecialModels: SpecialUnitModel[];
+}
 
 export type SpecialUnitModel = {
-  name: string;
+  name: SpecialUnitNames;
   amount: number;
   effect: {
     modStat: string;
@@ -126,3 +133,4 @@ export type FactionName =
   | 'sons of behemat';
 
 export type RoleName = 'battleline' | 'leader' | 'behemoth' | 'artillery';
+export type SpecialUnitNames = 'champion' | 'standard bearer' | 'musician';
