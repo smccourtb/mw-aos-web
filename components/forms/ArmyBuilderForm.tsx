@@ -173,13 +173,20 @@ const ArmyBuilderForm = ({
   };
 
   const onSubmit = async (data: FormValues) => {
+    const { factionName, units } = data;
+    const army: PlayerArmy = {
+      factionName: factionName as FactionName,
+      units,
+      id: crypto.randomUUID(),
+    };
     if (currentPlayer === 1) {
       await fetch('/api/firestore/add-player-army', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(army),
       });
     }
-    setArmy((prevState) => [...prevState, data as PlayerArmy]);
+
+    setArmy((prevState) => [...prevState, army]);
     closeModal(false);
   };
 
@@ -193,6 +200,7 @@ const ArmyBuilderForm = ({
           placeholder="Choose your faction"
           name="factionName"
           control={control}
+          rules={{ required: true }}
           options={factionNames}
         />
       </div>

@@ -17,7 +17,7 @@ const addPlayerArmy = async (req: NextApiRequest, res: NextApiResponse) => {
       .doc(user.uid)
       .collection('armies')
       .doc()
-      .set({ ...data, id: crypto.randomUUID() });
+      .set(data);
     return res.status(200).json({ message: 'success' });
   } catch (error) {
     console.log('error', error);
