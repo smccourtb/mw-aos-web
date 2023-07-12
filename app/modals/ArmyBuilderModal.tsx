@@ -1,20 +1,32 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import ArmyBuilderForm from '@/components/forms/ArmyBuilderForm';
-import { FactionName, Unit } from '@/components/firestore/types';
+import { FactionName, PlayerArmy, Unit } from '@/components/firestore/types';
 
 type ArmyBuilderModalProps = {
   isOpen: boolean;
   closeModal: React.Dispatch<React.SetStateAction<boolean>>;
-  pointLimit: number | null;
-  data: { factions: string[]; units: { [K in FactionName]: Unit[] } };
+  data: {
+    armyData: {
+      factions: string[];
+      units: {
+        [K in FactionName]: Unit[];
+      };
+    };
+    pointLimit: number | null;
+  };
+  setArmies: {
+    setArmy: React.Dispatch<React.SetStateAction<PlayerArmy[]>>;
+    currentPlayer: 1 | 2;
+  };
 };
 const ArmyBuilderModal = ({
   isOpen,
   closeModal,
-  pointLimit,
   data,
+  setArmies,
 }: ArmyBuilderModalProps) => {
+  const { pointLimit, armyData } = data;
   return (
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -43,10 +55,11 @@ const ArmyBuilderModal = ({
             >
               <Dialog.Panel className="md:2/3 h-[700px] w-5/6 transform overflow-y-auto rounded-2xl bg-white p-6 align-middle shadow-xl transition-all">
                 <ArmyBuilderForm
-                  factionNames={data.factions}
-                  units={data.units}
+                  factionNames={armyData.factions}
+                  units={armyData.units}
                   pointLimit={pointLimit}
                   closeModal={closeModal}
+                  setArmies={setArmies}
                 />
               </Dialog.Panel>
             </Transition.Child>

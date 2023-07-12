@@ -1,9 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
-import { FactionName, Unit } from '@/components/firestore/types';
+import { FactionName, PlayerArmy, Unit } from '@/components/firestore/types';
 import ArmyBuilderModal from '@/app/modals/ArmyBuilderModal';
 
 type FormValues = {
@@ -24,10 +24,17 @@ type NewGameFormProps = {
     factions: string[];
     units: { [K in FactionName]: Unit[] };
   };
+  userArmies: PlayerArmy[];
 };
 
-const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
-  const [openModal, setOpenModal] = React.useState(false);
+const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
+  const [openModal, setOpenModal] = useState(false);
+  const [playerOneArmies, setPlayerOneArmies] =
+    useState<PlayerArmy[]>(userArmies);
+  const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
+  const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
+  // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
+
   const defaultValues = {
     type: 'Matched Play',
     points: null,
@@ -47,6 +54,7 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
   });
   const watchType = watch('type');
   const points = watch('points');
+
   return (
     <>
       <div className="grid w-full grid-cols-2 gap-4">
@@ -59,6 +67,8 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
             options={['Matched Play', 'Open Play', 'Narrative Play']}
           />
         </div>
+
+        {/*points*/}
         {watchType.includes('Matched') && (
           <div className="col-span-2">
             <MatchTypeSelection
@@ -69,22 +79,48 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
             />
           </div>
         )}
+        {/*player 1*/}
         <div className="flex flex-col items-center">
           <span className="self-start text-lg font-bold">Player 1</span>
           <ArmySelectorRadioGroup
             control={control}
-            options={[]}
+            options={playerOneArmies}
             label="Army"
-            name="army"
+            name="playerOne.army"
           />
-          <button className="button" onClick={() => setOpenModal(true)}>
+          <button
+            className="button"
+            onClick={() => {
+              setCurrentPlayer(1);
+              setOpenModal(true);
+            }}
+          >
             Build Army
           </button>
         </div>
+        {/*player 2*/}
         <div className="flex flex-col items-center">
           <span className="self-end text-lg font-bold">Player 2</span>
+          <div className="flex flex-col items-center">
+            <ArmySelectorRadioGroup
+              control={control}
+              options={playerTwoArmies}
+              label="Army"
+              name="playerTwo.army"
+            />
+            <button
+              className="button"
+              onClick={() => {
+                setCurrentPlayer(2);
+                setOpenModal(true);
+              }}
+            >
+              Build Army
+            </button>
+          </div>
         </div>
       </div>
+      {/*submit form*/}
       <button className="button mt-auto mb-10" onClick={handleSubmit(onSubmit)}>
         Submit
       </button>
@@ -92,8 +128,15 @@ const NewGameForm = ({ armyBuilderData }: NewGameFormProps) => {
         <ArmyBuilderModal
           isOpen={openModal}
           closeModal={setOpenModal}
-          data={armyBuilderData}
-          pointLimit={Number(points) || null}
+          setArmies={{
+            setArmy:
+              currentPlayer === 1 ? setPlayerOneArmies : setPlayerTwoArmies,
+            currentPlayer,
+          }}
+          data={{
+            armyData: armyBuilderData,
+            pointLimit: Number(points) || null,
+          }}
         />
       )}
     </>
