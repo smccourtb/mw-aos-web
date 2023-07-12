@@ -2,14 +2,10 @@ import { RadioGroup } from '@headlessui/react';
 import React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { useController, UseControllerProps } from 'react-hook-form';
+import type { PlayerArmy } from '@/components/firestore/types';
 
 type ArmySelectorRadioGroupProps = {
-  options: {
-    id: string;
-    name: string;
-    faction: string;
-    points: number;
-  }[];
+  options: PlayerArmy[];
   label?: string;
 };
 
@@ -20,9 +16,9 @@ const ArmySelectorRadioGroup = (
   const { value, onChange } = field;
 
   return (
-    <div className="mx-auto w-full max-w-md">
+    <div className="mx-auto mb-4 flex w-full max-w-md flex-col items-center">
       <RadioGroup value={value} onChange={onChange} by="id">
-        <RadioGroup.Label className="text-lg font-bold">
+        <RadioGroup.Label className="w-full self-center text-lg font-bold">
           {props?.label}
         </RadioGroup.Label>
         <div className="flex flex-col items-center justify-between">
@@ -46,14 +42,14 @@ const ArmySelectorRadioGroup = (
                 <>
                   <div className="flex w-full items-center justify-between">
                     <div className="flex items-center ">
-                      <div className="text-sm">
+                      <div className="flex select-none flex-col items-start gap-2 text-sm  ">
                         <RadioGroup.Label
                           as="p"
-                          className={`select-none font-medium ${
+                          className={`mr-4 font-medium capitalize ${
                             checked ? 'text-white' : 'text-gray-900'
                           } ${active ? 'text-sky-400' : 'text-gray-500'} `}
                         >
-                          {option.name}
+                          {option.factionName}
                         </RadioGroup.Label>
                         <RadioGroup.Description
                           as="span"
@@ -61,7 +57,12 @@ const ArmySelectorRadioGroup = (
                             checked ? 'text-sky-100' : 'text-gray-500'
                           }`}
                         >
-                          <span>{option.faction}</span>
+                          <span>
+                            {option.units.reduce(
+                              (acc, unit) => acc + unit.points,
+                              0,
+                            )}
+                          </span>
                         </RadioGroup.Description>
                       </div>
                     </div>

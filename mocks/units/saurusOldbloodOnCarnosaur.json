@@ -9,7 +9,7 @@
     "save": 4,
     "bravery": 8
   },
-  "isUnique": true,
+  "isUnique": false,
   "unitSize": 1,
   "keywords": [
     "order",

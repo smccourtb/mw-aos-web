@@ -5,6 +5,7 @@ import { Tab } from '@headlessui/react';
 import UnitCard from '@/components/forms/army-builder-form/UnitCard';
 import {
   FactionName,
+  PlayerArmy,
   PlayerArmyUnit,
   RoleName,
   Unit,
@@ -20,12 +21,17 @@ type ArmyBuilderFormProps = {
   factionNames: string[];
   units: { [K in FactionName]: Unit[] };
   closeModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setArmies: {
+    setArmy: React.Dispatch<React.SetStateAction<PlayerArmy[]>>;
+    currentPlayer: 1 | 2;
+  };
 };
 
 const ArmyBuilderForm = ({
   pointLimit,
   factionNames,
   units,
+  setArmies,
   closeModal,
 }: ArmyBuilderFormProps) => {
   const [pointValue, setPointValue] = useState(0);
@@ -37,6 +43,8 @@ const ArmyBuilderForm = ({
     behemoth: { count: 0, max: 4, min: null },
     artillery: { count: 0, max: 4, min: null },
   });
+
+  const { setArmy, currentPlayer } = setArmies;
 
   const defaultValues = {
     factionName: '',
@@ -165,11 +173,20 @@ const ArmyBuilderForm = ({
   };
 
   const onSubmit = async (data: FormValues) => {
-    console.log(data);
-    await fetch('/api/firestore/add-player-army', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    });
+    const { factionName, units } = data;
+    const army: PlayerArmy = {
+      factionName: factionName as FactionName,
+      units,
+      id: crypto.randomUUID(),
+    };
+    if (currentPlayer === 1) {
+      await fetch('/api/firestore/add-player-army', {
+        method: 'POST',
+        body: JSON.stringify(army),
+      });
+    }
+
+    setArmy((prevState) => [...prevState, army]);
     closeModal(false);
   };
 
@@ -183,6 +200,7 @@ const ArmyBuilderForm = ({
           placeholder="Choose your faction"
           name="factionName"
           control={control}
+          rules={{ required: true }}
           options={factionNames}
         />
       </div>

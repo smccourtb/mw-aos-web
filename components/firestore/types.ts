@@ -76,6 +76,12 @@ export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
   weapons: Omit<UnitWeapon, 'choice'>[];
 }
 
+export type PlayerArmy = {
+  id: string;
+  factionName: FactionName;
+  units: PlayerArmyUnit[];
+};
+
 export type SpecialUnitModel = {
   name: SpecialUnitNames;
   amount: number;
