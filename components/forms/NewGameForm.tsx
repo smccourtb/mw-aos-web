@@ -1,21 +1,21 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
 import { FactionName, PlayerArmy, Unit } from '@/components/firestore/types';
 import ArmyBuilderModal from '@/app/modals/ArmyBuilderModal';
+import AuthContext from '@/context/AuthContext';
+import { redirect } from 'next/navigation';
 
 type FormValues = {
   type: string;
   points: string | null;
   playerOne: {
     army: {} | null;
-    playerId: string;
   };
   playerTwo: {
     army: {} | null;
-    playerId: string;
   };
 };
 
@@ -28,27 +28,49 @@ type NewGameFormProps = {
 };
 
 const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
+  const user = useContext(AuthContext);
   const [openModal, setOpenModal] = useState(false);
   const [playerOneArmies, setPlayerOneArmies] =
     useState<PlayerArmy[]>(userArmies);
   const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
   const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
   // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
-  console.log('playerTwoArmies', playerTwoArmies);
 
   const defaultValues = {
     type: 'Matched Play',
     points: null,
     playerOne: {
       army: null,
-      playerId: '',
     },
     playerTwo: {
       army: null,
-      playerId: '',
     },
   };
-  const onSubmit = (data: FormValues) => console.log(data);
+  const onSubmit = async (data: FormValues) => {
+    if (!user) {
+      alert('You must be logged in to create a game');
+      return;
+    }
+    const { type, points, playerOne, playerTwo } = data;
+    const game = {
+      id: crypto.randomUUID(),
+      type,
+      points,
+      playerOne: {
+        army: playerOne.army,
+        user: user.uid,
+      },
+      playerTwo: {
+        army: playerTwo.army,
+        user: crypto.randomUUID(),
+      },
+    };
+    await fetch('/api/firestore/add-new-game', {
+      method: 'POST',
+      body: JSON.stringify(game),
+    });
+    redirect(`/play/${game.id}`);
+  };
 
   const { control, watch, handleSubmit } = useForm<FormValues>({
     defaultValues,
@@ -87,6 +109,7 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
           <ArmySelectorRadioGroup
             control={control}
             options={playerOneArmies}
+            rules={{ required: true }}
             label="Army"
             name="playerOne.army"
           />
@@ -107,6 +130,7 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
             <ArmySelectorRadioGroup
               control={control}
               options={playerTwoArmies}
+              rules={{ required: true }}
               label="Army"
               name="playerTwo.army"
             />

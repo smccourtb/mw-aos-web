@@ -8,3 +8,14 @@ export const getUserArmies = async (user_id: string) => {
   }
   return armiesRef.docs.map((doc) => doc.data()) as PlayerArmy[];
 };
+
+export const getUserGame = async (user_id: string, gameId: string) => {
+  const gameRef = await db
+    .collection(`users/${user_id}/games`)
+    .doc(gameId)
+    .get();
+  if (!gameRef.exists) {
+    return null;
+  }
+  return gameRef.data();
+};

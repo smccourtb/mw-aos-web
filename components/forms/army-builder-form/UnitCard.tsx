@@ -44,8 +44,6 @@ const UnitCard = ({
 
   // used to toggle the general icon color
   const watchedGeneral = watch('general');
-  const watchedLoadoutSelected = watch('loadoutSelected');
-  console.log('watchedLoadoutSelected', watchedLoadoutSelected);
 
   const onSubmit = (data: FormValues) => {
     const { loadoutSelected, champion, musician, standardbearer, general } =
@@ -86,8 +84,6 @@ const UnitCard = ({
     };
     handleUnitSelection(unitToAdd, true);
   };
-
-  console.log('selectedUnits', selectedUnits);
 
   return (
     <div
