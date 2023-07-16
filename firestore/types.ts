@@ -113,7 +113,12 @@ export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
   isGeneral: boolean;
   equippedSpecialModels: SpecialUnitModel[];
   weapons: Omit<UnitWeapon, 'choice'>[];
-  commandTrait: { name: string; description: string } | null;
+  enhancements: {
+    prayer: Enhancement | null;
+    commandTrait: Enhancement | null;
+    artefact: Enhancement | null;
+    spellLore: Enhancement | null;
+  };
 }
 
 export type PlayerArmy = {

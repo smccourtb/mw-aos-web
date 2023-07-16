@@ -1,5 +1,7 @@
 import React from 'react';
 import {
+  Enhancement,
+  EnhancementKeys,
   PlayerArmyUnit,
   SpecialUnitModel,
   Unit,
@@ -8,13 +10,14 @@ import {
 import { FlagIcon, MusicNoteIcon, PlusIcon } from '@heroicons/react/solid';
 import { useForm } from 'react-hook-form';
 import LoadoutSelection from '@/components/inputs/LoadoutSelection';
+import EnhancementSelection from '@/components/inputs/EnhancementSelection';
 
 type FormValues = {
   loadoutSelected: { id: string; weapons: string[] } | null;
   champion: boolean;
   musician: boolean;
   standardbearer: boolean;
-  general: boolean;
+  enhancements: { [k in EnhancementKeys]: Enhancement | null };
 };
 
 type UnitCardProps = {
@@ -84,13 +87,22 @@ const UnitCard = ({
   disabled,
   handleUnitSelection,
   selectedUnits,
+  potentialGeneral,
+  selectPotentialGeneral,
+  enhancements,
 }: UnitCardProps) => {
   const defaultValues = {
     loadoutSelected: null,
     champion: false,
     musician: false,
     standardbearer: false,
-    general: false,
+    enhancements: {
+      commandTraits: null,
+      spellLores: null,
+      triumphs: null,
+      prayer: null,
+      artefacts: null,
+    },
   };
 
   const { control, getValues, setValue, watch, handleSubmit } =
@@ -98,12 +110,19 @@ const UnitCard = ({
       defaultValues,
     });
 
+  const isPotentialGeneral = potentialGeneral?.name === unit.name;
+
   // used to toggle the general icon color
-  const watchedGeneral = watch('general');
 
   const onSubmit = (data: FormValues) => {
-    const { loadoutSelected, champion, musician, standardbearer, general } =
-      data;
+    const {
+      loadoutSelected,
+      champion,
+      musician,
+      standardbearer,
+      enhancements,
+    } = data;
+    const { commandTraits, spellLores, prayer, artefacts } = enhancements;
     const unitMandatoryWeapons = unit.weapons.filter(
       (weapon: UnitWeapon) => !weapon.choice,
     );
@@ -127,8 +146,13 @@ const UnitCard = ({
 
     const unitToAdd: PlayerArmyUnit = {
       ...rest,
-      isGeneral: general,
-      commandTrait: null,
+      isGeneral: isPotentialGeneral,
+      enhancements: {
+        commandTrait: isPotentialGeneral ? commandTraits : null,
+        spellLore: spellLores ?? null,
+        prayer: prayer ?? null,
+        artefact: artefacts ?? null,
+      },
       weapons: weaponsWithoutChoice,
       equippedSpecialModels:
         unit?.specialModels?.filter((model: SpecialUnitModel) => {
@@ -217,9 +241,9 @@ const UnitCard = ({
           )}
           {unit.role.includes('leader') && (
             <button
-              onClick={() => setValue('general', true)}
+              onClick={() => selectPotentialGeneral(unit)}
               className={`h-6 w-6 ${
-                watchedGeneral ? 'text-green-500' : 'text-gray-500'
+                isPotentialGeneral ? 'text-green-500' : 'text-gray-500'
               }`}
             >
               <svg
@@ -260,6 +284,102 @@ const UnitCard = ({
               control={control}
               rules={{ required: true }}
               placeholder={'Select Weapon'}
+            />
+          </div>
+        )}
+        {enhancements?.commandTraits && (
+          <div className="flex w-full items-center gap-2 text-gray-500">
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill={'currentColor'}
+              className="h-6 w-6"
+            >
+              <g>
+                <path
+                  d="M7.05 13.406l3.534 3.536-1.413 1.414 1.415 1.415-1.414 1.414-2.475-2.475-2.829 2.829-1.414-1.414 2.829-2.83-2.475-2.474 1.414-1.414 1.414 1.413 1.413-1.414zM3 3l3.546.003 11.817 11.818 1.415-1.414 1.414 1.414-2.474 2.475 2.828 2.829-1.414 1.414-2.829-2.829-2.475 2.475-1.414-1.414 1.414-1.415L3.003 6.531 3 3zm14.457 0L21 3.003l.002 3.523-4.053 4.052-3.536-3.535L17.457 3z"
+                  fillRule="nonzero"
+                />
+              </g>
+            </svg>
+            <EnhancementSelection
+              name={'enhancements.commandTraits'}
+              options={enhancements?.commandTraits}
+              control={control}
+              rules={{ required: true }}
+              placeholder={'Command Trait'}
+            />
+          </div>
+        )}
+        {enhancements?.artefacts && (
+          <div className="flex w-full items-center gap-2 text-gray-500">
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill={'currentColor'}
+              className="h-6 w-6"
+            >
+              <g>
+                <path
+                  d="M7.05 13.406l3.534 3.536-1.413 1.414 1.415 1.415-1.414 1.414-2.475-2.475-2.829 2.829-1.414-1.414 2.829-2.83-2.475-2.474 1.414-1.414 1.414 1.413 1.413-1.414zM3 3l3.546.003 11.817 11.818 1.415-1.414 1.414 1.414-2.474 2.475 2.828 2.829-1.414 1.414-2.829-2.829-2.475 2.475-1.414-1.414 1.414-1.415L3.003 6.531 3 3zm14.457 0L21 3.003l.002 3.523-4.053 4.052-3.536-3.535L17.457 3z"
+                  fillRule="nonzero"
+                />
+              </g>
+            </svg>
+            <EnhancementSelection
+              name={'enhancements.artefacts'}
+              options={enhancements?.artefacts}
+              control={control}
+              rules={{ required: true }}
+              placeholder={'Artefact'}
+            />
+          </div>
+        )}
+        {enhancements?.spellLores && (
+          <div className="flex w-full items-center gap-2 text-gray-500">
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill={'currentColor'}
+              className="h-6 w-6"
+            >
+              <g>
+                <path
+                  d="M7.05 13.406l3.534 3.536-1.413 1.414 1.415 1.415-1.414 1.414-2.475-2.475-2.829 2.829-1.414-1.414 2.829-2.83-2.475-2.474 1.414-1.414 1.414 1.413 1.413-1.414zM3 3l3.546.003 11.817 11.818 1.415-1.414 1.414 1.414-2.474 2.475 2.828 2.829-1.414 1.414-2.829-2.829-2.475 2.475-1.414-1.414 1.414-1.415L3.003 6.531 3 3zm14.457 0L21 3.003l.002 3.523-4.053 4.052-3.536-3.535L17.457 3z"
+                  fillRule="nonzero"
+                />
+              </g>
+            </svg>
+            <EnhancementSelection
+              name={'enhancements.spellLores'}
+              options={enhancements?.spellLores}
+              control={control}
+              rules={{ required: true }}
+              placeholder={'Spell Lores'}
+            />
+          </div>
+        )}
+        {enhancements?.prayers && (
+          <div className="flex w-full items-center gap-2 text-gray-500">
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              fill={'currentColor'}
+              className="h-6 w-6"
+            >
+              <g>
+                <path
+                  d="M7.05 13.406l3.534 3.536-1.413 1.414 1.415 1.415-1.414 1.414-2.475-2.475-2.829 2.829-1.414-1.414 2.829-2.83-2.475-2.474 1.414-1.414 1.414 1.413 1.413-1.414zM3 3l3.546.003 11.817 11.818 1.415-1.414 1.414 1.414-2.474 2.475 2.828 2.829-1.414 1.414-2.829-2.829-2.475 2.475-1.414-1.414 1.414-1.415L3.003 6.531 3 3zm14.457 0L21 3.003l.002 3.523-4.053 4.052-3.536-3.535L17.457 3z"
+                  fillRule="nonzero"
+                />
+              </g>
+            </svg>
+            <EnhancementSelection
+              name={'enhancements.prayers'}
+              options={enhancements?.prayers}
+              control={control}
+              rules={{ required: true }}
+              placeholder={'Prayers'}
             />
           </div>
         )}

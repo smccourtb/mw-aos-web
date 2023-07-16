@@ -35,15 +35,12 @@ const useEnhancements = ({
   }>();
 
   useEffect(() => {
-    console.log('triggered');
-
     determineAvailableEnhancements();
   }, [subFaction]);
+
   const formatEnhancements = (enhancements: Enhancements, source: string) => {
     return Object.keys(enhancements).reduce(
       (acc, key) => {
-        console.log('key, acc', key, acc);
-
         return {
           ...acc,
           [key]: {
@@ -213,16 +210,12 @@ const useEnhancements = ({
 
     const hasSubFactionKeyword =
       unit.keywords.includes(subFaction!) || unit.keywords.includes(armyType!);
-    console.log('hasSubFactionKeyword', hasSubFactionKeyword);
 
     const filteredArtefacts = artefacts.value.filter((trait) =>
       hasSubFactionKeyword
         ? trait.source === armyType
         : trait.source === 'universal',
     );
-    console.log('artefacts.totalAllowed', artefacts.totalAllowed);
-
-    console.log('filteredArtefacts', filteredArtefacts);
     // check if the number of chosen artefacts is less than the total allowed
     if (
       filteredArtefacts.filter((trait) => trait.chosen).length >=
@@ -289,7 +282,6 @@ const useEnhancements = ({
     const eligibleSpellLores = determineAvailableSpellLores(unit);
     const eligibleTriumphs = determineAvailableTriumphs();
     const eligiblePrayers = determineAvailablePrayers(unit);
-    console.log('eligibleArtefacts', eligibleArtefacts);
 
     return {
       commandTraits: eligibleCommandTraits,

@@ -31,8 +31,6 @@ type NewGameFormProps = {
 const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   const user = useContext(AuthContext);
   const searchParams = useSearchParams();
-  const [playerOneArmies, setPlayerOneArmies] =
-    useState<PlayerArmy[]>(userArmies);
   const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
   // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
 
@@ -80,7 +78,6 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   });
   const watchedType = watch('type');
   const watchedBattlePack = watch('battlepack');
-  console.log('watchedPoints', watch('points'));
 
   return (
     <>
@@ -134,7 +131,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
           <span className="self-start text-lg font-bold">Player 1</span>
           <ArmySelectorRadioGroup
             control={control}
-            options={playerOneArmies}
+            options={userArmies}
             rules={{ required: true }}
             label="Army"
             name="playerOne.army"
