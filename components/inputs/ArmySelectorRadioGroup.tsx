@@ -2,7 +2,7 @@ import { RadioGroup } from '@headlessui/react';
 import React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { useController, UseControllerProps } from 'react-hook-form';
-import type { PlayerArmy } from '@/components/firestore/types';
+import type { PlayerArmy } from '@/firestore/types';
 
 type ArmySelectorRadioGroupProps = {
   options: PlayerArmy[];

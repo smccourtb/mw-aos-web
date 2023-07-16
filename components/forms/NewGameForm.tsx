@@ -3,8 +3,7 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
-import { FactionName, PlayerArmy, Unit } from '@/components/firestore/types';
-import ArmyBuilderModal from '@/app/modals/ArmyBuilderModal';
+import { PlayerArmy } from '@/firestore/types';
 import AuthContext from '@/context/AuthContext';
 import { redirect } from 'next/navigation';
 

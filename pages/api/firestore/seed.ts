@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { seedEmulatedFirestore } from '@/components/firestore/seedEmulatedFirestore';
+import { seedEmulatedFirestore } from '@/firestore/seedEmulatedFirestore';
 
 const seed = async (_req: NextApiRequest, res: NextApiResponse) => {
   try {

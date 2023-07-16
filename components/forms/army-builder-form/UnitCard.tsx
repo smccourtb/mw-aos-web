@@ -4,7 +4,7 @@ import {
   SpecialUnitModel,
   Unit,
   UnitWeapon,
-} from '@/components/firestore/types';
+} from '@/firestore/types';
 import { FlagIcon, MusicNoteIcon, PlusIcon } from '@heroicons/react/solid';
 import { useForm } from 'react-hook-form';
 import LoadoutSelection from '@/components/inputs/LoadoutSelection';

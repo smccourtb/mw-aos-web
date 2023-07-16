@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import Firestore from '@/components/Firestore';
-import { getKeywords } from '@/components/firestore/keywords';
-import { getFactions } from '@/components/firestore/factions';
+import { getKeywords } from '@/firestore/keywords';
+import { getFactions } from '@/firestore/factions';
 
 export default async function FirestorePage() {
   const [keywords, factions] = await Promise.all([

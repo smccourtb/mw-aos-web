@@ -1,6 +1,6 @@
 import React from 'react';
 import { userSession } from '@/firebase/serverUserSessionUtils';
-import { getUserGame } from '@/components/firestore/user';
+import { getUserGame } from '@/firestore/user';
 
 export default async function Page({ params }: { params: { id: string } }) {
   const user = await userSession();

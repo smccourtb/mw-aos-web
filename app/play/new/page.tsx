@@ -1,17 +1,7 @@
 import React from 'react';
 import NewGameForm from '@/components/forms/NewGameForm';
-import { getAllUnits } from '@/components/firestore/units';
-import { getUserArmies } from '@/components/firestore/user';
+import { getUserArmies } from '@/firestore/user';
 import { userSession } from '@/firebase/serverUserSessionUtils';
-
-const getArmyBuilderData = async () => {
-  const units = await getAllUnits();
-  const factions = Object.keys(units);
-  return {
-    factions,
-    units,
-  };
-};
 
 export default async function PlayPage() {
   const armyBuilderData = await getArmyBuilderData();

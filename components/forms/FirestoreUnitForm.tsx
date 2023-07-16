@@ -5,7 +5,7 @@ import AlertDatabaseError from '@/components/AlertDatabaseError';
 import Select from '@/components/inputs/Select';
 import Input from '@/components/inputs/Input';
 import InputArray from '@/components/forms/InputArray';
-import { Faction } from '@/components/firestore/types';
+import { Faction } from '@/firestore/types';
 
 type FirestoreUnitFormProps = {
   factions: Faction[];
@@ -40,38 +40,37 @@ type FormValues = {
 
 // TODO: add confirmation modal for delete
 const FirestoreUnitForm = ({ factions }: FirestoreUnitFormProps) => {
-  const { handleSubmit, control, reset, formState, setError, setFocus, watch } =
-    useForm<FormValues>({
-      defaultValues: {
-        faction: '',
-        unitName: '',
-        role: [],
-        baseStats: {
-          wounds: '',
-          move: '',
-          save: '',
-          bravery: '',
-        },
-        points: '',
-        unitSize: '',
-        weapons: [
-          {
-            name: '',
-            type: '',
-            stats: {
-              range: '',
-              attacks: '',
-              toHit: '',
-              toWound: '',
-              rend: '',
-              damage: '',
-            },
-            required: false,
-          },
-        ],
+  const { handleSubmit, control, reset } = useForm<FormValues>({
+    defaultValues: {
+      faction: '',
+      unitName: '',
+      role: [],
+      baseStats: {
+        wounds: '',
+        move: '',
+        save: '',
+        bravery: '',
       },
-      mode: 'all',
-    });
+      points: '',
+      unitSize: '',
+      weapons: [
+        {
+          name: '',
+          type: '',
+          stats: {
+            range: '',
+            attacks: '',
+            toHit: '',
+            toWound: '',
+            rend: '',
+            damage: '',
+          },
+          required: false,
+        },
+      ],
+    },
+    mode: 'all',
+  });
 
   const [submissionFailed, setSubmissionFailed] = useState(false);
   // used to check if faction already exists in the database
