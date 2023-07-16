@@ -3,46 +3,50 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
-import { PlayerArmy } from '@/firestore/types';
+import { Battlepack, PlayerArmy } from '@/firestore/types';
 import AuthContext from '@/context/AuthContext';
-import { redirect } from 'next/navigation';
+import { redirect, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import BattlepackSelect from '@/components/inputs/BattlepackSelect';
 
 type FormValues = {
-  type: string;
-  points: string | null;
+  type: string | null;
+  points: number | null;
+  battlepack: Battlepack | null;
   playerOne: {
     army: {} | null;
+    user: string | null;
   };
   playerTwo: {
     army: {} | null;
+    user: string | null;
   };
 };
 
 type NewGameFormProps = {
-  armyBuilderData: {
-    factions: string[];
-    units: { [K in FactionName]: Unit[] };
-  };
   userArmies: PlayerArmy[];
+  battlepacks: Battlepack[];
 };
 
-const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
+const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   const user = useContext(AuthContext);
-  const [openModal, setOpenModal] = useState(false);
+  const searchParams = useSearchParams();
   const [playerOneArmies, setPlayerOneArmies] =
     useState<PlayerArmy[]>(userArmies);
   const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
   // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
 
   const defaultValues = {
-    type: 'Matched Play',
-    points: null,
+    type: searchParams?.get('type') ?? null,
+    points: Number(searchParams?.get('points')) ?? null,
+    battlepack: null,
     playerOne: {
       army: null,
+      user: user?.uid,
     },
     playerTwo: {
       army: null,
+      user: crypto.randomUUID(),
     },
   };
   const onSubmit = async (data: FormValues) => {
@@ -57,11 +61,11 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
       points,
       playerOne: {
         army: playerOne.army,
-        user: user.uid,
+        user: playerOne.user,
       },
       playerTwo: {
         army: playerTwo.army,
-        user: crypto.randomUUID(),
+        user: playerTwo.user,
       },
     };
     await fetch('/api/firestore/add-new-game', {
@@ -71,11 +75,12 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
     redirect(`/play/${game.id}`);
   };
 
-  const { control, watch, handleSubmit } = useForm<FormValues>({
+  const { control, watch, handleSubmit, getValues } = useForm<FormValues>({
     defaultValues,
   });
-  const watchType = watch('type');
-  const points = watch('points');
+  const watchedType = watch('type');
+  const watchedBattlePack = watch('battlepack');
+  console.log('watchedPoints', watch('points'));
 
   return (
     <>
@@ -86,18 +91,40 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
             control={control}
             rules={{ required: true }}
             name="type"
-            options={['Matched Play', 'Open Play', 'Narrative Play']}
+            options={[
+              { value: 'matched', label: 'Matched Play' },
+              { value: 'open', label: 'Open Play' },
+              { value: 'narrative', label: 'Narrative Play' },
+            ]}
           />
         </div>
+        {watchedType === 'matched' && (
+          <div className="col-span-2">
+            <BattlepackSelect
+              placeholder="Battlepack"
+              control={control}
+              rules={{ required: watchedType === 'matched' }}
+              name="battlepack"
+              options={battlepacks}
+            />
+          </div>
+        )}
 
         {/*points*/}
-        {watchType.includes('Matched') && (
+        {watchedType === 'matched' && watchedBattlePack && (
           <div className="col-span-2">
             <MatchTypeSelection
               label="Points"
               name="points"
-              options={['1000', '1500', '2000', '2500', '3000']}
-              rules={{ required: watchType.includes('Matched') }}
+              options={
+                getValues('battlepack')?.armyRules.map((rules) => {
+                  return {
+                    value: rules.points,
+                    label: rules.points.toString(),
+                  };
+                }) ?? []
+              }
+              rules={{ required: watchedType === 'matched' }}
               control={control}
             />
           </div>
@@ -112,15 +139,20 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
             label="Army"
             name="playerOne.army"
           />
-          <button
+          <Link
             className="button"
-            onClick={() => {
-              setCurrentPlayer(1);
-              setOpenModal(true);
+            href={{
+              pathname: '/build',
+              query: {
+                type: getValues('type'),
+                battlepack: getValues('battlepack')?.id,
+                points: getValues('points'),
+                player: getValues('playerOne.user'),
+              },
             }}
           >
             Build Army
-          </button>
+          </Link>
         </div>
         {/*player 2*/}
         <div className="flex flex-col items-center">
@@ -133,15 +165,20 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
               label="Army"
               name="playerTwo.army"
             />
-            <button
+            <Link
               className="button"
-              onClick={() => {
-                setCurrentPlayer(2);
-                setOpenModal(true);
+              href={{
+                pathname: '/build',
+                query: {
+                  type: getValues('type'),
+                  battlepack: getValues('battlepack')?.id,
+                  points: getValues('points'),
+                  player: getValues('playerTwo.user'),
+                },
               }}
             >
               Build Army
-            </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -149,21 +186,6 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
       <button className="button mt-auto mb-10" onClick={handleSubmit(onSubmit)}>
         Submit
       </button>
-      {openModal && (
-        <ArmyBuilderModal
-          isOpen={openModal}
-          closeModal={setOpenModal}
-          setArmies={{
-            setArmy:
-              currentPlayer === 1 ? setPlayerOneArmies : setPlayerTwoArmies,
-            currentPlayer,
-          }}
-          data={{
-            armyData: armyBuilderData,
-            pointLimit: Number(points) || null,
-          }}
-        />
-      )}
     </>
   );
 };
