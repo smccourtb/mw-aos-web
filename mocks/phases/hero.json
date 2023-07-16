@@ -1,0 +1,28 @@
+{
+  "name": "hero",
+  "commandAbilities": [
+    {
+      "name": "rally",
+      "text": "You can use this command ability at the start of the hero phase. The unit that receives the command must be more than 3\" from all enemy units. Roll 1 dice for each slain model from that unit. For each 6, you can return 1 slain model to that unit.\n\nYou can only return models to that unit that have a combined Wounds characteristic of 10 or less. For example, if the unit that received the command has a Wounds characteristic of 2, you can return a maximum of 5 models to that unit."
+    }
+  ],
+  "heroicActions": [
+    {
+      "name": "heroic leadership",
+      "text": "Pick 1 friendly HERO and roll a dice. Add 2 to the roll if your general has been slain. On a 4+, you receive 1 command point that can only be spent during that turn to allow that HERO to issue a command."
+    },
+    {
+      "name": "heroic willpower",
+      "text": "Pick 1 friendly HERO that is not a WIZARD. If it is the enemy hero phase, that HERO can attempt to unbind 1 spell in that phase as if they were a WIZARD. If it is your hero phase, that HERO can attempt to dispel 1 endless spell in that phase as if they were a WIZARD (you can still only attempt to unbind or dispel the same spell or endless spell once in the same phase)."
+    },
+    {
+      "name": "their finest hour",
+      "text": "Pick 1 friendly HERO. Add 1 to wound rolls for attacks made by that HERO until the end of that turn, and add 1 to save rolls for attacks that target that HERO until the end of that turn. You cannot carry out this heroic action with the same HERO more than once in the same battle."
+    },
+    {
+      "name": "heroic recovery",
+      "text": "Pick 1 friendly HERO that is more than 3\" from all enemy units and make a heroic recovery roll by rolling 2D6. If the roll is less than or equal to that HERO’s Bravery characteristic, you can heal up to D3 wounds allocated to that HERO."
+    }
+  ],
+  "beginnerRules": ["Each player can pick a hero to perform a heroic action."]
+}
