@@ -1,5 +1,5 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Faction, FactionName, Unit } from '@/components/firestore/types';
+import { Faction, FactionName, Unit } from '@/firestore/types';
 
 export const getAllUnits = async () => {
   const factionsRef = db.collection('factions');
