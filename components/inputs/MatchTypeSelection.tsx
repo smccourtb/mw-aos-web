@@ -4,7 +4,7 @@ import { CheckCircleIcon } from '@heroicons/react/solid';
 import { useController, UseControllerProps } from 'react-hook-form';
 
 type MatchTypeSelectionProps = {
-  options: string[];
+  options: { value: number | string; label: string }[];
   label?: string;
 };
 
@@ -23,8 +23,8 @@ const MatchTypeSelection = (
         <div className="flex items-center justify-between">
           {props.options.map((option) => (
             <RadioGroup.Option
-              key={option}
-              value={option}
+              key={option.value}
+              value={option.value}
               className={({ active, checked }) =>
                 `${
                   active
@@ -48,7 +48,7 @@ const MatchTypeSelection = (
                             checked ? 'text-white' : 'text-gray-900'
                           } ${active ? 'text-sky-400' : 'text-gray-500'} `}
                         >
-                          {option}
+                          {option.label}
                         </RadioGroup.Label>
                         <RadioGroup.Description
                           as="span"
