@@ -22,6 +22,62 @@ type UnitCardProps = {
   disabled: boolean;
   handleUnitSelection: (unit: PlayerArmyUnit, add: boolean) => void;
   selectedUnits: PlayerArmyUnit[];
+  potentialGeneral: Unit | null;
+  selectPotentialGeneral: React.Dispatch<React.SetStateAction<Unit | null>>;
+  enhancements:
+    | undefined
+    | {
+        commandTraits:
+          | undefined
+          | null
+          | {
+              name: string;
+              description: string;
+              chosen: boolean;
+              source: string;
+              applicableKeywords?: string[];
+            }[];
+        spellLores:
+          | undefined
+          | null
+          | {
+              name: string;
+              description: string;
+              chosen: boolean;
+              source: string;
+              applicableKeywords?: string[];
+            }[];
+        triumphs:
+          | undefined
+          | null
+          | {
+              name: string;
+              description: string;
+              chosen: boolean;
+              source: string;
+              applicableKeywords?: string[];
+            }[];
+        prayers:
+          | undefined
+          | null
+          | {
+              name: string;
+              description: string;
+              chosen: boolean;
+              source: string;
+              applicableKeywords?: string[];
+            }[];
+        artefacts:
+          | undefined
+          | null
+          | {
+              name: string;
+              description: string;
+              chosen: boolean;
+              source: string;
+              applicableKeywords?: string[];
+            }[];
+      };
 };
 const UnitCard = ({
   unit,
@@ -72,6 +128,7 @@ const UnitCard = ({
     const unitToAdd: PlayerArmyUnit = {
       ...rest,
       isGeneral: general,
+      commandTrait: null,
       weapons: weaponsWithoutChoice,
       equippedSpecialModels:
         unit?.specialModels?.filter((model: SpecialUnitModel) => {
