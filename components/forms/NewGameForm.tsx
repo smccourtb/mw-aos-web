@@ -78,6 +78,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   });
   const watchedType = watch('type');
   const watchedBattlePack = watch('battlepack');
+  const watchedPoints = watch('points');
 
   return (
     <>

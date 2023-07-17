@@ -12,6 +12,7 @@ import { Tab } from '@headlessui/react';
 import UnitCard from '@/components/forms/army-builder-form/UnitCard';
 import {
   Battlepack,
+  EnhancementKeys,
   Enhancements,
   Faction,
   FactionName,
@@ -78,14 +79,17 @@ const ArmyBuilderForm = ({
   const watchedSubFaction = watch('subFaction');
 
   const [potentialGeneral, setPotentialGeneral] = useState<Unit | null>(null);
-  const { determineEnhancementEligibility, availableEnhancements } =
-    useEnhancements({
-      enhancements,
-      chosenArmy,
-      armyType: watchedType,
-      subFaction: watchedSubFaction,
-      potentialGeneral,
-    });
+  const {
+    determineEnhancementEligibility,
+    availableEnhancements,
+    setAvailableEnhancements,
+  } = useEnhancements({
+    enhancements,
+    chosenArmy,
+    armyType: watchedType,
+    subFaction: watchedSubFaction,
+    potentialGeneral,
+  });
 
   useEffect(() => {
     setInitialRoleCounts();
@@ -233,6 +237,33 @@ const ArmyBuilderForm = ({
       });
       setPointValue((prevState) => prevState + unit.points);
       setValue('units', [...currentUnits, unit]);
+      // flip all chosen enhancements to true, so they cant be picked again
+      Object.keys(unit.enhancements).forEach((enhancement) => {
+        // @ts-ignore
+        if (unit.enhancements[enhancement] !== null) {
+          // find all enhancements that match the incoming unit.enhancements and set the chosen property to true
+          setAvailableEnhancements((prevState) => ({
+            ...prevState!,
+            [enhancement]: prevState![enhancement as EnhancementKeys].map(
+              (prevEnhancement) => {
+                if (
+                  prevEnhancement.name ===
+                  // @ts-ignore
+                  unit.enhancements[enhancement].name
+                ) {
+                  return {
+                    ...prevEnhancement,
+                    chosen: true,
+                  };
+                }
+                return prevEnhancement;
+              },
+            ),
+          }));
+        }
+      });
+
+      setPotentialGeneral(null);
     } else {
       // loop through units roles and decrement the count in roleCounts that pertains to the role
       unit.role.forEach((role: string) => {

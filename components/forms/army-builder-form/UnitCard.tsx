@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Enhancement,
+  ArmyBuilderEnhancement,
   EnhancementKeys,
   PlayerArmyUnit,
   SpecialUnitModel,
@@ -17,7 +17,7 @@ type FormValues = {
   champion: boolean;
   musician: boolean;
   standardbearer: boolean;
-  enhancements: { [k in EnhancementKeys]: Enhancement | null };
+  enhancements: { [k in EnhancementKeys]: ArmyBuilderEnhancement | null };
 };
 
 type UnitCardProps = {
@@ -30,56 +30,11 @@ type UnitCardProps = {
   enhancements:
     | undefined
     | {
-        commandTraits:
-          | undefined
-          | null
-          | {
-              name: string;
-              description: string;
-              chosen: boolean;
-              source: string;
-              applicableKeywords?: string[];
-            }[];
-        spellLores:
-          | undefined
-          | null
-          | {
-              name: string;
-              description: string;
-              chosen: boolean;
-              source: string;
-              applicableKeywords?: string[];
-            }[];
-        triumphs:
-          | undefined
-          | null
-          | {
-              name: string;
-              description: string;
-              chosen: boolean;
-              source: string;
-              applicableKeywords?: string[];
-            }[];
-        prayers:
-          | undefined
-          | null
-          | {
-              name: string;
-              description: string;
-              chosen: boolean;
-              source: string;
-              applicableKeywords?: string[];
-            }[];
-        artefacts:
-          | undefined
-          | null
-          | {
-              name: string;
-              description: string;
-              chosen: boolean;
-              source: string;
-              applicableKeywords?: string[];
-            }[];
+        commandTraits: undefined | null | ArmyBuilderEnhancement[];
+        spellLores: undefined | null | ArmyBuilderEnhancement[];
+        triumphs: undefined | null | ArmyBuilderEnhancement[];
+        prayers: undefined | null | ArmyBuilderEnhancement[];
+        artefacts: undefined | null | ArmyBuilderEnhancement[];
       };
 };
 const UnitCard = ({
@@ -105,12 +60,13 @@ const UnitCard = ({
     },
   };
 
-  const { control, getValues, setValue, watch, handleSubmit } =
+  const { control, getValues, setValue, watch, handleSubmit, reset } =
     useForm<FormValues>({
       defaultValues,
     });
 
   const isPotentialGeneral = potentialGeneral?.name === unit.name;
+  const armyHasGeneral = selectedUnits.some((unit) => unit.isGeneral);
 
   // used to toggle the general icon color
 
@@ -146,12 +102,12 @@ const UnitCard = ({
 
     const unitToAdd: PlayerArmyUnit = {
       ...rest,
-      isGeneral: isPotentialGeneral,
+      isGeneral: isPotentialGeneral && !armyHasGeneral,
       enhancements: {
-        commandTrait: isPotentialGeneral ? commandTraits : null,
-        spellLore: spellLores ?? null,
+        commandTraits: commandTraits ?? null,
+        spellLores: spellLores ?? null,
         prayer: prayer ?? null,
-        artefact: artefacts ?? null,
+        artefacts: artefacts ?? null,
       },
       weapons: weaponsWithoutChoice,
       equippedSpecialModels:
@@ -164,6 +120,7 @@ const UnitCard = ({
         }) || null,
     };
     handleUnitSelection(unitToAdd, true);
+    reset();
   };
 
   return (
@@ -239,9 +196,11 @@ const UnitCard = ({
               ))}
             </div>
           )}
-          {unit.role.includes('leader') && (
+          {unit.role.includes('leader') && !armyHasGeneral && (
             <button
-              onClick={() => selectPotentialGeneral(unit)}
+              onClick={() =>
+                selectPotentialGeneral(isPotentialGeneral ? null : unit)
+              }
               className={`h-6 w-6 ${
                 isPotentialGeneral ? 'text-green-500' : 'text-gray-500'
               }`}

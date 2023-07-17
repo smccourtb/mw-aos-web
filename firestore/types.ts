@@ -114,12 +114,21 @@ export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
   equippedSpecialModels: SpecialUnitModel[];
   weapons: Omit<UnitWeapon, 'choice'>[];
   enhancements: {
-    prayer: Enhancement | null;
-    commandTrait: Enhancement | null;
-    artefact: Enhancement | null;
-    spellLore: Enhancement | null;
+    prayer: ArmyBuilderEnhancement | null;
+    commandTraits: ArmyBuilderEnhancement | null;
+    artefacts: ArmyBuilderEnhancement | null;
+    spellLores: ArmyBuilderEnhancement | null;
   };
 }
+
+export type ArmyBuilderEnhancement = {
+  name: string;
+  description: string;
+  applicableKeywords?: string[];
+  isUnique?: boolean;
+  chosen: boolean;
+  source: string;
+};
 
 export type PlayerArmy = {
   id: string;
@@ -239,6 +248,8 @@ export type Enhancements = {
 export type Enhancement = {
   name: string;
   description: string;
+  applicableKeywords?: string[];
+  includeUnique?: boolean;
 };
 
 export type Phase = {

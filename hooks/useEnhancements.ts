@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
+  ArmyBuilderEnhancement,
   Enhancement,
   EnhancementKeys,
   Enhancements,
@@ -22,16 +23,7 @@ const useEnhancements = ({
   potentialGeneral,
 }: useEnhancementsProps) => {
   const [availableEnhancements, setAvailableEnhancements] = useState<{
-    [k in EnhancementKeys]: {
-      value: {
-        name: string;
-        description: string;
-        chosen: boolean;
-        source: string;
-        applicableKeywords?: string[];
-      }[];
-      totalAllowed: number;
-    };
+    [k in EnhancementKeys]: ArmyBuilderEnhancement[];
   }>();
 
   useEffect(() => {
@@ -43,32 +35,19 @@ const useEnhancements = ({
       (acc, key) => {
         return {
           ...acc,
-          [key]: {
-            value: enhancements[key as EnhancementKeys].map(
-              (enhancement: Enhancement) => {
-                return {
-                  ...enhancement,
-                  chosen: false,
-                  source: source,
-                };
-              },
-            ),
-            totalAllowed: key === 'spellLore' || key === 'prayer' ? 100 : 1,
-          },
+          [key]: enhancements[key as EnhancementKeys].map(
+            (enhancement: Enhancement) => {
+              return {
+                ...enhancement,
+                chosen: false,
+                source: source,
+              };
+            },
+          ),
         };
       },
       {} as {
-        [key in EnhancementKeys]: {
-          value: {
-            name: string;
-            description: string;
-            applicableKeywords?: string[];
-            includeUnique?: boolean;
-            chosen: boolean;
-            source: string;
-          }[];
-          totalAllowed: number;
-        };
+        [key in EnhancementKeys]: ArmyBuilderEnhancement[];
       },
     );
   };
@@ -96,37 +75,25 @@ const useEnhancements = ({
       (acc, key) => {
         return {
           ...acc,
-          [key]: {
-            value: [
-              ...formattedUniversalEnhancements[key as EnhancementKeys].value,
-              ...formattedFactionEnhancements[key as EnhancementKeys].value,
-            ],
-            totalAllowed:
-              formattedUniversalEnhancements[key as EnhancementKeys]
-                .totalAllowed,
-          },
+          [key]: [
+            ...formattedUniversalEnhancements[key as EnhancementKeys],
+            ...formattedFactionEnhancements[key as EnhancementKeys],
+          ],
         };
       },
       {} as {
-        [key in EnhancementKeys]: {
-          value: {
-            name: string;
-            description: string;
-            chosen: boolean;
-            source: string;
-          }[];
-          totalAllowed: number;
-        };
+        [key in EnhancementKeys]: ArmyBuilderEnhancement[];
       },
     );
 
     setAvailableEnhancements(mergedEnhancements);
   }, [chosenArmy, armyType, subFaction]);
 
-  const determineAvailableCommandTraits = (unit: Unit) => {
-    if (!availableEnhancements) return;
-    const { commandTraits } = availableEnhancements;
-
+  const determineAvailableCommandTraits = (
+    unit: Unit,
+  ): ArmyBuilderEnhancement[] | null => {
+    const { commandTraits } = availableEnhancements!;
+    const totalAllowed = 1;
     // check if unit is selected as a potential general
     if (potentialGeneral?.name !== unit.name) return null;
 
@@ -135,11 +102,12 @@ const useEnhancements = ({
     const hasSubFactionKeyword =
       unit.keywords.includes(subFaction!) || unit.keywords.includes(armyType!);
 
-    const filteredCommandTraits = commandTraits.value.filter((trait) =>
-      hasSubFactionKeyword
-        ? trait.source === armyType
-        : trait.source === 'universal',
-    );
+    const filteredCommandTraits: ArmyBuilderEnhancement[] =
+      commandTraits.filter((trait) =>
+        hasSubFactionKeyword
+          ? trait.source === armyType
+          : trait.source === 'universal',
+      );
 
     // next we filter out based on keywords. In this case, we want to filter out all command traits that don't have
     // the 'hero' keyword first. Then after we check for any conditions that might prevent the unit from taking the command point. we will filter out faction specific keywords
@@ -153,7 +121,7 @@ const useEnhancements = ({
     // check if the number of chosen command traits is less than the total allowed
     if (
       filteredCommandTraits.filter((trait) => trait.chosen).length >=
-      commandTraits.totalAllowed
+      totalAllowed
     )
       return null;
 
@@ -170,8 +138,7 @@ const useEnhancements = ({
     return availableCommandTraits.length > 0 ? availableCommandTraits : null;
   };
   const determineAvailableSpellLores = (unit: Unit) => {
-    if (!availableEnhancements) return;
-    const { spellLores } = availableEnhancements;
+    const { spellLores } = availableEnhancements!;
 
     const eligibleKeywords = ['wizard'];
     // check if unit has any of the eligible keywords. Might need to change to 'every' in the future in the case of
@@ -183,12 +150,8 @@ const useEnhancements = ({
     // would let each wizard take 1(base) + n(number of battalions) enhancements.
     // totalAllowed at this level would really be the number of wizards in the army * 1 (for base) + the number of
     // battalions
-    if (
-      spellLores.value.filter((trait) => trait.chosen).length >=
-      spellLores.totalAllowed
-    )
-      return null;
-    const unitSpecificSpellLores = spellLores.value.filter((trait) =>
+
+    const unitSpecificSpellLores = spellLores.filter((trait) =>
       trait?.applicableKeywords?.every((keyword) =>
         unit.keywords.includes(keyword),
       ),
@@ -201,8 +164,8 @@ const useEnhancements = ({
   };
 
   const determineAvailableArtefacts = (unit: Unit) => {
-    if (!availableEnhancements) return;
-    const { artefacts } = availableEnhancements;
+    const { artefacts } = availableEnhancements!;
+    const totalAllowed = 1;
 
     const eligibleKeywords = ['hero'];
     if (!eligibleKeywords.some((keyword) => unit.keywords.includes(keyword)))
@@ -211,15 +174,14 @@ const useEnhancements = ({
     const hasSubFactionKeyword =
       unit.keywords.includes(subFaction!) || unit.keywords.includes(armyType!);
 
-    const filteredArtefacts = artefacts.value.filter((trait) =>
+    const filteredArtefacts = artefacts.filter((trait) =>
       hasSubFactionKeyword
         ? trait.source === armyType
         : trait.source === 'universal',
     );
     // check if the number of chosen artefacts is less than the total allowed
     if (
-      filteredArtefacts.filter((trait) => trait.chosen).length >=
-      artefacts.totalAllowed
+      filteredArtefacts.filter((trait) => trait.chosen).length >= totalAllowed
     )
       return null;
 
@@ -237,51 +199,47 @@ const useEnhancements = ({
   };
 
   const determineAvailablePrayers = (unit: Unit) => {
-    if (!availableEnhancements) return;
-    const { prayer } = availableEnhancements;
+    const { prayer } = availableEnhancements!;
 
     const eligibleKeywords = ['priest'];
     // check if unit has any of the eligible keywords. Might need to change to 'every' in the future in the case of
     // having to match all eligible keywords
     if (!eligibleKeywords.some((keyword) => unit.keywords.includes(keyword)))
       return null;
-    // you can choose 1 spell lore for each wizard in your army. Total count as of right, isn't set up to track
-    // enhancement count. Meaning if a battalion is chosen, an army is allowed to take multiple enhancements which
-    // would let each wizard take 1(base) + n(number of battalions) enhancements.
-    // totalAllowed at this level would really be the number of wizards in the army * 1 (for base) + the number of
-    // battalions
-    if (
-      prayer.value.filter((trait) => trait.chosen).length >= prayer.totalAllowed
-    )
-      return null;
 
     // filter out spell lores that are already chosen
-    const availablePrayers = prayer.value.filter((trait) => !trait.chosen);
+    const availablePrayers = prayer.filter((trait) => !trait.chosen);
     return availablePrayers.length > 0 ? availablePrayers : null;
   };
 
   const determineAvailableTriumphs = () => {
-    if (!availableEnhancements) return;
-    const { triumphs } = availableEnhancements;
+    const { triumphs } = availableEnhancements!;
+    const totalAllowed = 1;
 
-    if (
-      triumphs.value.filter((trait) => trait.chosen).length >=
-      triumphs.totalAllowed
-    )
+    if (triumphs.filter((trait) => trait.chosen).length >= totalAllowed)
       return null;
 
-    return triumphs.value;
+    return triumphs.filter((trait) => !trait.chosen);
   };
 
   const determineEnhancementEligibility = (unit: Unit) => {
-    if (!availableEnhancements) return;
     // unique units cannot take any enhancements
     if (unit.isUnique) return;
-    const eligibleCommandTraits = determineAvailableCommandTraits(unit);
-    const eligibleArtefacts = determineAvailableArtefacts(unit);
-    const eligibleSpellLores = determineAvailableSpellLores(unit);
-    const eligibleTriumphs = determineAvailableTriumphs();
-    const eligiblePrayers = determineAvailablePrayers(unit);
+    const eligibleCommandTraits = availableEnhancements
+      ? determineAvailableCommandTraits(unit)
+      : null;
+    const eligibleArtefacts = availableEnhancements
+      ? determineAvailableArtefacts(unit)
+      : null;
+    const eligibleSpellLores = availableEnhancements
+      ? determineAvailableSpellLores(unit)
+      : null;
+    const eligibleTriumphs = availableEnhancements
+      ? determineAvailableTriumphs()
+      : null;
+    const eligiblePrayers = availableEnhancements
+      ? determineAvailablePrayers(unit)
+      : null;
 
     return {
       commandTraits: eligibleCommandTraits,
