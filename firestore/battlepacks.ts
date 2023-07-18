@@ -15,7 +15,8 @@ export const getBattlePacks = async () => {
   return battlepacks;
 };
 
-export const getBattlePack = async (id: string) => {
+export const getBattlePack = async (id: string | undefined) => {
+  if (!id) return null;
   const response = await db.collection('battlepacks').doc(id).get();
   if (!response.exists) {
     console.log('No matching documents.');
