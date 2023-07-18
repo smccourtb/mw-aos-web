@@ -151,9 +151,6 @@ const useEnhancements = ({
     // totalAllowed at this level would really be the number of wizards in the army * 1 (for base) + the number of
     // battalions
 
-    if (unit.name === 'Skink Starpriest') {
-      console.log('spellLores', spellLores);
-    }
     const unitSpecificSpellLores = spellLores.filter((trait) => {
       if (trait.hasOwnProperty('applicableKeywords')) {
         return trait?.applicableKeywords?.every((keyword) =>
