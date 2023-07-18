@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Battlepack, PlayerArmyUnit } from '@/firestore/types';
 import GameUnit from '@/components/GameUnit';
 
-type HeroPhaseProps = {
+type MovementPhaseProps = {
   battlepack: Battlepack;
   playerInfo: {
     [key: number]: { commandPoints: number; units: PlayerArmyUnit[] };
@@ -21,12 +21,12 @@ type HeroPhaseProps = {
 // perform heroic actions
 // cast spells
 
-const HeroPhase = ({
+const MovementPhase = ({
   currentPlayer,
   playerInfo,
   setPlayerInfo,
   endPhase,
-}: HeroPhaseProps) => {
+}: MovementPhaseProps) => {
   const [phasePosition, setPhasePosition] = useState(0);
   // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
   // get all hero unit possible heroic actions
@@ -79,4 +79,4 @@ const HeroPhase = ({
   );
 };
 
-export default HeroPhase;
+export default MovementPhase;
