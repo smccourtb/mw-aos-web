@@ -1,5 +1,4 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Faction } from '@/firestore/types';
 
 export const getKeywords = async () => {
   const response = await db.collection('keywords').get();
@@ -7,7 +6,7 @@ export const getKeywords = async () => {
     console.log('No matching documents.');
     return [];
   }
-  const keywords: Faction[] = [];
+  const keywords: { name: string; ref: string }[] = [];
   response.forEach((doc) => {
     const { name } = doc.data();
     keywords.push({ ref: `/keywords/${doc.id}`, name });
