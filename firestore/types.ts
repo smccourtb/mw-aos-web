@@ -53,6 +53,7 @@ export interface Unit {
         description: string;
         phase: string;
         flavor: string;
+        type?: string;
       }[]
     | null;
   faction: string;
@@ -199,8 +200,8 @@ export type Game = {
   points: number;
   battlepack: Battlepack;
   types: string;
-  playerOne: PlayerArmy;
-  playerTwo: PlayerArmy;
+  playerOne: { army: PlayerArmy; user: string };
+  playerTwo: { army: PlayerArmy; user: string };
 };
 
 export type Battlepack = {

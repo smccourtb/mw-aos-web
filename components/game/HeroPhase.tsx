@@ -4,7 +4,6 @@ import GameUnit from '@/components/GameUnit';
 
 type HeroPhaseProps = {
   battlepack: Battlepack;
-  setCommandAbilities: React.Dispatch<React.SetStateAction<any>>;
   playerInfo: {
     [key: number]: { commandPoints: number; units: PlayerArmyUnit[] };
   };
@@ -18,6 +17,7 @@ type HeroPhaseProps = {
   setBattleTactic: React.Dispatch<
     React.SetStateAction<{ name: string; description: string }>
   >;
+  endPhase: React.Dispatch<React.SetStateAction<number>>;
 };
 
 // player priority goes first
@@ -27,15 +27,13 @@ type HeroPhaseProps = {
 
 const HeroPhase = ({
   currentPlayer,
-  setCommandAbilities,
   playerInfo,
   setPlayerInfo,
   heroicActions,
   battlepack,
   setBattleTactic,
+  endPhase,
 }: HeroPhaseProps) => {
-  console.log('setCommandAbilities', setCommandAbilities);
-
   const [phasePosition, setPhasePosition] = useState(0);
   // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
   // get all hero unit possible heroic actions
@@ -106,13 +104,22 @@ const HeroPhase = ({
       )}
       {/* gather units with the keyword wizard to cast any spells*/}
       {phasePosition === 3 && (
-        <>
+        <div className="flex flex-col">
+          <h3>You may cast a spell with each of the following units:</h3>
           {playerInfo[currentPlayer]!.units.filter((unit) => unit.isWizard).map(
             (unit) => (
               <GameUnit key={unit.name} unit={unit} />
             ),
           )}
-        </>
+          <button
+            className="self-center rounded-md bg-green-500 p-2 text-white hover:bg-green-700"
+            onClick={() => {
+              endPhase((prev) => prev + 1);
+            }}
+          >
+            Complete
+          </button>
+        </div>
       )}
     </section>
   );

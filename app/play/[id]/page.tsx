@@ -11,7 +11,9 @@ export default async function PlayGamePage({ params }: GamePageProps) {
   const user = await userSession();
 
   const gameData = await getUserGame(user?.uid, params.id);
-
+  if (!gameData) {
+    return <div>Game not found</div>;
+  }
   const phases = await getPhases();
   return (
     <div className="mx-10 flex h-screen flex-col items-center">

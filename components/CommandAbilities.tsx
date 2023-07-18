@@ -1,7 +1,7 @@
 import React from 'react';
 
 type CommandAbilitiesProps = {
-  abilities: { name: string; text: string }[];
+  abilities: { name: string; text?: string; description?: string }[];
 };
 const CommandAbilities = ({ abilities }: CommandAbilitiesProps) => {
   console.log('abilities', abilities);
@@ -15,7 +15,9 @@ const CommandAbilities = ({ abilities }: CommandAbilitiesProps) => {
           className={'flex flex-col border-b border-gray-400 pb-2'}
         >
           <p className={'font-bold capitalize'}>{ability.name}</p>
-          <p className="pl-2 text-sm">{ability.text}</p>
+          <p className="pl-2 text-sm">
+            {ability?.text || ability?.description}
+          </p>
         </div>
       ))}
     </div>

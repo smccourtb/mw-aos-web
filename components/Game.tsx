@@ -6,7 +6,7 @@ import HeroPhase from '@/components/game/HeroPhase';
 import CommandAbilities from '@/components/CommandAbilities';
 
 type GameProps = {
-  gameData: Game | null;
+  gameData: Game;
   phaseData: Phase[];
 };
 
@@ -34,7 +34,7 @@ const Game = ({ gameData, phaseData }: GameProps) => {
     },
   });
   const [availableCommandAbilities, setAvailableCommandAbilities] = useState<
-    { name: string; text: string }[]
+    { name: string; text?: string; description?: string }[]
   >([]);
   const [phase, setPhase] = useState(0);
   const [currentPlayer, setCurrentPlayer] = useState<1 | 2 | null>(null); // whos turn it is
@@ -54,18 +54,40 @@ const Game = ({ gameData, phaseData }: GameProps) => {
     setPlayerInfo({
       1: {
         commandPoints: 0,
-        units: gameData!.playerOne.units ?? [],
+        units: gameData!.playerOne.army.units ?? [],
       },
       2: {
         commandPoints: 0,
-        units: gameData?.playerTwo?.units ?? [],
+        units: gameData?.playerTwo?.army?.units ?? [],
       },
     });
   }, []);
 
+  console.log('playerInfo', gameData!.playerOne);
+
   useEffect(() => {
-    setAvailableCommandAbilities(phaseData[phase - 1]?.commandAbilities || []);
+    setAvailableCommandAbilities(handleCommandAbilities());
   }, [phase]);
+
+  const handleCommandAbilities = () => {
+    const universalAbilities = phaseData[phase - 1]?.commandAbilities || [];
+    // search each units abilities object for the type property, and if it equals command return it
+    const unitCommandAbilities =
+      playerInfo[currentPlayer ?? 1]?.units
+        .map((unit) => unit.abilities)
+        .flat()
+        .filter(
+          (ability) =>
+            ability?.type === 'command' &&
+            (ability?.phase === phases[phase] || ability?.phase === 'all'),
+        ) ?? [];
+
+    return [...universalAbilities, ...unitCommandAbilities] as {
+      name: string;
+      text?: string;
+      description?: string;
+    }[];
+  };
 
   return (
     <section className="flex h-full w-full flex-col">
@@ -93,11 +115,11 @@ const Game = ({ gameData, phaseData }: GameProps) => {
             <HeroPhase
               battlepack={gameData!.battlepack}
               currentPlayer={currentPlayer as 1 | 2}
-              setCommandAbilities={setAvailableCommandAbilities}
               playerInfo={playerInfo}
               setPlayerInfo={setPlayerInfo}
               heroicActions={phaseData[0]?.heroicActions || []}
               setBattleTactic={setBattleTactic}
+              endPhase={setPhase}
             />
           )}
           {/*{currentPlayer && (*/}
