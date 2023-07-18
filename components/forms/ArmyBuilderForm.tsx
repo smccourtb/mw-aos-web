@@ -25,16 +25,17 @@ import ArmyTypeRadioGroup from '@/components/inputs/ArmyTypeRadioGroup';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AuthContext from '@/context/AuthContext';
 import useEnhancements from '@/hooks/useEnhancements';
+import GrandStrategyRadioGroup from '@/components/inputs/GrandStrategyRadioGroup';
 
 type FormValues = {
   factionName: string;
   units: PlayerArmyUnit[];
   subFaction: string | null;
   type: 'starborne' | 'coalesced' | null;
+  grandStrategy: { name: string; description: string } | null;
 };
 
 type ArmyBuilderFormProps = {
-  pointLimit: number | null;
   armyData: Faction[];
   battlepack: Battlepack | null;
   enhancements: Enhancements;
@@ -47,7 +48,11 @@ const ArmyBuilderForm = ({
 }: ArmyBuilderFormProps) => {
   const user = useContext(AuthContext);
   const searchParams = useSearchParams();
-  const pointLimit = searchParams?.get('points');
+  const pointLimit =
+    searchParams?.get('type') !== 'matched'
+      ? null
+      : searchParams?.get('points');
+
   const router = useRouter();
   const [initialDataCollected, setInitialDataCollected] = useState(false);
   const [chosenArmy, setChosenArmy] = useState<Faction | null>(null);
@@ -66,6 +71,7 @@ const ArmyBuilderForm = ({
     type: null,
     subFaction: null,
     units: [] as PlayerArmyUnit[],
+    grandStrategy: null,
   };
 
   const { control, watch, handleSubmit, setValue, getValues } =
@@ -92,7 +98,7 @@ const ArmyBuilderForm = ({
   });
 
   useEffect(() => {
-    setInitialRoleCounts();
+    pointLimit && setInitialRoleCounts();
   }, []);
 
   useEffect(() => {
@@ -130,15 +136,17 @@ const ArmyBuilderForm = ({
     ) {
       disabled = true;
     }
-    unit.role.forEach((role: RoleName) => {
-      if (role === 'battleline') return;
-      const roleCount = roleCounts[role];
-      if (roleCount.max && roleCount.count >= roleCount.max) {
+    if (pointLimit) {
+      unit.role.forEach((role: RoleName) => {
+        if (role === 'battleline') return;
+        const roleCount = roleCounts[role];
+        if (roleCount.max && roleCount.count >= roleCount.max) {
+          disabled = true;
+        }
+      });
+      if (pointValue + unit.points > (pointLimit ? pointLimit : Infinity)) {
         disabled = true;
       }
-    });
-    if (pointValue + unit.points > (pointLimit ? pointLimit : Infinity)) {
-      disabled = true;
     }
     return disabled;
   };
@@ -185,29 +193,36 @@ const ArmyBuilderForm = ({
       {
         displayName: 'Leaders',
         name: 'leader' as RoleName,
-        condition:
-          leader.max &&
-          leader.count <= leader.max &&
-          leader.min &&
-          leader.count >= leader.min,
+        condition: pointLimit
+          ? leader.max &&
+            leader.count <= leader.max &&
+            leader.min &&
+            leader.count >= leader.min
+          : true,
         units: determineUnitRoleEligibility('leader'),
       },
       {
         displayName: 'Battleline',
         name: 'battleline' as RoleName,
-        condition: battleline.min && battleline.count >= battleline.min,
+        condition: pointLimit
+          ? battleline.min && battleline.count >= battleline.min
+          : true,
         units: determineUnitRoleEligibility('battleline'),
       },
       {
         displayName: 'Behemoths',
         name: 'behemoth' as RoleName,
-        condition: behemoth.max && behemoth.count <= behemoth.max,
+        condition: pointLimit
+          ? behemoth.max && behemoth.count <= behemoth.max
+          : true,
         units: determineUnitRoleEligibility('behemoth'),
       },
       {
         displayName: 'Artillery',
         name: 'artillery' as RoleName,
-        condition: artillery.max && artillery.count <= artillery.max,
+        condition: pointLimit
+          ? artillery.max && artillery.count <= artillery.max
+          : true,
         units: determineUnitRoleEligibility('artillery'),
       },
       {
@@ -225,17 +240,19 @@ const ArmyBuilderForm = ({
     if (add) {
       // loop through units roles and increment the count in roleCounts that pertains to the role
       unit.role.forEach((role: string) => {
-        setRoleCounts((prevState) => ({
-          ...prevState,
-          [role]: {
-            // @ts-ignore
-            ...prevState[role],
-            // @ts-ignore
-            count: prevState[role].count + 1,
-          },
-        }));
+        if (pointLimit) {
+          setRoleCounts((prevState) => ({
+            ...prevState,
+            [role]: {
+              // @ts-ignore
+              ...prevState[role],
+              // @ts-ignore
+              count: prevState[role].count + 1,
+            },
+          }));
+        }
+        setPointValue((prevState) => prevState + unit.points);
       });
-      setPointValue((prevState) => prevState + unit.points);
       setValue('units', [...currentUnits, unit]);
       // flip all chosen enhancements to true, so they cant be picked again
       Object.keys(unit.enhancements).forEach((enhancement) => {
@@ -266,17 +283,19 @@ const ArmyBuilderForm = ({
       setPotentialGeneral(null);
     } else {
       // loop through units roles and decrement the count in roleCounts that pertains to the role
-      unit.role.forEach((role: string) => {
-        setRoleCounts((prevState) => ({
-          ...prevState,
-          [role]: {
-            // @ts-ignore
-            ...prevState[role],
-            // @ts-ignore
-            count: prevState[role].count - 1,
-          },
-        }));
-      });
+      if (pointLimit) {
+        unit.role.forEach((role: string) => {
+          setRoleCounts((prevState) => ({
+            ...prevState,
+            [role]: {
+              // @ts-ignore
+              ...prevState[role],
+              // @ts-ignore
+              count: prevState[role].count - 1,
+            },
+          }));
+        });
+      }
       setPointValue((prevState) => prevState - unit.points);
       setValue(
         'units',
@@ -289,11 +308,21 @@ const ArmyBuilderForm = ({
 
   const onSubmit = async (data: FormValues) => {
     const currentPlayer = searchParams?.get('player');
-    const { factionName, units } = data;
+    const { factionName, units, grandStrategy } = data;
+    const battleTraits =
+      chosenArmy?.type.find(
+        (armyType) => armyType.name === getValues('subFaction'),
+      )?.battleTraits ?? [];
     const army: PlayerArmy = {
       factionName: factionName as FactionName,
       units,
       id: crypto.randomUUID(),
+      grandStrategy: grandStrategy!,
+      battleTraits,
+      battleTactics: [
+        ...(chosenArmy?.battleTactics ?? []),
+        ...(battlepack?.battleTactics ?? []),
+      ],
     };
     if (currentPlayer === user?.uid) {
       await fetch('/api/firestore/add-player-army', {
@@ -349,6 +378,21 @@ const ArmyBuilderForm = ({
         </div>
       </div>
 
+      {battlepack && chosenArmy && (
+        <div>
+          <GrandStrategyRadioGroup
+            name="grandStrategy"
+            label="Grand Strategy"
+            options={[
+              ...battlepack?.grandStrategies,
+              ...chosenArmy?.grandStrategies,
+            ]}
+            rules={{ required: true }}
+            control={control}
+          />
+        </div>
+      )}
+
       <div
         className={`my-10 w-full transition-all  ${
           initialDataCollected ? 'opacity-100' : 'translate-y-4 opacity-0'
@@ -363,28 +407,30 @@ const ArmyBuilderForm = ({
               >
                 {section.displayName}
 
-                <div className="flex-start flex w-full items-center gap-2 text-sm">
-                  <div className="flex flex-col">
-                    <span>{roleCounts[section.name]?.min ?? '-'}</span>
-                    <span className="text-[10px] uppercase leading-[10px] opacity-50">
-                      min
-                    </span>
-                  </div>
-                  <div className="flex flex-col text-center">
-                    <span>{roleCounts[section.name]?.max ?? '-'}</span>
-                    <span className="text-[10px] uppercase leading-[10px] opacity-50">
-                      max
-                    </span>
-                  </div>
-                  {roleCounts[section.name]?.count > 0 && (
-                    <div className="ml-auto flex flex-col">
-                      <span>{roleCounts[section.name]?.count}</span>
+                {pointLimit && (
+                  <div className="flex-start flex w-full items-center gap-2 text-sm">
+                    <div className="flex flex-col">
+                      <span>{roleCounts[section.name]?.min ?? '-'}</span>
                       <span className="text-[10px] uppercase leading-[10px] opacity-50">
-                        total
+                        min
                       </span>
                     </div>
-                  )}
-                </div>
+                    <div className="flex flex-col text-center">
+                      <span>{roleCounts[section.name]?.max ?? '-'}</span>
+                      <span className="text-[10px] uppercase leading-[10px] opacity-50">
+                        max
+                      </span>
+                    </div>
+                    {roleCounts[section.name]?.count > 0 && (
+                      <div className="ml-auto flex flex-col">
+                        <span>{roleCounts[section.name]?.count}</span>
+                        <span className="text-[10px] uppercase leading-[10px] opacity-50">
+                          total
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </Tab>
             ))}
           </Tab.List>
