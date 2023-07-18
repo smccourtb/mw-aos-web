@@ -14,7 +14,7 @@ const nextConfig = {
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   reactStrictMode: true,
   compilerOptions: {
-    baseUrl: '/',
+    baseUrl: '.',
     paths: {
       '@/components/*': ['components/*'],
     },
