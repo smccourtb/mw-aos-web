@@ -252,7 +252,7 @@ export type Enhancement = {
 
 export type Phase = {
   name: string;
-  commandAbilities: { name: string; text: string }[];
-  heroicActions: { name: string; text: string }[];
+  commandAbilities: { name: string; description: string }[];
+  heroicActions: { name: string; description: string }[];
   beginnerRules: string[];
 };

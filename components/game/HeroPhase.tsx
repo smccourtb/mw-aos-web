@@ -13,7 +13,7 @@ type HeroPhaseProps = {
     }>
   >;
   currentPlayer: 1 | 2;
-  heroicActions: { text: string; name: string }[];
+  heroicActions: { description: string; name: string }[];
   setBattleTactic: React.Dispatch<
     React.SetStateAction<{ name: string; description: string }>
   >;
@@ -35,6 +35,7 @@ const HeroPhase = ({
   endPhase,
 }: HeroPhaseProps) => {
   const [phasePosition, setPhasePosition] = useState(0);
+
   // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
   // get all hero unit possible heroic actions
   // get all generic heroic actions
@@ -96,7 +97,7 @@ const HeroPhase = ({
                 <span className="text-md font-bold capitalize">
                   {heroicAction.name}
                 </span>
-                <span className="text-sm">{heroicAction.text}</span>
+                <span className="text-sm">{heroicAction.description}</span>
               </button>
             ))}
           </div>
