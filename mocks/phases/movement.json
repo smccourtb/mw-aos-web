@@ -1,0 +1,16 @@
+{
+  "name": "movement",
+  "commandAbilities": [
+    {
+      "name": "At the Double",
+      "description": "You can use this command ability after you declare that a friendly unit will run. That unit must receive the command. The run roll is not made for that unit. Instead, 6\" is added to that unit’s Move characteristic in that phase. The unit is still considered to have run.",
+      "flavor": "Eager for battle, the warriors pick up their pace and surge towards the enemy."
+    },
+    {
+      "name": "Redeploy",
+      "description": "You can use this command ability in the enemy movement phase after an enemy unit finishes a normal move, run or retreat. The unit that receives the command must be within 9\" of that enemy unit and more than 3\" from all enemy units. You can make a D6\" move with the unit that receives the command, but it must finish the move more than 3\" from all enemy units and cannot shoot later in the turn.",
+      "flavor": "As the enemy draw close, battle-hardened warriors adjust their position to leave their foe at a disadvantage."
+    }
+  ],
+  "beginnerRules": []
+}

@@ -1,0 +1,11 @@
+{
+  "name": "battleshock",
+  "commandAbilities": [
+    {
+      "name": "Inspiring Presence",
+      "description": "You can use this command ability at the start of the battleshock phase. The unit that receives the command does not have to take battleshock tests in that phase.",
+      "flavor": "The stoic leaders of these mighty warriors never falter, inspiring their comrades to fight no matter the odds."
+    }
+  ],
+  "beginnerRules": []
+}
