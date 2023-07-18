@@ -13,12 +13,6 @@ const nextConfig = {
   },
   pageExtensions: ['ts', 'tsx', 'js', 'jsx', 'md', 'mdx'],
   reactStrictMode: true,
-  compilerOptions: {
-    baseUrl: '.',
-    paths: {
-      '@/components/*': ['components/*'],
-    },
-  },
 };
 
 module.exports = withMDX(nextConfig);
