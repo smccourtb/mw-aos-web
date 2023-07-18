@@ -1,5 +1,5 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Faction } from '@/components/firestore/types';
+import { Faction } from '@/firestore/types';
 
 export const getKeywords = async () => {
   const response = await db.collection('keywords').get();

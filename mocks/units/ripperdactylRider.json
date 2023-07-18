@@ -1,6 +1,7 @@
 {
   "name": "Ripperdactyl Riders",
   "points": 120,
+  "flavor": "In a storm of snapping, razor-sharp fangs, Ripperdactyls descend to tear apart their prey. The bloodlust of these creatures can never be sated, for in their bestial hearts lurks an endless desire to kill.",
   "role": [],
   "faction": "seraphon",
   "baseStats": {
@@ -118,5 +119,26 @@
     }
   ],
   "canFly": true,
-  "isWizard": false
+  "isWizard": false,
+  "spells": null,
+  "abilities": [
+    {
+      "name": "Blot Toad",
+      "description": "You receive 1 Blot Toad marker for each RIPPERDACTYL RIDERS unit in your army. After the players have received their starting command points but before the start of the first turn, you can pick 1 enemy unit to have a Blot Toad for each Blot Toad marker you have. Place a Blot Toad marker next to that enemy unit.",
+      "phase": "setup",
+      "flavor": ""
+    },
+    {
+      "name": "Toad Rage",
+      "description": "In the combat phase, add 1 to hit rolls and wound rolls for attacks made with this unit’s Tearing Jaws that target an enemy unit that has a Blot Toad.",
+      "phase": "combat",
+      "flavor": "The mere scent of a blot toad sends Ripperdactyls into a frenzy."
+    },
+    {
+      "name": "Swooping Dive",
+      "description": "Subtract 1 from hit rolls from attacks made with missile weapons that target this unit. In addition, if this unit is targeted by attacks made by an enemy unit that received the Unleash Hell command in that phase, those attacks only score a hit on an unmodified hit roll of 6.",
+      "phase": "combat",
+      "flavor": "Ripperdactyls fly with such savage haste that it is almost impossible to draw a bead on them - and never more so than when they swoop down in a fit of rage."
+    }
+  ]
 }

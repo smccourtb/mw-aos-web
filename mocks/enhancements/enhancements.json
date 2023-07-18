@@ -1,0 +1,84 @@
+{
+  "commandTraits": [
+    {
+      "name": "Battle-lust",
+      "description": "You can re-roll run rolls and charge rolls for this general."
+    },
+    {
+      "name": "High Priest",
+      "description": "You can re-roll chanting rolls for this general."
+    },
+    {
+      "name": "Skilled Leader",
+      "description": "If this general is on the battlefield at the start of your hero phase, roll a dice. On a 5+, you receive 1 extra command point."
+    },
+    {
+      "name": "Heroic Stature",
+      "description": "Add 1 to this general’s Wounds characteristic."
+    },
+    {
+      "name": "Master of Magic",
+      "description": "Once per hero phase, you can re-roll 1 casting roll, dispelling roll or unbinding roll for this general."
+    }
+  ],
+  "artefacts": [
+    {
+      "name": "Amulet of Destiny",
+      "description": "The bearer has a ward of 6+."
+    },
+    {
+      "name": "Vial of Manticore Venom",
+      "description": "Pick 1 of the bearer’s melee weapons. Add 1 to wound rolls for attacks made with that weapon."
+    },
+    {
+      "name": "Arcane Tome",
+      "description": "HERO that does not have the WIZARD, PRIEST or KHORNE keyword. The bearer becomes a WIZARD that can only cast Arcane Bolt, Mystic Shield and spells to summon endless spells on your army roster. They can attempt to cast 1 spell in your hero phase and attempt to unbind 1 spell in the enemy hero phase. \nDesigner’s Note: When using the Pitched Battles 2023-24 battlepack in the General’s Handbook, if a HERO with a Wounds characteristic of 9 or less is given the Arcane Tome, it gains the ANDTORIAN LOCUS keyword."
+    },
+    {
+      "name": "Seed of Rebirth",
+      "description": "You can re-roll heroic recovery rolls for the bearer."
+    }
+  ],
+  "spellLores": [
+    {
+      "name": "Flaming Weapon",
+      "description": "Flaming Weapon is a spell that has a casting value of 4. If successfully cast, pick 1 of the caster’s melee weapons. Add 1 to Damage characteristic of that weapon until your next hero phase."
+    },
+    {
+      "name": "Levitate",
+      "description": "Levitate is a spell that has a casting value of 8 and a range of 18\". If successfully cast, pick 1 friendly unit wholly within range and visible to the caster. That unit can fly until your next hero phase."
+    },
+    {
+      "name": "Ghost-mist",
+      "description": "Ghost-mist is a spell that has a casting value of 5 and a range of 6\". If successfully cast, pick 1 terrain feature within range and visible to the caster. Until your next hero phase, visibility between 2 models is blocked if a straight line 1mm wide drawn between the closest points of the 2 models passes across more than 3\" of that terrain feature. This effect does not block visibility to or from models with a Wounds characteristic of 10 or more."
+    }
+  ],
+  "prayer": [
+    {
+      "name": "Guidance",
+      "description": "Guidance is a prayer that has an answer value of 5. If answered, you receive 1 command point."
+    },
+    {
+      "name": "Heal",
+      "description": "Heal is a prayer that has an answer value of 3 and a range of 12\". If answered, pick 1 friendly model within range and visible to the chanter. You can heal up to D3 wounds allocated to that model."
+    },
+    {
+      "name": "Curse",
+      "description": "Curse is a prayer that has an answer value of 4 and a range of 9\". If answered, pick 1 enemy unit within range and visible to the chanter. Until your next hero phase, if the unmodified hit roll for an attack that targets that unit is 6, that unit suffers 1 mortal wound in addition to any normal damage."
+    }
+  ],
+  "triumphs": [
+    {
+      "name": "Bloodthirsty",
+      "description": "Once per battle, after you make a charge roll for a friendly unit, you can say that it is bloodthirsty. If you do so, you can re-roll that charge roll."
+    },
+    {
+      "name": "Inspired",
+      "description": "Once per battle, after you pick a friendly unit to shoot or fight, you can say that it is inspired. If you do so, add 1 to wound rolls for attacks made by that unit until the end of that phase."
+    },
+    {
+      "name": "Indomitable",
+      "description": "Once per battle, after you take a battleshock test for a friendly unit, you can say it is indomitable. If you do so, no models from that unit will flee in that battleshock phase."
+    }
+  ]
+}

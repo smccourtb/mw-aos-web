@@ -1,5 +1,6 @@
 {
   "name": "Saurus Warriors",
+  "flavor": "Saurus Warriors are the brutal heart of the Seraphon armies. Bred solely for war, their cohorts advance across the battlefield in disciplined lockstep, unleashing their cold-blooded savagery only when battle is joined.",
   "points": 200,
   "role": ["battleline"],
   "faction": "seraphon",
@@ -137,5 +138,20 @@
     }
   ],
   "canFly": false,
-  "isWizard": false
+  "isWizard": false,
+  "spells": null,
+  "abilities": [
+    {
+      "name": "Ordered Cohorts",
+      "description": "Add 1 to save rolls for attacks that target this unit if it is contesting any objectives or if it is wholly within your territory.",
+      "phase": "all",
+      "flavor": "Devoted servants of the Old Ones, Saurus Warriors are as intractable in defence as they are relentless upon the attack."
+    },
+    {
+      "name": "Saurus Jaws",
+      "description": "Each time this unit fights, after all of its attacks have been resolved, pick 1 enemy unit within 1\" of this unit and roll 1 dice for each model in this unit within 1\" of that unit. These dice rolls are referred to as bite rolls. For each bite roll of 6+, that enemy unit suffers 1 mortal wound.",
+      "phase": "attack",
+      "flavor": "A bite from this fearsome creature is strong enough to rip a limb off a lesser warrior or tear a massive blood chunk from the flank of a beast."
+    }
+  ]
 }

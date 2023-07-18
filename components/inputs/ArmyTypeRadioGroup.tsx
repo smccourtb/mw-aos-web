@@ -2,29 +2,28 @@ import { RadioGroup } from '@headlessui/react';
 import React from 'react';
 import { CheckCircleIcon } from '@heroicons/react/solid';
 import { useController, UseControllerProps } from 'react-hook-form';
-import type { PlayerArmy } from '@/firestore/types';
 
-type ArmySelectorRadioGroupProps = {
-  options: PlayerArmy[];
+type ArmyTypeRadioGroupProps = {
+  options: string[];
   label?: string;
 };
 
-const ArmySelectorRadioGroup = (
-  props: UseControllerProps<any> & ArmySelectorRadioGroupProps,
+const ArmyTypeRadioGroup = (
+  props: UseControllerProps<any> & ArmyTypeRadioGroupProps,
 ) => {
   const { field } = useController(props);
   const { value, onChange } = field;
 
   return (
-    <div className="mx-auto mb-4 flex w-full max-w-md flex-col items-center">
-      <RadioGroup value={value} onChange={onChange} by="id">
+    <div className="mx-auto flex items-center gap-2">
+      <RadioGroup value={value} onChange={onChange}>
         <RadioGroup.Label className="w-full self-center text-lg font-bold">
           {props?.label}
         </RadioGroup.Label>
-        <div className="flex flex-col items-center justify-between">
+        <div className="flex items-center justify-between gap-2">
           {props.options.map((option) => (
             <RadioGroup.Option
-              key={option.id}
+              key={option}
               value={option}
               className={({ active, checked }) =>
                 `${
@@ -35,7 +34,7 @@ const ArmySelectorRadioGroup = (
                   ${
                     checked ? 'bg-sky-900 bg-opacity-75 text-white' : 'bg-white'
                   }
-                    relative flex cursor-pointer rounded-lg px-5 py-4 shadow-md focus:outline-none`
+                    relative flex cursor-pointer rounded-lg px-2 py-1 text-sm shadow-md focus:outline-none`
               }
             >
               {({ active, checked }) => (
@@ -49,21 +48,8 @@ const ArmySelectorRadioGroup = (
                             checked ? 'text-white' : 'text-gray-900'
                           } ${active ? 'text-sky-400' : 'text-gray-500'} `}
                         >
-                          {option.factionName}
+                          {option}
                         </RadioGroup.Label>
-                        <RadioGroup.Description
-                          as="span"
-                          className={`inline ${
-                            checked ? 'text-sky-100' : 'text-gray-500'
-                          }`}
-                        >
-                          <span>
-                            {option.units.reduce(
-                              (acc, unit) => acc + unit.points,
-                              0,
-                            )}
-                          </span>
-                        </RadioGroup.Description>
                       </div>
                     </div>
                     {checked && (
@@ -82,4 +68,4 @@ const ArmySelectorRadioGroup = (
   );
 };
 
-export default ArmySelectorRadioGroup;
+export default ArmyTypeRadioGroup;

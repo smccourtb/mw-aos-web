@@ -1,0 +1,231 @@
+{
+  "name": "Contest of Generals",
+  "battleTactics": [
+    {
+      "name": "Break their Spirit",
+      "description": "Pick 1 enemy unit wholly within your opponent’s territory. You complete this tactic if that unit is destroyed during this turn."
+    },
+    {
+      "name": "Broken Ranks",
+      "description": "Pick 1 unit from your opponent’s starting army that is on the battlefield. You complete this tactic if that unit is destroyed during this turn."
+    },
+    {
+      "name": "Conquer",
+      "description": "Pick 1 objective marker on the battlefield that your opponent controls. You complete this tactic if you control that objective marker at the end of this turn."
+    },
+    {
+      "name": "Repel",
+      "description": "Pick 1 enemy unit wholly or partially within your territory. You complete this tactic if that unit is destroyed during this turn."
+    },
+    {
+      "name": "Seize the Centre",
+      "description": "You complete this tactic if there are more friendly than enemy models within 6\" of the centre of the battlefield at the end of this turn."
+    },
+    {
+      "name": "Slay the Warlord",
+      "description": "You complete this tactic if the model chosen to be your opponent’s general is slain during this turn."
+    }
+  ],
+  "grandStrategies": [
+    {
+      "name": "Sever the Head",
+      "description": "When the battle ends, you complete this grand strategy if there are no HEROES from your opponent’s starting army on the battlefield."
+    },
+    {
+      "name": "Vendetta",
+      "description": "When the battle ends, you complete this grand strategy if the model chosen to be your opponent’s general has been slain and the model chosen to be your general has not been slain."
+    },
+    {
+      "name": "Hold the Line",
+      "description": "When the battle ends, you complete this grand strategy if there are any Battleline units from your starting army on the battlefield."
+    }
+  ],
+  "gsPoints": 3,
+  "btPoints": 2,
+  "battlions": {
+    "core": true,
+    "warscroll": false
+  },
+  "armyRules": [
+    {
+      "points": 750,
+      "leaders": {
+        "min": 1,
+        "max": 2
+      },
+      "battleline": {
+        "min": 1,
+        "max": null
+      },
+      "artillery": {
+        "min": 0,
+        "max": 1
+      },
+      "behemoths": {
+        "min": 0,
+        "max": 1
+      },
+      "endlessSpells": {
+        "min": 0,
+        "max": 1
+      },
+      "reinforced": {
+        "min": 0,
+        "max": 1
+      },
+      "understrength": {
+        "min": 0,
+        "max": 1
+      },
+      "allied": {
+        "min": 0,
+        "max": 100
+      },
+      "recommendedTerrainCount": 4
+    },
+    {
+      "points": 1000,
+      "leaders": {
+        "min": 1,
+        "max": 3
+      },
+      "battleline": {
+        "min": 2,
+        "max": null
+      },
+      "artillery": {
+        "min": 0,
+        "max": 2
+      },
+      "behemoths": {
+        "min": 0,
+        "max": 2
+      },
+      "endlessSpells": {
+        "min": 0,
+        "max": 2
+      },
+      "reinforced": {
+        "min": 0,
+        "max": 2
+      },
+      "understrength": {
+        "min": 0,
+        "max": 1
+      },
+      "allied": {
+        "min": 0,
+        "max": 200
+      },
+      "recommendedTerrainCount": 4
+    },
+    {
+      "points": 1500,
+      "leaders": {
+        "min": 1,
+        "max": 4
+      },
+      "battleline": {
+        "min": 2,
+        "max": null
+      },
+      "artillery": {
+        "min": 0,
+        "max": 3
+      },
+      "behemoths": {
+        "min": 0,
+        "max": 3
+      },
+      "endlessSpells": {
+        "min": 0,
+        "max": 2
+      },
+      "reinforced": {
+        "min": 0,
+        "max": 3
+      },
+      "understrength": {
+        "min": 0,
+        "max": 1
+      },
+      "allied": {
+        "min": 0,
+        "max": 300
+      },
+      "recommendedTerrainCount": 8
+    },
+    {
+      "points": 2000,
+      "leaders": {
+        "min": 1,
+        "max": 6
+      },
+      "battleline": {
+        "min": 3,
+        "max": null
+      },
+      "artillery": {
+        "min": 0,
+        "max": 4
+      },
+      "behemoths": {
+        "min": 0,
+        "max": 4
+      },
+      "endlessSpells": {
+        "min": 0,
+        "max": 3
+      },
+      "reinforced": {
+        "min": 0,
+        "max": 4
+      },
+      "understrength": {
+        "min": 0,
+        "max": 1
+      },
+      "allied": {
+        "min": 0,
+        "max": 400
+      },
+      "recommendedTerrainCount": 4
+    },
+    {
+      "points": 3000,
+      "leaders": {
+        "min": 1,
+        "max": 8
+      },
+      "battleline": {
+        "min": 4,
+        "max": null
+      },
+      "artillery": {
+        "min": 0,
+        "max": 6
+      },
+      "behemoths": {
+        "min": 0,
+        "max": 6
+      },
+      "endlessSpells": {
+        "min": 0,
+        "max": 4
+      },
+      "reinforced": {
+        "min": 0,
+        "max": 6
+      },
+      "understrength": {
+        "min": 0,
+        "max": 1
+      },
+      "allied": {
+        "min": 0,
+        "max": 600
+      },
+      "recommendedTerrainCount": 12
+    }
+  ]
+}

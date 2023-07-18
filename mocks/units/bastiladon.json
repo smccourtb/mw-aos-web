@@ -1,6 +1,7 @@
 {
   "name": "Bastiladon",
   "points": 265,
+  "flavor": "With scales thicker than the hull of a Steam Tank, a Bastiladon is nearly impervious to attack. They lumber forth heedless of even the mightiest blows while the skinks who ride upon their armoured shells operating deadly relics of the Old Ones.",
   "role": ["behemoth"],
   "faction": "seraphon",
   "baseStats": {
@@ -144,5 +145,14 @@
     }
   ],
   "canFly": false,
-  "isWizard": false
+  "isWizard": false,
+  "spells": null,
+  "abilities": [
+    {
+      "name": "Tide of Snakes",
+      "description": "If the unmodified hit roll for an attack made with an Ark of Sotek is 6, the target suffers 1 mortal wound and the attack sequence ends (do not make a wound roll or save roll).",
+      "flavor": "So numerous are the snakes unleashed by an Ark of Sotek that it is almost inevitable that some will find their way past the foe’s defences to deliver a lethal venomous bite.",
+      "phase": "attack"
+    }
+  ]
 }
