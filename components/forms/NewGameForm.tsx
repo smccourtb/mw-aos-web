@@ -5,7 +5,7 @@ import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
 import { Battlepack, PlayerArmy } from '@/firestore/types';
 import AuthContext from '@/context/AuthContext';
-import { redirect, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import BattlepackSelect from '@/components/inputs/BattlepackSelect';
 
@@ -31,20 +31,24 @@ type NewGameFormProps = {
 const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   const user = useContext(AuthContext);
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
   // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
 
   const defaultValues = {
     type: searchParams?.get('type') ?? null,
     points: Number(searchParams?.get('points')) ?? null,
-    battlepack: null,
+    battlepack:
+      battlepacks.find(
+        (battlepack) => battlepack.id === searchParams?.get('battlepack'),
+      ) ?? null,
     playerOne: {
       army: null,
       user: user?.uid,
     },
     playerTwo: {
       army: null,
-      user: crypto.randomUUID(),
+      user: '',
     },
   };
   const onSubmit = async (data: FormValues) => {
@@ -52,7 +56,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
       alert('You must be logged in to create a game');
       return;
     }
-    const { type, points, playerOne, playerTwo } = data;
+    const { type, points, playerOne, playerTwo, battlepack } = data;
     const game = {
       id: crypto.randomUUID(),
       type,
@@ -65,12 +69,13 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
         army: playerTwo.army,
         user: playerTwo.user,
       },
+      battlepack,
     };
     await fetch('/api/firestore/add-new-game', {
       method: 'POST',
       body: JSON.stringify(game),
     });
-    redirect(`/play/${game.id}`);
+    router.push(`/play/${game.id}`);
   };
 
   const { control, watch, handleSubmit, getValues } = useForm<FormValues>({
@@ -79,6 +84,35 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   const watchedType = watch('type');
   const watchedBattlePack = watch('battlepack');
   const watchedPoints = watch('points');
+
+  const handleBuildArmyDisabled = () => {
+    if (!watchedType) return true;
+    if (watchedType === 'matched') {
+      if (!watchedPoints || !watchedBattlePack) return true;
+    }
+    return false;
+  };
+
+  const BuildArmyButton = ({ playerId }: { playerId: string }) => (
+    <Link
+      href={{
+        pathname: '/build',
+        query: {
+          type: getValues('type'),
+          battlepack: getValues('battlepack')?.id,
+          points: getValues('points'),
+          player: playerId,
+        },
+      }}
+    >
+      <button
+        className="cursor-pointer rounded bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-500"
+        disabled={handleBuildArmyDisabled()}
+      >
+        Build Army
+      </button>
+    </Link>
+  );
 
   return (
     <>
@@ -137,20 +171,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
             label="Army"
             name="playerOne.army"
           />
-          <Link
-            className="button"
-            href={{
-              pathname: '/build',
-              query: {
-                type: getValues('type'),
-                battlepack: getValues('battlepack')?.id,
-                points: getValues('points'),
-                player: getValues('playerOne.user'),
-              },
-            }}
-          >
-            Build Army
-          </Link>
+          <BuildArmyButton playerId={getValues('playerOne.user')!} />
         </div>
         {/*player 2*/}
         <div className="flex flex-col items-center">
@@ -159,24 +180,11 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
             <ArmySelectorRadioGroup
               control={control}
               options={playerTwoArmies}
-              rules={{ required: true }}
+              rules={{ required: false }}
               label="Army"
               name="playerTwo.army"
             />
-            <Link
-              className="button"
-              href={{
-                pathname: '/build',
-                query: {
-                  type: getValues('type'),
-                  battlepack: getValues('battlepack')?.id,
-                  points: getValues('points'),
-                  player: getValues('playerTwo.user'),
-                },
-              }}
-            >
-              Build Army
-            </Link>
+            <BuildArmyButton playerId={getValues('playerTwo.user')!} />
           </div>
         </div>
       </div>
