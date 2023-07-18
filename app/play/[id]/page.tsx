@@ -1,15 +1,21 @@
 import React from 'react';
-import { userSession } from '@/firebase/serverUserSessionUtils';
+import Game from '@/components/Game';
 import { getUserGame } from '@/firestore/user';
+import { userSession } from '@/firebase/serverUserSessionUtils';
+import { getPhases } from '@/firestore/phases';
 
-export default async function Page({ params }: { params: { id: string } }) {
+type GamePageProps = {
+  params: { id: string };
+};
+export default async function PlayGamePage({ params }: GamePageProps) {
   const user = await userSession();
-  const gameData = user ? await getUserGame(user?.uid, params.id) : [];
-  console.log('gameData', gameData);
 
+  const gameData = await getUserGame(user?.uid, params.id);
+
+  const phases = await getPhases();
   return (
     <div className="mx-10 flex h-screen flex-col items-center">
-      return <div>GameId: {params.id}</div>
+      <Game gameData={gameData} phaseData={phases} />
     </div>
   );
 }

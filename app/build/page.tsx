@@ -18,7 +18,6 @@ export default async function BuildPage({ searchParams }: BuildPageProps) {
     <div className="mx-10 flex h-screen flex-col items-center">
       <ArmyBuilderForm
         armyData={factions}
-        pointLimit={1000}
         battlepack={battlepack}
         enhancements={enhancements}
       />
