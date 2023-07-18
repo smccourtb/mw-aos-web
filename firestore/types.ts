@@ -37,6 +37,24 @@ export type Faction = {
 };
 
 export interface Unit {
+  flavor: string;
+  spells:
+    | {
+        name: string;
+        description: string;
+        flavor: string;
+        range: number;
+        castingValue: number;
+      }[]
+    | null;
+  abilities:
+    | {
+        name: string;
+        description: string;
+        phase: string;
+        flavor: string;
+      }[]
+    | null;
   faction: string;
   keywords: string[];
   name: string;
@@ -76,30 +94,6 @@ export interface Unit {
   conditionalRole?: {
     condition: SubFactionCondition;
   };
-
-  abilities: {
-    name: string;
-    description: string;
-    round: number;
-    phase: string;
-    effect: {
-      target: string;
-      rolls: string[];
-      value: number;
-      description: string;
-    };
-  };
-
-  specialAttack: {
-    name: string;
-    targetCondition: string; // 'range',
-    dicePerCondition: number | null; // account for target unit role ex. 'monsters' keyword gets 5 dice
-    rollThreshold: number;
-    range: number;
-    mortalWounds: boolean;
-    damage: number; // 'models in unit', 'roll result'
-    canModify: boolean;
-  };
 }
 
 type SubFactionCondition = {
@@ -134,6 +128,9 @@ export type PlayerArmy = {
   id: string;
   factionName: FactionName;
   units: PlayerArmyUnit[];
+  grandStrategy: { name: string; description: string };
+  battleTactics: { name: string; description: string }[];
+  battleTraits: { name: string; description: string }[];
 };
 
 export type SpecialUnitModel = {
