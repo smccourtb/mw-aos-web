@@ -1,7 +1,7 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { PlayerArmy } from '@/components/firestore/types';
+import { Game, PlayerArmy } from '@/firestore/types';
 
-export const getUserArmies = async (user_id: string) => {
+export const getUserArmies = async (user_id: string | undefined) => {
   const armiesRef = await db.collection(`users/${user_id}/armies`).get();
   if (armiesRef.empty) {
     return [];
@@ -9,7 +9,11 @@ export const getUserArmies = async (user_id: string) => {
   return armiesRef.docs.map((doc) => doc.data()) as PlayerArmy[];
 };
 
-export const getUserGame = async (user_id: string, gameId: string) => {
+export const getUserGame = async (
+  user_id: string | undefined,
+  gameId: string,
+) => {
+  if (!user_id) return null;
   const gameRef = await db
     .collection(`users/${user_id}/games`)
     .doc(gameId)
@@ -17,5 +21,5 @@ export const getUserGame = async (user_id: string, gameId: string) => {
   if (!gameRef.exists) {
     return null;
   }
-  return gameRef.data();
+  return gameRef.data() as Game;
 };

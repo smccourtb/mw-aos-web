@@ -1,5 +1,6 @@
 {
   "name": "Saurus Oldblood on Carnosaur",
+  "flavor": "Only the mightiest Oldbloods can tame a Carnosaur and ride the terrifying beast into battle. The roar of a Carnosaur can send even the bravest warrior fleeing, for the fury of these predatory monsters is legendary.",
   "points": 285,
   "role": ["leader", "behemoth"],
   "faction": "seraphon",
@@ -195,5 +196,26 @@
     }
   ],
   "canFly": false,
-  "isWizard": false
+  "isWizard": false,
+  "spells": null,
+  "abilities": [
+    {
+      "name": "Blood Frenzy",
+      "description": "If any enemy models are slain by wounds caused by this unit’s attacks, for the rest of the battle, this unit is blood-frenzied. Add 1 to wound rolls for attacks made by this unit’s mount while it is blood-frenzied.",
+      "phase": "all",
+      "flavor": "A Carnosaur that tastes flesh in the midst of battle becomes a rampaging force of destruction."
+    },
+    {
+      "name": "Terror",
+      "description": "Enemy units cannot receive the Inspiring Presence command while they are within 3\" of any friendly units with this ability.",
+      "phase": "all",
+      "flavor": "This terrifying monstrosity strikes fear into the hearts of its foes."
+    },
+    {
+      "name": "Ancient Warlord",
+      "description": "This unit can issue the same command up to 2 times in the same phase. If it does so, each command must be received by a friendly SERAPHON unit. No command point is spent the second time this unit issues that command in that phase.",
+      "phase": "all",
+      "flavor": "An Oldblood who has mastered a Carnosaur is a creature of unstoppable will, and they command their saurian brethren with a relentless focus and drive."
+    }
+  ]
 }

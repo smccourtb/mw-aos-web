@@ -3,47 +3,52 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
-import { FactionName, PlayerArmy, Unit } from '@/components/firestore/types';
-import ArmyBuilderModal from '@/app/modals/ArmyBuilderModal';
+import { Battlepack, PlayerArmy } from '@/firestore/types';
 import AuthContext from '@/context/AuthContext';
-import { redirect } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
+import BattlepackSelect from '@/components/inputs/BattlepackSelect';
 
 type FormValues = {
-  type: string;
-  points: string | null;
+  type: string | null;
+  points: number | null;
+  battlepack: Battlepack | null;
   playerOne: {
     army: {} | null;
+    user: string | null;
   };
   playerTwo: {
     army: {} | null;
+    user: string | null;
   };
 };
 
 type NewGameFormProps = {
-  armyBuilderData: {
-    factions: string[];
-    units: { [K in FactionName]: Unit[] };
-  };
   userArmies: PlayerArmy[];
+  battlepacks: Battlepack[];
 };
 
-const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
+const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
   const user = useContext(AuthContext);
-  const [openModal, setOpenModal] = useState(false);
-  const [playerOneArmies, setPlayerOneArmies] =
-    useState<PlayerArmy[]>(userArmies);
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
-  const [currentPlayer, setCurrentPlayer] = useState<1 | 2>(1);
   // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
 
   const defaultValues = {
-    type: 'Matched Play',
-    points: null,
+    type: searchParams?.get('type') ?? null,
+    points: Number(searchParams?.get('points')) ?? null,
+    battlepack:
+      battlepacks.find(
+        (battlepack) => battlepack.id === searchParams?.get('battlepack'),
+      ) ?? null,
     playerOne: {
       army: null,
+      user: user?.uid,
     },
     playerTwo: {
       army: null,
+      user: '',
     },
   };
   const onSubmit = async (data: FormValues) => {
@@ -51,32 +56,63 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
       alert('You must be logged in to create a game');
       return;
     }
-    const { type, points, playerOne, playerTwo } = data;
+    const { type, points, playerOne, playerTwo, battlepack } = data;
     const game = {
       id: crypto.randomUUID(),
       type,
       points,
       playerOne: {
         army: playerOne.army,
-        user: user.uid,
+        user: playerOne.user,
       },
       playerTwo: {
         army: playerTwo.army,
-        user: crypto.randomUUID(),
+        user: playerTwo.user,
       },
+      battlepack,
     };
     await fetch('/api/firestore/add-new-game', {
       method: 'POST',
       body: JSON.stringify(game),
     });
-    redirect(`/play/${game.id}`);
+    router.push(`/play/${game.id}`);
   };
 
-  const { control, watch, handleSubmit } = useForm<FormValues>({
+  const { control, watch, handleSubmit, getValues } = useForm<FormValues>({
     defaultValues,
   });
-  const watchType = watch('type');
-  const points = watch('points');
+  const watchedType = watch('type');
+  const watchedBattlePack = watch('battlepack');
+  const watchedPoints = watch('points');
+
+  const handleBuildArmyDisabled = () => {
+    if (!watchedType) return true;
+    if (watchedType === 'matched') {
+      if (!watchedPoints || !watchedBattlePack) return true;
+    }
+    return false;
+  };
+
+  const BuildArmyButton = ({ playerId }: { playerId: string }) => (
+    <Link
+      href={{
+        pathname: '/build',
+        query: {
+          type: getValues('type'),
+          battlepack: getValues('battlepack')?.id,
+          points: getValues('points'),
+          player: playerId,
+        },
+      }}
+    >
+      <button
+        className="cursor-pointer rounded bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-500"
+        disabled={handleBuildArmyDisabled()}
+      >
+        Build Army
+      </button>
+    </Link>
+  );
 
   return (
     <>
@@ -87,18 +123,40 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
             control={control}
             rules={{ required: true }}
             name="type"
-            options={['Matched Play', 'Open Play', 'Narrative Play']}
+            options={[
+              { value: 'matched', label: 'Matched Play' },
+              { value: 'open', label: 'Open Play' },
+              { value: 'narrative', label: 'Narrative Play' },
+            ]}
           />
         </div>
+        {watchedType === 'matched' && (
+          <div className="col-span-2">
+            <BattlepackSelect
+              placeholder="Battlepack"
+              control={control}
+              rules={{ required: watchedType === 'matched' }}
+              name="battlepack"
+              options={battlepacks}
+            />
+          </div>
+        )}
 
         {/*points*/}
-        {watchType.includes('Matched') && (
+        {watchedType === 'matched' && watchedBattlePack && (
           <div className="col-span-2">
             <MatchTypeSelection
               label="Points"
               name="points"
-              options={['1000', '1500', '2000', '2500', '3000']}
-              rules={{ required: watchType.includes('Matched') }}
+              options={
+                getValues('battlepack')?.armyRules.map((rules) => {
+                  return {
+                    value: rules.points,
+                    label: rules.points.toString(),
+                  };
+                }) ?? []
+              }
+              rules={{ required: watchedType === 'matched' }}
               control={control}
             />
           </div>
@@ -108,20 +166,12 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
           <span className="self-start text-lg font-bold">Player 1</span>
           <ArmySelectorRadioGroup
             control={control}
-            options={playerOneArmies}
+            options={userArmies}
             rules={{ required: true }}
             label="Army"
             name="playerOne.army"
           />
-          <button
-            className="button"
-            onClick={() => {
-              setCurrentPlayer(1);
-              setOpenModal(true);
-            }}
-          >
-            Build Army
-          </button>
+          <BuildArmyButton playerId={getValues('playerOne.user')!} />
         </div>
         {/*player 2*/}
         <div className="flex flex-col items-center">
@@ -130,19 +180,11 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
             <ArmySelectorRadioGroup
               control={control}
               options={playerTwoArmies}
-              rules={{ required: true }}
+              rules={{ required: false }}
               label="Army"
               name="playerTwo.army"
             />
-            <button
-              className="button"
-              onClick={() => {
-                setCurrentPlayer(2);
-                setOpenModal(true);
-              }}
-            >
-              Build Army
-            </button>
+            <BuildArmyButton playerId={getValues('playerTwo.user')!} />
           </div>
         </div>
       </div>
@@ -150,21 +192,6 @@ const NewGameForm = ({ armyBuilderData, userArmies }: NewGameFormProps) => {
       <button className="button mt-auto mb-10" onClick={handleSubmit(onSubmit)}>
         Submit
       </button>
-      {openModal && (
-        <ArmyBuilderModal
-          isOpen={openModal}
-          closeModal={setOpenModal}
-          setArmies={{
-            setArmy:
-              currentPlayer === 1 ? setPlayerOneArmies : setPlayerTwoArmies,
-            currentPlayer,
-          }}
-          data={{
-            armyData: armyBuilderData,
-            pointLimit: Number(points) || null,
-          }}
-        />
-      )}
     </>
   );
 };
