@@ -1,5 +1,6 @@
 {
   "faction": "seraphon",
+  "flavor": "Few creatures can hope to match a Terradon for speed. The skinks who ride them are gifted aerial warriors, directing their mounts to swoop low over the enemy lines before releasing the meteoric rocks that the beasts clasp in their powerful hind claws.",
   "name": "Terradon Riders",
   "keywords": ["order", "seraphon", "skin", "terradon", "terradon riders"],
   "baseStats": {
@@ -165,5 +166,20 @@
     }
   ],
   "canFly": true,
-  "isWizard": false
+  "isWizard": false,
+  "spells": null,
+  "abilities": [
+    {
+      "name": "Deadly Cargo",
+      "description": "Once per battle, after this unit finishes a normal move or run, you can pick 1 enemy unit and roll a dice for each model in this unit that passed across any models in that enemy unit. For each 4+, that enemy unit suffers D3 mortal wounds. In addition, if any mortal wounds caused by this ability are allocated to that enemy unit, halve the Move characteristic of that enemy unit until your next hero phase.",
+      "phase": "attack",
+      "flavor": "Terradons carry heavy boulders hewn from meteoric rock and carved with sigils of destruction. When these are dropped upon enemy lines, those not immediately crushed are sent flying in all directions."
+    },
+    {
+      "name": "Attack from On High",
+      "description": "Subtract 1 from hit rolls for attacks made with missile weapons that target this unit.",
+      "phase": "all",
+      "flavor": "Terradons circle high in the sky, only darting down for a brief moment to launch a strafing run."
+    }
+  ]
 }
