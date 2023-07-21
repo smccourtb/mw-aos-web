@@ -131,7 +131,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
           />
         </div>
         {watchedType === 'matched' && (
-          <div className="col-span-2">
+          <div className="col-span-2 w-1/3 place-self-center">
             <BattlepackSelect
               placeholder="Battlepack"
               control={control}
