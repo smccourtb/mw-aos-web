@@ -102,5 +102,7 @@
       "castingValue": 7,
       "range": null
     }
-  ]
+  ],
+  "spellCastLimit": 3,
+  "unBindAttempts": 3
 }

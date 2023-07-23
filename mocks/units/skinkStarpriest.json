@@ -2,6 +2,8 @@
   "name": "Skink Starpriest",
   "flavor": "Blessed with great intelligence and a deep connection to Azyr, the Starpriests provide front-line magical support to the Seraphon in battle. Each is a talented wizard, able to unleash the scouring light of distant celestial bodies upon the foe.",
   "points": 130,
+  "spellCastLimit": 1,
+  "unbindAttempts": 1,
   "role": ["leader"],
   "faction": "seraphon",
   "baseStats": {
