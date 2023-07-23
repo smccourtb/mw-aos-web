@@ -3,11 +3,12 @@ import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
-import { Battlepack, PlayerArmy } from '@/firestore/types';
+import { PlayerArmy } from '@/firestore/types';
 import AuthContext from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import BattlepackSelect from '@/components/inputs/BattlepackSelect';
+import { Battlepack } from '@/types/firestore';
 
 type FormValues = {
   type: string | null;

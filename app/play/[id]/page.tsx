@@ -15,6 +15,7 @@ export default async function PlayGamePage({ params }: GamePageProps) {
     return <div>Game not found</div>;
   }
   const phases = await getPhases();
+
   return (
     <div className="mx-10 flex h-screen flex-col items-center">
       <Game gameData={gameData} phaseData={phases} />

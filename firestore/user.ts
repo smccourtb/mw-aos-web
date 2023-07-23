@@ -1,5 +1,6 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Game, PlayerArmy } from '@/firestore/types';
+import { PlayerArmy } from '@/firestore/types';
+import { Game } from '@/types/firestore';
 
 export const getUserArmies = async (user_id: string | undefined) => {
   const armiesRef = await db.collection(`users/${user_id}/armies`).get();

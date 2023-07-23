@@ -1,5 +1,5 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Enhancements } from '@/firestore/types';
+import { Enhancement } from '@/types/firestore';
 
 export const getEnhancements = async () => {
   const response = await db.collection('enhancements').get();
@@ -8,7 +8,7 @@ export const getEnhancements = async () => {
     return [];
   }
   const enhancements = response.docs.map((doc) => {
-    return doc.data() as Enhancements;
+    return doc.data() as Enhancement[];
   });
   return enhancements[0];
 };

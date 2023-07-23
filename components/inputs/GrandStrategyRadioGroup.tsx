@@ -77,7 +77,7 @@ const GrandStrategyRadioGroup = (
                     </>
                   )}
                 </RadioGroup.Option>
-              </TooltipTrigger>{' '}
+              </TooltipTrigger>
               <TooltipContent>
                 <div className="flex max-w-[350px] flex-col rounded bg-gray-700 bg-opacity-95 p-4 text-gray-100">
                   {option.description}

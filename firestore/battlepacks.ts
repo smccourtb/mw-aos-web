@@ -1,5 +1,5 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Battlepack } from '@/firestore/types';
+import { Battlepack } from '@/types/firestore';
 
 export const getBattlePacks = async () => {
   const response = await db.collection('battlepacks').get();

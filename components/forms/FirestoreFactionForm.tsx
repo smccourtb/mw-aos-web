@@ -5,7 +5,7 @@ import { DocumentAddIcon, DocumentRemoveIcon } from '@heroicons/react/outline';
 import { sanitizeInput } from '@/utils/input-helpers';
 import AlertDatabaseError from '@/components/AlertDatabaseError';
 import Input from '@/components/inputs/Input';
-import { Faction } from '@/firestore/types';
+import { Faction } from '@/types/firestore';
 
 type FirestoreFactionFormProps = {
   factions: Faction[];
