@@ -1,11 +1,12 @@
 import { initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth } from 'firebase/auth';
+import { connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
 import clientConfig from './clientConfig';
 import { connectFirestoreEmulator, getFirestore } from '@firebase/firestore';
 
 const app = initializeApp(clientConfig);
+
 function shouldConnectAuthEmulator(): boolean {
   // You could do any logic here to decide whether to connect to the emulator or not
   return process.env.NODE_ENV === 'development';
@@ -24,5 +25,5 @@ if (shouldConnectAuthEmulator()) {
     Number(process.env.FIRESTORE_EMULATOR_PORT),
   );
 }
-export const clientAuth = getAuth(app);
+export const clientAuth = getAuth(app).setPersistence({ type: 'NONE' });
 export const clientStorage = getStorage(app);

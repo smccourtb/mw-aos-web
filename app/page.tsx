@@ -5,22 +5,12 @@ import React, { useContext, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import LandingHeader from '@/components/header/LandingHeader';
 import AuthContext from '@/context/AuthContext';
-import { clientAuth } from '@/firebase/clientFirebaseApps';
 import SeedEmulatedFirestoreButton from '@/components/buttons/SeedEmulatedFirestoreButton';
 
 export default function Page() {
   const user = useContext(AuthContext);
   // const [isSubscriber, setIsSubscriber] = useState<boolean>();
   const [isAdmin, setIsAdmin] = useState(false);
-  React.useEffect(() => {
-    const unsubscribe = clientAuth.onAuthStateChanged(async (authData) => {
-      authData?.getIdTokenResult(true).then((idTokenResult) => {
-        // setIsSubscriber(!!idTokenResult?.claims?.subscriber);
-        setIsAdmin(idTokenResult?.claims?.firestoreUser.role === 0);
-      });
-    });
-    return () => unsubscribe();
-  }, [user]);
 
   return (
     <AuthContext.Provider value={user}>
@@ -61,7 +51,7 @@ export default function Page() {
         </article>
 
         <div className="flex flex-col items-center justify-center gap-6 self-center p-10">
-          {user && isAdmin && <Link href={'/firestore'}>Firestore</Link>}
+          {user && isAdmin && <Link href={'/firestore.ts'}>Firestore</Link>}
         </div>
         {process.env.NODE_ENV === 'development' && (
           <div className="self-center">

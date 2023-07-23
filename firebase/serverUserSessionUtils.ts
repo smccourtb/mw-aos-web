@@ -3,8 +3,6 @@ import { cookies } from 'next/headers';
 
 import { db, serverAuth } from '@/firebase/serverFirebaseApps';
 
-const tokenName = process.env.NEXT_PUBLIC_FIREBASE_TOKEN as string;
-
 export const isUserSubscriber = async (
   user_uid: string | undefined,
 ): Promise<boolean> => {
@@ -49,16 +47,16 @@ export const getOrCreateFirestoreUser = async (uid: string | undefined) => {
 
 export const userSession = async () => {
   const nextCookies = cookies();
-  if (!nextCookies.has(tokenName)) {
+  if (!nextCookies.has('session')) {
     return null;
   }
 
-  const cookie = nextCookies.get(tokenName);
+  const cookie = nextCookies.get('session');
 
   const authData = await serverAuth
-    .verifyIdToken(cookie?.value as string)
+    .verifySessionCookie(cookie?.value as string)
     .then((DecodedToken) => DecodedToken)
-    .catch(() => null);
+    .catch((e) => console.log('e', e));
 
   if (authData) {
     const firestoreUser = await getOrCreateFirestoreUser(authData.uid);
