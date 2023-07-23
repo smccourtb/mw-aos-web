@@ -1,5 +1,6 @@
 {
   "name": "combat",
+  "order": 5,
   "commandAbilities": [
     {
       "name": "All-out Attack",

@@ -1,5 +1,6 @@
 {
   "name": "shooting",
+  "order": 3,
   "commandAbilities": [],
   "beginnerRules": []
 }

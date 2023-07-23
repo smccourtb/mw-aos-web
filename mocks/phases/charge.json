@@ -1,5 +1,6 @@
 {
   "name": "charge",
+  "order": 4,
   "commandAbilities": [
     {
       "name": "Forward to Victory",

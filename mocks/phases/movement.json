@@ -1,5 +1,6 @@
 {
   "name": "movement",
+  "order": 2,
   "commandAbilities": [
     {
       "name": "At the Double",

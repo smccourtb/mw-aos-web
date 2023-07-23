@@ -1,5 +1,6 @@
 {
   "name": "battleshock",
+  "order": 6,
   "commandAbilities": [
     {
       "name": "Inspiring Presence",

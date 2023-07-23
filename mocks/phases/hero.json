@@ -1,9 +1,12 @@
 {
   "name": "hero",
+  "order": 1,
   "commandAbilities": [
     {
       "name": "rally",
-      "description": "You can use this command ability at the start of the hero phase. The unit that receives the command must be more than 3\" from all enemy units. Roll 1 dice for each slain model from that unit. For each 6, you can return 1 slain model to that unit.\n\nYou can only return models to that unit that have a combined Wounds characteristic of 10 or less. For example, if the unit that received the command has a Wounds characteristic of 2, you can return a maximum of 5 models to that unit."
+      "description": "You can use this command ability at the start of the hero phase. The unit that receives the command must be more than 3\" from all enemy units. Roll 1 dice for each slain model from that unit. For each 6, you can return 1 slain model to that unit.\n\nYou can only return models to that unit that have a combined Wounds characteristic of 10 or less. For example, if the unit that received the command has a Wounds characteristic of 2, you can return a maximum of 5 models to that unit.",
+      "stage": "start",
+      "priority": "any"
     }
   ],
   "heroicActions": [
@@ -22,6 +25,22 @@
     {
       "name": "heroic recovery",
       "description": "Pick 1 friendly HERO that is more than 3\" from all enemy units and make a heroic recovery roll by rolling 2D6. If the roll is less than or equal to that HERO’s Bravery characteristic, you can heal up to D3 wounds allocated to that HERO."
+    }
+  ],
+  "spells": [
+    {
+      "name": "Arcane Bolt",
+      "flavor": "The caster calls forth a ball of crackling arcane energy that hovers above their outstretched hand, ready to be hurled at a foe.",
+      "description": "Arcane Bolt is a spell that has a casting value of 5 and a range of 12\". If successfully cast, at the start of any 1 phase before your next hero phase, you can pick 1 enemy unit within range and visible to the caster. That unit suffers 1 mortal wound. If that unit is within 3\" of the caster, it suffers D3 mortal wounds instead of 1.",
+      "castingValue": 5,
+      "range": 12
+    },
+    {
+      "name": "Mystic Shield",
+      "flavor": "The caster conjures up a shield of shimmering energy to protect themselves or an ally from harm.",
+      "description": "Mystic Shield is a spell that has a casting value of 5 and a range of 12\". If successfully cast, pick 1 friendly unit wholly within range and visible to the caster. Add 1 to save rolls for attacks that target that unit until your next hero phase.",
+      "castingValue": 5,
+      "range": 12
     }
   ],
   "beginnerRules": ["Each player can pick a hero to perform a heroic action."]
