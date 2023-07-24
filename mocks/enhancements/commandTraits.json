@@ -1,0 +1,24 @@
+{
+  "commandTraits": [
+    {
+      "name": "Battle-lust",
+      "description": "You can re-roll run rolls and charge rolls for this general."
+    },
+    {
+      "name": "High Priest",
+      "description": "You can re-roll chanting rolls for this general."
+    },
+    {
+      "name": "Skilled Leader",
+      "description": "If this general is on the battlefield at the start of your hero phase, roll a dice. On a 5+, you receive 1 extra command point."
+    },
+    {
+      "name": "Heroic Stature",
+      "description": "Add 1 to this general’s Wounds characteristic."
+    },
+    {
+      "name": "Master of Magic",
+      "description": "Once per hero phase, you can re-roll 1 casting roll, dispelling roll or unbinding roll for this general."
+    }
+  ]
+}

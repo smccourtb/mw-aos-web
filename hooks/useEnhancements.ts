@@ -1,16 +1,17 @@
 import { useCallback, useEffect, useState } from 'react';
+import { ArmyBuilderEnhancement } from '@/firestore/types';
 import {
-  ArmyBuilderEnhancement,
-  Enhancement,
   EnhancementKeys,
-  Enhancements,
-  Faction,
   Unit,
-} from '@/firestore/types';
+  UniversalEnhancement,
+} from '@/types/firestore/firestore';
+import { Faction, FactionEnhancement } from '@/types/firestore/factions';
 
 type useEnhancementsProps = {
   chosenArmy: Faction | null;
-  enhancements: Enhancements;
+  enhancements: {
+    [key in EnhancementKeys]: UniversalEnhancement[];
+  };
   armyType: string | null;
   subFaction: string | null;
   potentialGeneral: Unit | null;
@@ -30,20 +31,23 @@ const useEnhancements = ({
     determineAvailableEnhancements();
   }, [subFaction]);
 
-  const formatEnhancements = (enhancements: Enhancements, source: string) => {
+  const formatEnhancements = (
+    enhancements: {
+      [key in EnhancementKeys]: FactionEnhancement[] | UniversalEnhancement[];
+    },
+    source: string,
+  ) => {
     return Object.keys(enhancements).reduce(
       (acc, key) => {
         return {
           ...acc,
-          [key]: enhancements[key as EnhancementKeys].map(
-            (enhancement: Enhancement) => {
-              return {
-                ...enhancement,
-                chosen: false,
-                source: source,
-              };
-            },
-          ),
+          [key]: enhancements[key as EnhancementKeys].map((enhancement) => {
+            return {
+              ...enhancement,
+              chosen: false,
+              source: source,
+            };
+          }),
         };
       },
       {} as {
@@ -60,12 +64,22 @@ const useEnhancements = ({
     );
 
     // get the enhancements of chosen faction/subfaction
-    const factionEnhancements: Enhancements =
-      chosenArmy?.type.find((type) => type.name === armyType)?.enhancements ??
-      ({} as Enhancements);
+    const factionEnhancements = (): {
+      [key in EnhancementKeys]: FactionEnhancement[];
+    } => {
+      const { commandTraits, artefacts, spellLores, prayers, triumphs } =
+        chosenArmy;
+      return {
+        commandTraits,
+        artefacts,
+        spellLores,
+        prayers,
+        triumphs,
+      };
+    };
 
     const formattedFactionEnhancements = formatEnhancements(
-      factionEnhancements,
+      factionEnhancements(),
       armyType!,
     );
 
@@ -204,7 +218,7 @@ const useEnhancements = ({
   };
 
   const determineAvailablePrayers = (unit: Unit) => {
-    const { prayer } = availableEnhancements!;
+    const { prayers } = availableEnhancements!;
 
     const eligibleKeywords = ['priest'];
     // check if unit has any of the eligible keywords. Might need to change to 'every' in the future in the case of
@@ -213,7 +227,7 @@ const useEnhancements = ({
       return null;
 
     // filter out spell lores that are already chosen
-    const availablePrayers = prayer.filter((trait) => !trait.chosen);
+    const availablePrayers = prayers.filter((trait) => !trait.chosen);
     return availablePrayers.length > 0 ? availablePrayers : null;
   };
 

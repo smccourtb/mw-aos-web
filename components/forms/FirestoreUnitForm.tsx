@@ -5,7 +5,7 @@ import AlertDatabaseError from '@/components/AlertDatabaseError';
 import Select from '@/components/inputs/Select';
 import Input from '@/components/inputs/Input';
 import InputArray from '@/components/forms/InputArray';
-import { Faction } from '@/types/firestore';
+import { Faction } from '@/types/firestore/factions';
 
 type FirestoreUnitFormProps = {
   factions: Faction[];

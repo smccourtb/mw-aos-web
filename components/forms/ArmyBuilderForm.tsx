@@ -10,22 +10,21 @@ import { useForm } from 'react-hook-form';
 import Select from '@/components/inputs/Select';
 import { Tab } from '@headlessui/react';
 import UnitCard from '@/components/forms/army-builder-form/UnitCard';
-import {
-  Battlepack,
-  EnhancementKeys,
-  Enhancements,
-  Faction,
-  FactionName,
-  PlayerArmy,
-  PlayerArmyUnit,
-  RoleName,
-  Unit,
-} from '@/firestore/types';
+import { PlayerArmy, PlayerArmyUnit } from '@/firestore/types';
 import ArmyTypeRadioGroup from '@/components/inputs/ArmyTypeRadioGroup';
 import { useRouter, useSearchParams } from 'next/navigation';
 import AuthContext from '@/context/AuthContext';
 import useEnhancements from '@/hooks/useEnhancements';
 import GrandStrategyRadioGroup from '@/components/inputs/GrandStrategyRadioGroup';
+import {
+  Battlepack,
+  EnhancementKeys,
+  FactionName,
+  RoleName,
+  Unit,
+  UniversalEnhancement,
+} from '@/types/firestore/firestore';
+import { Faction } from '@/types/firestore/factions';
 
 type FormValues = {
   factionName: string;
@@ -36,13 +35,19 @@ type FormValues = {
 };
 
 type ArmyBuilderFormProps = {
-  armyData: Faction[];
+  armies: Faction[];
   battlepack: Battlepack | null;
-  enhancements: Enhancements;
+  enhancements: {
+    [key in EnhancementKeys]: UniversalEnhancement[];
+  };
+};
+
+type RoleCounts = {
+  [K in RoleName]: { count: number; min: number | null; max: number | null };
 };
 
 const ArmyBuilderForm = ({
-  armyData,
+  armies,
   battlepack,
   enhancements,
 }: ArmyBuilderFormProps) => {
@@ -56,10 +61,9 @@ const ArmyBuilderForm = ({
   const router = useRouter();
   const [initialDataCollected, setInitialDataCollected] = useState(false);
   const [chosenArmy, setChosenArmy] = useState<Faction | null>(null);
+  const [hasArmyTypes, setHasArmyTypes] = useState<boolean>(false);
   const [pointValue, setPointValue] = useState(0);
-  const [roleCounts, setRoleCounts] = useState<{
-    [K in RoleName]: { count: number; min: number | null; max: number | null };
-  }>({
+  const [roleCounts, setRoleCounts] = useState<RoleCounts>({
     leader: { count: 0, max: 0, min: 1 },
     battleline: { count: 0, max: null, min: 0 },
     behemoth: { count: 0, max: 0, min: null },
@@ -70,11 +74,11 @@ const ArmyBuilderForm = ({
     factionName: '',
     type: null,
     subFaction: null,
-    units: [] as PlayerArmyUnit[],
+    units: [],
     grandStrategy: null,
   };
 
-  const { control, watch, handleSubmit, setValue, getValues } =
+  const { control, watch, handleSubmit, setValue, getValues, resetField } =
     useForm<FormValues>({
       defaultValues,
     });
@@ -102,10 +106,16 @@ const ArmyBuilderForm = ({
   }, []);
 
   useEffect(() => {
+    resetField('subFaction');
+    setInitialDataCollected(false);
+  }, [watchedType]);
+
+  useEffect(() => {
     if (watchedFactionName) {
       setChosenArmy(
-        armyData.find((army) => army.name === watchedFactionName) ?? null,
+        armies.find((army) => army.name === watchedFactionName) ?? null,
       );
+      determineFactionArmyTypes();
     }
   }, [watchedFactionName]);
 
@@ -127,6 +137,25 @@ const ArmyBuilderForm = ({
       setInitialDataCollected(true);
     }
   }, [watchedSubFaction]);
+
+  const determineFactionArmyTypes = useCallback(() => {
+    setHasArmyTypes(chosenArmy?.armyTypes.length !== 0 ?? false);
+  }, [chosenArmy]);
+
+  const armyTypeOptions = useMemo(() => {
+    return chosenArmy?.armyTypes.map((type) => type.name) ?? [];
+  }, [chosenArmy]);
+
+  const subFactionOptions = useMemo(() => {
+    if (hasArmyTypes) {
+      return (
+        chosenArmy?.armyTypes.find(
+          (type) => type.name === watchedType?.toLowerCase(),
+        )?.subFactions ?? []
+      );
+    }
+    return chosenArmy?.subfactions.names ?? [];
+  }, [watchedType]);
 
   const checkIfDisabled = (unit: Unit) => {
     let disabled = false;
@@ -251,8 +280,8 @@ const ArmyBuilderForm = ({
             },
           }));
         }
-        setPointValue((prevState) => prevState + unit.points);
       });
+      setPointValue((prevState) => prevState + unit.points);
       setValue('units', [...currentUnits, unit]);
       // flip all chosen enhancements to true, so they cant be picked again
       Object.keys(unit.enhancements).forEach((enhancement) => {
@@ -308,11 +337,13 @@ const ArmyBuilderForm = ({
 
   const onSubmit = async (data: FormValues) => {
     const currentPlayer = searchParams?.get('player');
-    const { factionName, units, grandStrategy } = data;
+    const { factionName, units, grandStrategy, subFaction } = data;
+
     const battleTraits =
-      chosenArmy?.type.find(
-        (armyType) => armyType.name === getValues('subFaction'),
-      )?.battleTraits ?? [];
+      chosenArmy?.battleTraits.filter((battleTrait) =>
+        battleTrait.applicableSubfactions.includes(subFaction!),
+      ) ?? [];
+
     const army: PlayerArmy = {
       factionName: factionName as FactionName,
       units,
@@ -341,7 +372,7 @@ const ArmyBuilderForm = ({
       <div
         className={`${
           initialDataCollected ? '' : 'my-auto h-full '
-        } flex w-full items-center justify-center justify-evenly self-center transition-all`}
+        } flex w-full flex-col items-center justify-center justify-evenly gap-4 self-center transition-all`}
       >
         <div className="w-1/3">
           <Select
@@ -349,43 +380,50 @@ const ArmyBuilderForm = ({
             name="factionName"
             control={control}
             rules={{ required: true }}
-            options={armyData.map((army) => army.name)}
+            options={armies.map((army) => army.name)}
           />
         </div>
         <div className="flex flex-col items-center justify-center gap-2">
-          <ArmyTypeRadioGroup
-            options={
-              armyData
-                .find((army) => army.name === watchedFactionName)
-                ?.type.map((type) => type.name) ?? []
-            }
-            control={control}
-            rules={{ required: true }}
-            name="type"
-          />
-          <Select
-            placeholder="Choose your subfaction"
-            name="subFaction"
-            control={control}
-            rules={{ required: true }}
-            options={
-              armyData
-                .find((army) => army.name === watchedFactionName)
-                ?.type.find((type) => type.name === watchedType)
-                ?.subFactions.map((subFaction) => subFaction.name) ?? []
-            }
-          />
+          {hasArmyTypes ? (
+            <>
+              <ArmyTypeRadioGroup
+                options={armyTypeOptions}
+                control={control}
+                rules={{ required: true }}
+                name="type"
+              />
+              {watchedType && (
+                <Select
+                  placeholder="Choose your subfaction"
+                  name="subFaction"
+                  control={control}
+                  rules={{ required: true }}
+                  options={subFactionOptions}
+                />
+              )}
+            </>
+          ) : (
+            watchedFactionName && (
+              <Select
+                placeholder="Choose your subfaction"
+                name="subFaction"
+                control={control}
+                rules={{ required: true }}
+                options={subFactionOptions}
+              />
+            )
+          )}
         </div>
       </div>
 
-      {battlepack && chosenArmy && (
+      {battlepack && watchedSubFaction && (
         <div>
           <GrandStrategyRadioGroup
             name="grandStrategy"
             label="Grand Strategy"
             options={[
               ...battlepack?.grandStrategies,
-              ...chosenArmy?.grandStrategies,
+              ...chosenArmy?.grandStrategies!,
             ]}
             rules={{ required: true }}
             control={control}

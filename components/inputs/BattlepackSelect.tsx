@@ -6,7 +6,7 @@ import {
   CheckIcon,
   ChevronUpIcon,
 } from '@heroicons/react/solid';
-import { Battlepack } from '@/types/firestore';
+import { Battlepack } from '@/types/firestore/firestore';
 
 type BattlepackSelectProps = {
   options: Battlepack[];

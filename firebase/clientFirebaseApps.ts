@@ -1,5 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { connectAuthEmulator, getAuth, setPersistence } from 'firebase/auth';
+import {
+  inMemoryPersistence,
+  connectAuthEmulator,
+  getAuth,
+} from 'firebase/auth';
 import { getStorage } from 'firebase/storage';
 
 import clientConfig from './clientConfig';
@@ -25,5 +29,5 @@ if (shouldConnectAuthEmulator()) {
     Number(process.env.FIRESTORE_EMULATOR_PORT),
   );
 }
-export const clientAuth = getAuth(app).setPersistence({ type: 'NONE' });
+export const clientAuth = getAuth(app).setPersistence(inMemoryPersistence);
 export const clientStorage = getStorage(app);

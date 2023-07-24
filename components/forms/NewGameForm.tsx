@@ -8,7 +8,7 @@ import AuthContext from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import BattlepackSelect from '@/components/inputs/BattlepackSelect';
-import { Battlepack } from '@/types/firestore';
+import { Battlepack } from '@/types/firestore/firestore';
 
 type FormValues = {
   type: string | null;

@@ -1,45 +1,5 @@
 import { PlayerArmy } from '@/firestore/types';
 
-export type Faction = {
-  ref: string;
-  name: string;
-  units: Unit[];
-  grandStrategies: { name: string; description: string; source: string[] }[];
-  battleTactics: {
-    name: string;
-    description: string;
-    applicableSubfactions: string[];
-    source: string[];
-  }[];
-  battleTraits: {
-    name: string;
-    description: string;
-    flavor: string;
-    applicableSubfactions: string[];
-  }[];
-  heroicActions: {
-    name: string;
-    description: string;
-    applicableKeywords: string[];
-    applicableSubfactions: string[];
-  }[];
-  commandTraits: Enhancement[];
-
-  artefacts: Enhancement[];
-  spellLores: Enhancement[];
-  prayers: Enhancement[];
-  triumphs: Enhancement[];
-  monstrousRampages: {
-    name: string;
-    description: string;
-    applicableKeywords: string[];
-    applicableSubfactions: string[];
-  }[];
-  subFactions: { names: string[]; flavorName: string };
-  armyTypes: { name: string; subFactions: string[] }[];
-  battalions: { name: string }[];
-};
-
 export interface Unit {
   flavor: string;
   spellCastLimit?: number;
@@ -196,14 +156,19 @@ export type Battlepack = {
   }[];
 };
 
-export type Enhancement = {
+export interface UniversalEnhancement {
   name: string;
   description: string;
-  applicableKeywords?: string[];
-  applicableSubfaction: string[];
   flavor: string;
-  includeUnique?: boolean;
-};
+}
+
+export type EnhancementKeys =
+  | 'artefacts'
+  | 'commandTraits'
+  | 'prayers'
+  | 'spellLores'
+  | 'triumphs';
+
 export type Phase = {
   name: string;
   order: number;

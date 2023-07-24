@@ -4,7 +4,7 @@ import React from 'react';
 import FirestoreKeywordForm from '@/components/forms/FirestoreKeywordForm';
 import FirestoreFactionForm from '@/components/forms/FirestoreFactionForm';
 import FirestoreUnitForm from '@/components/forms/FirestoreUnitForm';
-import { Faction } from '@/types/firestore';
+import { Faction } from '@/types/firestore/factions';
 type FirestoreProps = {
   data: { keywords: { name: string; ref: string }[]; factions: Faction[] };
 };

@@ -1,5 +1,5 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Phase } from '@/types/firestore';
+import { Phase } from '@/types/firestore/firestore';
 
 export const getPhases = async () => {
   const response = await db.collection('phases').get();

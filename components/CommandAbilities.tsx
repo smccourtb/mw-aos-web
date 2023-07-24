@@ -4,8 +4,6 @@ type CommandAbilitiesProps = {
   abilities: { name: string; text?: string; description?: string }[];
 };
 const CommandAbilities = ({ abilities }: CommandAbilitiesProps) => {
-  console.log('abilities', abilities);
-
   return (
     <div className="flex h-full flex-col gap-3 px-3">
       <h3 className="text-lg font-bold">Command Abilities</h3>

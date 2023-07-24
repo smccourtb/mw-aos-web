@@ -1,0 +1,16 @@
+{
+  "triumphs": [
+    {
+      "name": "Bloodthirsty",
+      "description": "Once per battle, after you make a charge roll for a friendly unit, you can say that it is bloodthirsty. If you do so, you can re-roll that charge roll."
+    },
+    {
+      "name": "Inspired",
+      "description": "Once per battle, after you pick a friendly unit to shoot or fight, you can say that it is inspired. If you do so, add 1 to wound rolls for attacks made by that unit until the end of that phase."
+    },
+    {
+      "name": "Indomitable",
+      "description": "Once per battle, after you take a battleshock test for a friendly unit, you can say it is indomitable. If you do so, no models from that unit will flee in that battleshock phase."
+    }
+  ]
+}

@@ -1,5 +1,5 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Battlepack } from '@/types/firestore';
+import { Battlepack } from '@/types/firestore/firestore';
 
 export const getBattlePacks = async () => {
   const response = await db.collection('battlepacks').get();
@@ -19,8 +19,7 @@ export const getBattlePack = async (id: string | undefined) => {
   if (!id) return null;
   const response = await db.collection('battlepacks').doc(id).get();
   if (!response.exists) {
-    console.log('No matching documents.');
-    return null;
+    throw new Error('No matching documents in battlepacks collection.');
   }
   return response.data() as Battlepack;
 };

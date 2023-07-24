@@ -1,11 +1,13 @@
 import { db } from '@/firebase/serverFirebaseApps';
-import { Faction, Unit } from '@/types/firestore';
+import { Unit } from '@/types/firestore/firestore';
+import { Faction } from '@/types/firestore/factions';
 
 export const getFactions = async () => {
   const response = await db.collection('factions').get();
   if (response.empty) {
-    console.log('No matching documents.');
-    return [];
+    throw new Error('Something went wrong', {
+      cause: 'No matching documents in factions collection.',
+    });
   }
   const factions: Faction[] = [];
   for (const doc of response.docs) {

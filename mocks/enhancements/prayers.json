@@ -1,0 +1,16 @@
+{
+  "prayers": [
+    {
+      "name": "Guidance",
+      "description": "Guidance is a prayer that has an answer value of 5. If answered, you receive 1 command point."
+    },
+    {
+      "name": "Heal",
+      "description": "Heal is a prayer that has an answer value of 3 and a range of 12\". If answered, pick 1 friendly model within range and visible to the chanter. You can heal up to D3 wounds allocated to that model."
+    },
+    {
+      "name": "Curse",
+      "description": "Curse is a prayer that has an answer value of 4 and a range of 9\". If answered, pick 1 enemy unit within range and visible to the chanter. Until your next hero phase, if the unmodified hit roll for an attack that targets that unit is 6, that unit suffers 1 mortal wound in addition to any normal damage."
+    }
+  ]
+}

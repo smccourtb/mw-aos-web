@@ -1,0 +1,20 @@
+{
+  "artefacts": [
+    {
+      "name": "Amulet of Destiny",
+      "description": "The bearer has a ward of 6+."
+    },
+    {
+      "name": "Vial of Manticore Venom",
+      "description": "Pick 1 of the bearer’s melee weapons. Add 1 to wound rolls for attacks made with that weapon."
+    },
+    {
+      "name": "Arcane Tome",
+      "description": "HERO that does not have the WIZARD, PRIEST or KHORNE keyword. The bearer becomes a WIZARD that can only cast Arcane Bolt, Mystic Shield and spells to summon endless spells on your army roster. They can attempt to cast 1 spell in your hero phase and attempt to unbind 1 spell in the enemy hero phase. \nDesigner’s Note: When using the Pitched Battles 2023-24 battlepack in the General’s Handbook, if a HERO with a Wounds characteristic of 9 or less is given the Arcane Tome, it gains the ANDTORIAN LOCUS keyword."
+    },
+    {
+      "name": "Seed of Rebirth",
+      "description": "You can re-roll heroic recovery rolls for the bearer."
+    }
+  ]
+}

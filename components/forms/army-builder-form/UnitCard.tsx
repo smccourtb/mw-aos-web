@@ -1,16 +1,15 @@
 import React from 'react';
-import {
-  ArmyBuilderEnhancement,
-  EnhancementKeys,
-  PlayerArmyUnit,
-  SpecialUnitModel,
-  Unit,
-  UnitWeapon,
-} from '@/firestore/types';
+import { ArmyBuilderEnhancement, PlayerArmyUnit } from '@/firestore/types';
 import { FlagIcon, MusicNoteIcon, PlusIcon } from '@heroicons/react/solid';
 import { useForm } from 'react-hook-form';
 import LoadoutSelection from '@/components/inputs/LoadoutSelection';
 import EnhancementSelection from '@/components/inputs/EnhancementSelection';
+import {
+  EnhancementKeys,
+  SpecialUnitModel,
+  Unit,
+  UnitWeapon,
+} from '@/types/firestore/firestore';
 
 type FormValues = {
   loadoutSelected: { id: string; weapons: string[] } | null;
@@ -55,7 +54,7 @@ const UnitCard = ({
       commandTraits: null,
       spellLores: null,
       triumphs: null,
-      prayer: null,
+      prayers: null,
       artefacts: null,
     },
   };
@@ -78,7 +77,7 @@ const UnitCard = ({
       standardbearer,
       enhancements,
     } = data;
-    const { commandTraits, spellLores, prayer, artefacts } = enhancements;
+    const { commandTraits, spellLores, prayers, artefacts } = enhancements;
     const unitMandatoryWeapons = unit.weapons.filter(
       (weapon: UnitWeapon) => !weapon.choice,
     );
@@ -106,7 +105,7 @@ const UnitCard = ({
       enhancements: {
         commandTraits: commandTraits ?? null,
         spellLores: spellLores ?? null,
-        prayer: prayer ?? null,
+        prayers: prayers ?? null,
         artefacts: artefacts ?? null,
       },
       weapons: weaponsWithoutChoice,
@@ -262,7 +261,7 @@ const UnitCard = ({
               </g>
             </svg>
             <EnhancementSelection
-              name={'enhancements.commandTraits'}
+              name={'enhancements.commandTraits.json'}
               options={enhancements?.commandTraits}
               control={control}
               rules={{ required: true }}

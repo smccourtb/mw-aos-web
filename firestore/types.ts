@@ -3,7 +3,7 @@ import {
   SpecialUnitModel,
   Unit,
   UnitWeapon,
-} from '@/types/firestore';
+} from '@/types/firestore/firestore';
 
 type ExcludedUnitProperties = 'weapons' | 'equipOptions' | 'specialModels';
 
@@ -12,7 +12,7 @@ export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
   equippedSpecialModels: SpecialUnitModel[];
   weapons: Omit<UnitWeapon, 'choice'>[];
   enhancements: {
-    prayer: ArmyBuilderEnhancement | null;
+    prayers: ArmyBuilderEnhancement | null;
     commandTraits: ArmyBuilderEnhancement | null;
     artefacts: ArmyBuilderEnhancement | null;
     spellLores: ArmyBuilderEnhancement | null;
