@@ -1,21 +1,32 @@
 import React from 'react';
-import PlayerRadioGroup from '@/components/inputs/PlayerRadioGroup';
 
 type SetupProps = {
-  setPlayer: React.Dispatch<React.SetStateAction<1 | 2 | null>>;
-  currentPlayer: 1 | 2 | null;
+  setUp: (player: 1 | 2) => void;
 };
 
-const Setup = ({ setPlayer, currentPlayer }: SetupProps) => {
+const Setup = ({ setUp }: SetupProps) => {
   return (
     <section className={'flex flex-col'}>
-      <PlayerRadioGroup
-        options={[1, 2]}
-        setPlayer={setPlayer}
-        player={currentPlayer}
-        label="To begin, both players roll off. The winner chooses who deploys first. After deployment, the player who finished deploying first can choose to take the first or second turn. Which player has priority for the first battle round?"
-      />
-      <div className="mt-10"></div>
+      <div className="mt-10 flex gap-10 self-center">
+        <h2 className="text-2xl font-bold">
+          To begin, both players roll off. The winner chooses who deploys first.
+          After deployment, the player who finished deploying first can choose
+          to take the first or second turn. Which player has priority for the
+          first battle round?
+        </h2>
+        <button
+          onClick={() => setUp(1)}
+          className="rounded-md bg-sky-900 px-4 py-2 text-white shadow-md"
+        >
+          Player 1
+        </button>
+        <button
+          onClick={() => setUp(2)}
+          className="rounded-md bg-sky-900 px-4 py-2 text-white shadow-md"
+        >
+          Player 2
+        </button>
+      </div>
     </section>
   );
 };

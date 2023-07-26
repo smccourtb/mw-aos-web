@@ -1,10 +1,9 @@
 'use client';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
 import { PlayerArmy } from '@/firestore/types';
-import AuthContext from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import BattlepackSelect from '@/components/inputs/BattlepackSelect';
@@ -27,10 +26,10 @@ type FormValues = {
 type NewGameFormProps = {
   userArmies: PlayerArmy[];
   battlepacks: Battlepack[];
+  userId: string;
 };
 
-const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
-  const user = useContext(AuthContext);
+const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
@@ -45,7 +44,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
       ) ?? null,
     playerOne: {
       army: null,
-      user: user?.uid,
+      user: userId,
     },
     playerTwo: {
       army: null,
@@ -53,10 +52,6 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
     },
   };
   const onSubmit = async (data: FormValues) => {
-    if (!user) {
-      alert('You must be logged in to create a game');
-      return;
-    }
     const { type, points, playerOne, playerTwo, battlepack } = data;
     const game = {
       id: crypto.randomUUID(),
@@ -72,6 +67,7 @@ const NewGameForm = ({ battlepacks, userArmies }: NewGameFormProps) => {
       },
       battlepack,
     };
+
     await fetch('/api/firestore/add-new-game', {
       method: 'POST',
       body: JSON.stringify(game),

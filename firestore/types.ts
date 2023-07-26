@@ -18,6 +18,8 @@ export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
     artefacts: ArmyBuilderEnhancement | null;
     spellLores: ArmyBuilderEnhancement | null;
   };
+  id?: string;
+  movement?: string | null;
 }
 
 export type ArmyBuilderEnhancement = {

@@ -1,19 +1,16 @@
 'use client';
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Select from '@/components/inputs/Select';
 import { Tab } from '@headlessui/react';
 import UnitCard from '@/components/forms/army-builder-form/UnitCard';
-import { PlayerArmy, PlayerArmyUnit } from '@/firestore/types';
+import {
+  FirestoreBattleTactic,
+  PlayerArmy,
+  PlayerArmyUnit,
+} from '@/firestore/types';
 import ArmyTypeRadioGroup from '@/components/inputs/ArmyTypeRadioGroup';
 import { useRouter, useSearchParams } from 'next/navigation';
-import AuthContext from '@/context/AuthContext';
 import useEnhancements from '@/hooks/useEnhancements';
 import GrandStrategyRadioGroup from '@/components/inputs/GrandStrategyRadioGroup';
 import {
@@ -40,6 +37,7 @@ type ArmyBuilderFormProps = {
   enhancements: {
     [key in EnhancementKeys]: UniversalEnhancement[];
   };
+  userId: string;
 };
 
 type RoleCounts = {
@@ -50,8 +48,8 @@ const ArmyBuilderForm = ({
   armies,
   battlepack,
   enhancements,
+  userId,
 }: ArmyBuilderFormProps) => {
-  const user = useContext(AuthContext);
   const searchParams = useSearchParams();
   const pointLimit =
     searchParams?.get('type') !== 'matched'
@@ -336,7 +334,7 @@ const ArmyBuilderForm = ({
   };
 
   const onSubmit = async (data: FormValues) => {
-    const currentPlayer = searchParams?.get('player');
+    const currentPlayer = userId;
     const { factionName, units, grandStrategy, subFaction } = data;
 
     const battleTraits =
@@ -353,9 +351,9 @@ const ArmyBuilderForm = ({
       battleTactics: [
         ...(chosenArmy?.battleTactics ?? []),
         ...(battlepack?.battleTactics ?? []),
-      ],
+      ] as FirestoreBattleTactic[],
     };
-    if (currentPlayer === user?.uid) {
+    if (currentPlayer) {
       await fetch('/api/firestore/add-player-army', {
         method: 'POST',
         body: JSON.stringify(army),
