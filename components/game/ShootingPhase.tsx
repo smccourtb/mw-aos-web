@@ -15,8 +15,6 @@ const ShootingPhase = ({
   playerInfo,
   endPhase,
 }: ShootingPhaseProps) => {
-  const [phasePosition, setPhasePosition] = useState(0);
-
   return (
     <section className="flex w-full flex-col">
       <h3 className="text-lg font-bold">
@@ -26,9 +24,13 @@ const ShootingPhase = ({
         {currentPlayer && (
           <div>
             {playerInfo[currentPlayer]?.units
-              ?.filter((unit) =>
-                unit.weapons.some((weapon) => weapon.type === 'missile'),
-              )
+              ?.filter((unit) => {
+                const validMove = !unit.movement || unit.movement === 'move';
+                const hasMissileWeapon = unit.weapons.some(
+                  (weapon) => weapon.type === 'missile',
+                );
+                return validMove && hasMissileWeapon;
+              })
               .map((unit, i) => (
                 <GameUnit key={unit.name + i} unit={unit} />
               ))}
