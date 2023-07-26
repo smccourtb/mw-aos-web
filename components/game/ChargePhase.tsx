@@ -2,7 +2,7 @@ import React from 'react';
 import GameUnit from '@/components/GameUnit';
 import { Player } from '@/types/firestore/firestore';
 
-type ShootingPhaseProps = {
+type ChargePhaseProps = {
   playerInfo: {
     [key in 1 | 2]: Player;
   };
@@ -10,26 +10,23 @@ type ShootingPhaseProps = {
   endPhase: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const ShootingPhase = ({
+const ChargePhase = ({
   currentPlayer,
   playerInfo,
   endPhase,
-}: ShootingPhaseProps) => {
+}: ChargePhaseProps) => {
   return (
     <section className="flex w-full flex-col">
       <h3 className="text-lg font-bold">
-        You may shoot with any of the following units:
+        You may charge with any of the following units if they are not within 3"
+        of any enemy units:
       </h3>
       <div className="mt-2 flex h-full w-full flex-wrap gap-4">
         {currentPlayer && (
           <div>
             {playerInfo[currentPlayer]?.units
               ?.filter((unit) => {
-                const validMove = !unit.movement || unit.movement === 'move';
-                const hasMissileWeapon = unit.weapons.some(
-                  (weapon) => weapon.type === 'missile',
-                );
-                return validMove && hasMissileWeapon;
+                return !unit.movement || unit.movement === 'move';
               })
               .map((unit, i) => (
                 <GameUnit key={unit.name + i} unit={unit} />
@@ -50,4 +47,4 @@ const ShootingPhase = ({
   );
 };
 
-export default ShootingPhase;
+export default ChargePhase;

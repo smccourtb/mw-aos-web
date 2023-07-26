@@ -8,6 +8,7 @@ import ShootingPhase from '@/components/game/ShootingPhase';
 import { Game, Phase, Player } from '@/types/firestore/firestore';
 import ReceivedCommandPointAlert from '@/components/alerts/ReceivedCommandPointAlert';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
+import ChargePhase from '@/components/game/ChargePhase';
 
 declare module 'notistack' {
   interface VariantOverrides {
@@ -235,6 +236,13 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
             )}
             {gameInfo.phase === 3 && (
               <ShootingPhase
+                currentPlayer={gameInfo.priority as 1 | 2}
+                playerInfo={playerInfo}
+                endPhase={() => incrementPhase()}
+              />
+            )}
+            {gameInfo.phase === 4 && (
+              <ChargePhase
                 currentPlayer={gameInfo.priority as 1 | 2}
                 playerInfo={playerInfo}
                 endPhase={() => incrementPhase()}
