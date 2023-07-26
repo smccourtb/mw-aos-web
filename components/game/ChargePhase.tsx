@@ -15,6 +15,7 @@ const ChargePhase = ({
   playerInfo,
   endPhase,
 }: ChargePhaseProps) => {
+  // TODO: check for monstrous rampages that the current player has
   return (
     <section className="flex w-full flex-col">
       <h3 className="text-lg font-bold">
