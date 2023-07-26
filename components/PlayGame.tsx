@@ -227,7 +227,7 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
             )}
             {gameInfo.phase === 2 && (
               <MovementPhase
-                currentPlayer={gameData.priority as 1 | 2}
+                currentPlayer={gameInfo.priority as 1 | 2}
                 playerInfo={playerInfo}
                 setPlayerInfo={setPlayerInfo}
                 endPhase={() => incrementPhase()}

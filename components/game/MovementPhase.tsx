@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { PlayerArmyUnit } from '@/firestore/types';
 import GameUnit from '@/components/GameUnit';
 import { Player } from '@/types/firestore/firestore';
@@ -27,27 +27,7 @@ const MovementPhase = ({
   setPlayerInfo,
   endPhase,
 }: MovementPhaseProps) => {
-  const [phasePosition, setPhasePosition] = useState(0);
-  const [unitsMovementSelected, setUnitsMovementSelected] = useState(
-    playerInfo[currentPlayer]?.units?.map((unit) => ({
-      id: unit.id,
-      movement: unit.movement,
-    })),
-  );
-  // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
-  // get all hero unit possible heroic actions
-  // get all generic heroic actions
-  // choose a battle tactic
-  // TODO: add in reserve to units for heroes -> they cannot perform heroic actions if they are in reserve
   const handleUnitMovement = (unit: PlayerArmyUnit, movementAction: string) => {
-    setUnitsMovementSelected((prev) => {
-      const unitIndex = prev?.findIndex((u) => u.id === unit.id);
-      if (unitIndex === -1) {
-        return [...prev!, { id: unit.id, movement: movementAction }];
-      } else {
-        return prev?.filter((u) => u.id !== unit.id);
-      }
-    });
     setPlayerInfo((prev) => ({
       ...prev,
       [currentPlayer]: {
@@ -56,7 +36,7 @@ const MovementPhase = ({
           if (u.id === unit.id) {
             return {
               ...u,
-              movement: movementAction,
+              movement: movementAction === u.movement ? null : movementAction,
             };
           }
           return u;
@@ -81,12 +61,13 @@ const MovementPhase = ({
                     <button
                       onClick={() => handleUnitMovement(unit, movementAction)}
                       className={`${
-                        unitsMovementSelected?.find(
-                          (u) => u.movement === movementAction,
+                        playerInfo[currentPlayer]?.units?.find(
+                          (u) =>
+                            u.movement === movementAction && u.id === unit.id,
                         )
-                          ? 'bg-white text-gray-700'
-                          : 'bg-gray-700 text-white'
-                      } gap-2 rounded-md px-2 py-0.5 text-sm font-bold capitalize`}
+                          ? 'bg-white text-gray-700 ring-1 ring-gray-700 hover:bg-gray-200'
+                          : 'bg-gray-700 text-white hover:bg-gray-500'
+                      } gap-2 rounded-md px-2 py-0.5 text-sm font-bold capitalize `}
                     >
                       {movementAction}
                     </button>
