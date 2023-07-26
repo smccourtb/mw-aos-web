@@ -1,4 +1,5 @@
 import {
+  BattleTrait,
   FactionName,
   SpecialUnitModel,
   Unit,
@@ -33,6 +34,27 @@ export type PlayerArmy = {
   factionName: FactionName;
   units: PlayerArmyUnit[];
   grandStrategy: { name: string; description: string };
-  battleTactics: { name: string; description: string }[];
-  battleTraits: { name: string; description: string }[];
+  battleTactics: FirestoreBattleTactic[];
+  battleTraits: BattleTrait[];
+};
+
+export type FirestoreBattleTactic = {
+  name: string;
+  description: string;
+  source: string;
+  applicableSubfactions: string[];
+};
+
+export type GameBattleTrait = {
+  name: string;
+  description: string;
+  flavor: string;
+};
+
+export type GameBattleTactic = {
+  name: string;
+  description: string;
+  source: string;
+  chosen: boolean;
+  active: boolean;
 };

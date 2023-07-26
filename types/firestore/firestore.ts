@@ -1,4 +1,9 @@
-import { PlayerArmy } from '@/firestore/types';
+import {
+  GameBattleTactic,
+  GameBattleTrait,
+  PlayerArmy,
+  PlayerArmyUnit,
+} from '@/firestore/types';
 
 export interface Unit {
   flavor: string;
@@ -123,7 +128,7 @@ export type FactionName =
   | 'sons of behemat';
 export type RoleName = 'battleline' | 'leader' | 'behemoth' | 'artillery';
 export type SpecialUnitNames = 'champion' | 'standard bearer' | 'musician';
-export type Game = {
+export type FirestoreGame = {
   id: string;
   points: number;
   battlepack: Battlepack;
@@ -131,6 +136,16 @@ export type Game = {
   playerOne: { army: PlayerArmy; user: string };
   playerTwo: { army: PlayerArmy; user: string };
 };
+
+export type Game = {
+  id: string;
+  battleRound: number;
+  phase: number;
+  priority: 1 | 2 | null;
+  battleTacticPointAmount: number;
+  grandStrategyPointAmount: number;
+};
+
 export type Battlepack = {
   id: string;
   name: string;
@@ -175,4 +190,20 @@ export type Phase = {
   commandAbilities: { name: string; description: string }[];
   heroicActions: { name: string; description: string }[];
   beginnerRules: string[];
+};
+
+export type BattleTrait = {
+  name: string;
+  description: string;
+  flavor: string;
+  applicableSubfactions: string[];
+};
+
+export type Player = {
+  commandPoints: number;
+  units: PlayerArmyUnit[];
+  battleTactics: GameBattleTactic[];
+  battleTraits: GameBattleTrait[];
+  grandStrategy: { name: string; description: string } | null;
+  userId: string;
 };
