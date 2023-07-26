@@ -31,14 +31,14 @@ const HeroPhase = ({
   endPhase,
   battleTactics,
 }: HeroPhaseProps) => {
-  const [phasePosition, setPhasePosition] = useState(1);
+  const [stage, setStage] = useState(1);
 
   // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
   // TODO: add in reserve to units for heroes -> they cannot perform heroic actions if they are in reserve
 
   return (
     <section className="flex w-full flex-col">
-      {phasePosition === 1 && (
+      {stage === 1 && (
         <>
           <h3 className="text-lg font-bold">Choose your battle tactic</h3>
           <div className="mt-2 flex h-full w-full flex-wrap gap-4">
@@ -48,7 +48,7 @@ const HeroPhase = ({
                 className="min-w-1/4 flex flex-col rounded-md border border-gray-500 p-2 shadow-md"
                 onClick={() => {
                   onBattleTacticSelect(battleTactic);
-                  setPhasePosition(2);
+                  setStage(2);
                 }}
               >
                 <Tooltip>
@@ -68,7 +68,7 @@ const HeroPhase = ({
           </div>
         </>
       )}
-      {phasePosition === 2 && (
+      {stage === 2 && (
         <>
           <h3 className="text-lg font-bold">Choose a heroic action</h3>
           <div className="mt-2 flex h-full w-full flex-wrap gap-4">
@@ -77,7 +77,7 @@ const HeroPhase = ({
                 key={heroicAction.name}
                 className="min-w-1/4 flex max-w-fit flex-col rounded-md border border-gray-500 p-2 shadow-md"
                 onClick={() => {
-                  setPhasePosition(3);
+                  setStage(3);
                 }}
               >
                 <span className="text-md font-bold capitalize">
@@ -90,7 +90,7 @@ const HeroPhase = ({
         </>
       )}
       {/* gather units with the keyword wizard to cast any spells*/}
-      {phasePosition === 3 && (
+      {stage === 3 && (
         <div className="flex flex-col">
           <h3>You may cast a spell with each of the following units:</h3>
           {playerInfo[currentPlayer]!.units.filter((unit) => unit.isWizard).map(
