@@ -9,6 +9,7 @@ import { Game, Phase, Player } from '@/types/firestore/firestore';
 import ReceivedCommandPointAlert from '@/components/alerts/ReceivedCommandPointAlert';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import ChargePhase from '@/components/game/ChargePhase';
+import UnitAbilities from '@/components/UnitAbilities';
 
 declare module 'notistack' {
   interface VariantOverrides {
@@ -252,6 +253,10 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
           {gameInfo.phase > 0 && (
             <div className="flex h-full w-1/3 flex-col border-l border-black py-4">
               <CommandAbilities abilities={availableCommandAbilities} />
+              <UnitAbilities
+                playerUnits={playerInfo[gameInfo.priority!]?.units ?? []}
+                currentPhase={phases[gameInfo.phase] ?? ''}
+              />
             </div>
           )}
         </div>
