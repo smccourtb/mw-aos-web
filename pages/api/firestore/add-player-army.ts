@@ -3,8 +3,8 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { getAuth } from 'firebase-admin/auth';
 const addPlayerArmy = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const cookie = req.headers.cookie?.split('authentication=')[1];
-    const user = await getAuth().verifyIdToken(cookie as string);
+    const cookie = req.headers.cookie?.split('session=')[1];
+    const user = await getAuth().verifySessionCookie(cookie as string);
 
     if (!user) {
       return res.status(401).json({ message: 'unauthorized' });
