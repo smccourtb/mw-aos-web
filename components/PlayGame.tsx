@@ -36,9 +36,6 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
   const [playerInfo, setPlayerInfo] =
     useState<{ [key in 1 | 2]: Player }>(playerData);
   const [gameInfo, setGameInfo] = useState<Game>(gameData);
-  const [availableCommandAbilities, setAvailableCommandAbilities] = useState<
-    { name: string; description: string; flavor?: string }[]
-  >([]);
 
   const setUpUnits = (priorityPlayer: 1 | 2) => {
     setGameInfo((prev) => ({
@@ -55,31 +52,7 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
     if (gameInfo.phase === 1) {
       giveCommandPoints(gameInfo.priority as 1 | 2, 1, 'Hero Phase');
     }
-    setAvailableCommandAbilities(handleCommandAbilities());
   }, [gameInfo.phase]);
-
-  const handleCommandAbilities = () => {
-    const currentPlayer = gameInfo.priority as 1 | 2;
-    if (!currentPlayer) return [];
-    const universalAbilities =
-      phaseData.find((p) => p.order === gameInfo.phase)?.commandAbilities || [];
-
-    const unitAbilities =
-      playerInfo[currentPlayer]?.units
-        .map((unit) => unit?.abilities ?? [])
-        .flat() ?? [];
-    if (unitAbilities.length === 0) return universalAbilities;
-    // search each units abilities object for the type property, and if it equals command return it
-    const unitCommandAbilities =
-      unitAbilities!.filter(
-        (ability) =>
-          ability?.type === 'command' &&
-          (ability?.phase === phases[gameInfo.phase] ||
-            ability?.phase === 'all'),
-      ) ?? [];
-
-    return [...universalAbilities, ...unitCommandAbilities];
-  };
 
   const giveCommandPoints = (
     player: 1 | 2,
@@ -115,6 +88,8 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
     }));
   };
 
+  const resetCommandAbiltiies = () => {};
+
   const incrementPhase = () => {
     setGameInfo((prev) => {
       const lastRound = prev.phase === 6;
@@ -147,13 +122,6 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
         commandPoints: 0,
       },
     }));
-  };
-
-  const getActiveBattleTactic = () => {
-    const activeTactic = playerInfo[
-      gameInfo.priority as 1 | 2
-    ]?.battleTactics.find((tactic) => tactic.active);
-    return activeTactic?.name ?? '';
   };
 
   const selectBattleTactic = (tactic: {
@@ -190,74 +158,97 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
         commandPoint: ReceivedCommandPointAlert,
       }}
     >
-      <section className="flex h-full w-full flex-col">
-        <div className="flex items-center gap-4 font-bold">
-          <span className="text-xl">Round: {gameData.battleRound}</span>
-          <span className="flex items-center gap-3 text-xl capitalize">
-            Current Phase: {phases[gameInfo.phase]}
-          </span>
-          <span className="flex items-center gap-3 text-xl capitalize">
-            Battle Tactic: {getActiveBattleTactic()}
-          </span>
-          <span className="flex items-center gap-3 text-xl capitalize">
-            Command Points: {playerInfo[gameInfo.priority!]?.commandPoints ?? 0}
-          </span>
-          <button
-            className="ml-auto rounded-sm border bg-gray-700 px-2 py-1 text-white"
-            onClick={() => incrementPhase()}
+      <section className="grid h-full w-full grid-cols-12">
+        <div className="col-span-3">
+          <div
+            className={`${
+              gameInfo.priority === 1
+                ? 'bg-red-500  text-white'
+                : 'bg-none text-red-500'
+            } font-2xl flex-start -mb-1 flex justify-between rounded-t-lg px-4 pb-0.5 font-bold`}
           >
-            Next Phase
-          </button>
-        </div>
-        <div className={'mt-10 flex h-full w-full border-t border-black'}>
-          <div className="mt-10 w-2/3 px-6">
-            {gameInfo.phase === 0 && !gameInfo.priority && (
-              <Setup setUp={setUpUnits} />
-            )}
-            {gameInfo.phase === 1 && (
-              <HeroPhase
-                currentPlayer={gameInfo.priority as 1 | 2}
-                playerInfo={playerInfo}
-                heroicActions={
-                  phaseData.find((phase) => phase.name === 'hero')
-                    ?.heroicActions || []
-                }
-                onBattleTacticSelect={selectBattleTactic}
-                battleTactics={getAvailablePlayerBattleTactics()}
-                endPhase={() => incrementPhase()}
-              />
-            )}
-            {gameInfo.phase === 2 && (
-              <MovementPhase
-                currentPlayer={gameInfo.priority as 1 | 2}
-                playerInfo={playerInfo}
-                setPlayerInfo={setPlayerInfo}
-                endPhase={() => incrementPhase()}
-              />
-            )}
-            {gameInfo.phase === 3 && (
-              <ShootingPhase
-                currentPlayer={gameInfo.priority as 1 | 2}
-                playerInfo={playerInfo}
-                endPhase={() => incrementPhase()}
-              />
-            )}
-            {gameInfo.phase === 4 && (
-              <ChargePhase
-                currentPlayer={gameInfo.priority as 1 | 2}
-                playerInfo={playerInfo}
-                endPhase={() => incrementPhase()}
-              />
-            )}
+            <span>Player 1</span>
+            <span>
+              {playerInfo[1].commandPoints}
+              <span className="text-[10px] uppercase">cp</span>
+            </span>
           </div>
           {gameInfo.phase > 0 && (
-            <div className="flex h-full w-1/3 flex-col border-l border-black py-4">
-              <CommandAbilities abilities={availableCommandAbilities} />
+            <div className="flex h-full flex-col rounded-md border-t-4 border-red-500 py-4 shadow-xl">
+              <CommandAbilities
+                abilities={playerInfo[1].commandAbilities[gameInfo.phase] ?? []}
+              />
               <UnitAbilities
-                playerUnits={playerInfo[gameInfo.priority!]?.units ?? []}
+                playerUnits={playerInfo[1]?.units ?? []}
                 currentPhase={phases[gameInfo.phase] ?? ''}
               />
             </div>
+          )}
+        </div>
+        <div className="col-span-3 col-start-10 flex flex-col">
+          <div
+            className={`${
+              gameInfo.priority === 2
+                ? 'bg-blue-500 text-white'
+                : 'bg-none text-blue-500'
+            } font-2xl -mb-1 w-fit self-end rounded-t-lg px-4 pb-0.5 font-bold`}
+          >
+            Player 2
+          </div>
+          {gameInfo.phase > 0 && (
+            <div className="flex h-full flex-col rounded-md border-t-4 border-blue-500 py-4 shadow-xl">
+              <CommandAbilities
+                abilities={playerInfo[2].commandAbilities[gameInfo.phase] ?? []}
+              />
+              <UnitAbilities
+                playerUnits={playerInfo[2]?.units ?? []}
+                currentPhase={phases[gameInfo.phase] ?? ''}
+              />
+            </div>
+          )}
+        </div>
+        <div
+          className={
+            'col-span-6 col-start-4 row-start-1 mt-[22px] flex w-full px-6'
+          }
+        >
+          {gameInfo.phase === 0 && !gameInfo.priority && (
+            <Setup setUp={setUpUnits} />
+          )}
+          {gameInfo.phase === 1 && (
+            <HeroPhase
+              currentPlayer={gameInfo.priority as 1 | 2}
+              playerInfo={playerInfo}
+              heroicActions={
+                phaseData.find((phase) => phase.name === 'hero')
+                  ?.heroicActions || []
+              }
+              onBattleTacticSelect={selectBattleTactic}
+              battleTactics={getAvailablePlayerBattleTactics()}
+              endPhase={() => incrementPhase()}
+            />
+          )}
+          {gameInfo.phase === 2 && (
+            <MovementPhase
+              currentPlayer={gameInfo.priority as 1 | 2}
+              playerInfo={playerInfo}
+              setPlayerInfo={setPlayerInfo}
+              endPhase={() => incrementPhase()}
+            />
+          )}
+          {gameInfo.phase === 3 && (
+            <ShootingPhase
+              currentPlayer={gameInfo.priority as 1 | 2}
+              playerInfo={playerInfo}
+              endPhase={() => incrementPhase()}
+            />
+          )}
+          {gameInfo.phase === 4 && (
+            <ChargePhase
+              currentPlayer={gameInfo.priority as 1 | 2}
+              playerInfo={playerInfo}
+              endPhase={() => incrementPhase()}
+            />
           )}
         </div>
       </section>

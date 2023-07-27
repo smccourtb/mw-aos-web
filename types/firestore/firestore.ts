@@ -206,4 +206,15 @@ export type Player = {
   battleTraits: GameBattleTrait[];
   grandStrategy: { name: string; description: string } | null;
   userId: string;
+  commandAbilities: {
+    [key: number]: {
+      name: string;
+      description: string;
+      priority?: string;
+      flavor?: string;
+      stage?: string;
+      active: boolean;
+      chosen: boolean;
+    }[];
+  };
 };

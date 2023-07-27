@@ -32,34 +32,36 @@ const UnitAbilities = ({ playerUnits, currentPhase }: UnitAbilitiesProps) => {
 
   return (
     <div className="flex h-full flex-col gap-3 px-3">
-      <h3 className="text-lg font-bold">Unit Abilities</h3>
+      <h3 className="font-bold">Unit Abilities</h3>
       {applicableUnitAbilities.map((unit) => (
-        <div className="flex flex-col">
-          <h3 key={unit.id}>{unit.name}</h3>
-          <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-2 text-sm font-medium">
+          <h3 key={unit.id} className="w-fit border-b border-black pr-10">
+            {unit.name}
+          </h3>
+          <div className="flex flex-wrap gap-3 text-sm">
             {unit.abilities?.map((ability) => (
-              <button
-                key={ability.name}
-                className={`${
-                  ability.phase === currentPhase
-                    ? 'ring-2 ring-green-400'
-                    : 'ring-1 ring-gray-500'
-                } min-w-1/4 flex flex-col rounded-md p-2 shadow-md `}
-                onClick={() => {
-                  console.log('clicked');
-                }}
-              >
-                <Tooltip>
-                  <TooltipTrigger>
-                    <p className={'font-bold capitalize'}>{ability.name}</p>
+              <Tooltip>
+                <TooltipTrigger>
+                  <button
+                    key={ability.name}
+                    className={`${
+                      ability.phase === currentPhase
+                        ? 'ring-2 ring-green-400'
+                        : 'ring-1 ring-gray-500'
+                    } flex flex-col rounded-md py-1 px-1.5 text-xs shadow-md `}
+                    onClick={() => {
+                      console.log('clicked');
+                    }}
+                  >
+                    <p className={'capitalize'}>{ability.name}</p>
                     <TooltipContent>
                       <div className="flex max-w-[350px] flex-col rounded bg-gray-700 bg-opacity-95 p-4 text-xs text-gray-100">
                         {ability.description}
                       </div>
                     </TooltipContent>
-                  </TooltipTrigger>
-                </Tooltip>
-              </button>
+                  </button>
+                </TooltipTrigger>
+              </Tooltip>
             ))}
           </div>
         </div>

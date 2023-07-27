@@ -63,6 +63,7 @@ export default async function PlayGamePage({ params }: GamePageProps) {
       battleTraits: formatBattleTraits(player.army?.battleTraits),
       grandStrategy: player.army?.grandStrategy,
       userId: player.user ?? '',
+      commandAbilities: formatCommandAbilities(player.army?.units ?? []),
     })) as Player[];
   };
 
@@ -72,6 +73,43 @@ export default async function PlayGamePage({ params }: GamePageProps) {
       1: players[0],
       2: players[1],
     } as { [key in 1 | 2]: Player };
+  };
+
+  const formatCommandAbilities = (playerUnits: PlayerArmyUnit[]) => {
+    const formattedAbilities = {} as {
+      [key: number]: {
+        name: string;
+        description: string;
+        priority?: string;
+        flavor?: string;
+        stage?: string;
+        active: boolean;
+        chosen: boolean;
+      }[];
+    };
+
+    const unitCommandAbilities =
+      playerUnits
+        .map((unit) => unit?.abilities ?? [])
+        .flat()
+        .filter((ability) => ability?.type === 'command') ?? [];
+
+    phases.forEach((phase) => {
+      const unitAbilities = unitCommandAbilities.filter(
+        (ability) => ability.phase === phase.name || ability.phase === 'all',
+      );
+      const universalAbilities = phase.commandAbilities ?? [];
+      formattedAbilities[phase.order] = [
+        ...unitAbilities,
+        ...universalAbilities,
+      ].map((ability) => ({
+        ...ability,
+        active: false,
+        chosen: false,
+      }));
+    });
+
+    return formattedAbilities;
   };
 
   const setUpGame = () => {
