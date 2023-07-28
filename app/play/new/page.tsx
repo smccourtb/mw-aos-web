@@ -10,7 +10,8 @@ export default async function PlayPage() {
   if (!user) {
     redirect('/login');
   }
-  const userArmies = user ? await getUserArmies(user.uid) : [];
+
+  const userArmies = (await getUserArmies(user.uid)) ?? [];
   const battlepacks = await getBattlePacks();
   return (
     <div className="mx-10 flex h-screen flex-col items-center">

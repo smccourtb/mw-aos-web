@@ -14,6 +14,7 @@ export default async function BuildPage({ searchParams }: BuildPageProps) {
   if (!user) {
     redirect('/login');
   }
+
   const [battlepack, factions, enhancements] = await Promise.all([
     await getBattlePack(searchParams.battlepack),
     await getFactions(),

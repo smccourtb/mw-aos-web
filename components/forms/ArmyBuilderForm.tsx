@@ -335,6 +335,7 @@ const ArmyBuilderForm = ({
 
   const onSubmit = async (data: FormValues) => {
     const currentPlayer = userId;
+    const isLocal = searchParams?.get('local');
     const { factionName, units, grandStrategy, subFaction } = data;
 
     const battleTraits =
@@ -353,11 +354,24 @@ const ArmyBuilderForm = ({
         ...(battlepack?.battleTactics ?? []),
       ] as FirestoreBattleTactic[],
     };
-    if (currentPlayer) {
+    if (currentPlayer && !isLocal) {
       await fetch('/api/firestore/add-player-army', {
         method: 'POST',
-        body: JSON.stringify(army),
+        body: JSON.stringify({ ...army, player: currentPlayer }),
       });
+    }
+    if (isLocal) {
+      const localPlayer = localStorage.getItem('guest');
+      if (localPlayer) {
+        const { armies } = JSON.parse(localPlayer);
+        localStorage.setItem(
+          'guest',
+          JSON.stringify({
+            armies: [...armies, army],
+            user: currentPlayer,
+          }),
+        );
+      }
     }
     router.push(`/play/new?${searchParams?.toString()}`);
   };

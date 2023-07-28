@@ -12,12 +12,14 @@ const addPlayerArmy = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const data = await JSON.parse(req.body);
 
+    const { player, ...rest } = data;
+
     await db
       .collection('users')
-      .doc(user.uid)
+      .doc(player)
       .collection('armies')
       .doc()
-      .set(data);
+      .set(rest);
     return res.status(200).json({ message: 'success' });
   } catch (error) {
     console.log('error', error);

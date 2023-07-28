@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import MatchTypeSelection from '@/components/inputs/MatchTypeSelection';
 import ArmySelectorRadioGroup from '@/components/inputs/ArmySelectorRadioGroup';
@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import BattlepackSelect from '@/components/inputs/BattlepackSelect';
 import { Battlepack } from '@/types/firestore/firestore';
+import CreatePlayerModal from '@/app/modals/CreatePlayerModal';
 
 type FormValues = {
   type: string | null;
@@ -32,9 +33,17 @@ type NewGameFormProps = {
 const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [playerTwoArmies, setPlayerTwoArmies] = useState<PlayerArmy[]>([]);
   // TODO: we can prompt player 2 to enter their email to get their armies but for now we will just keep it local
-
+  const [createPlayerModalOpen, setCreatePlayerModalOpen] = useState(false);
+  const [opponent, setOpponent] = useState<{
+    user: string;
+    isLocal: boolean;
+    armies: PlayerArmy[];
+  }>({
+    armies: [],
+    user: '',
+    isLocal: false,
+  });
   const defaultValues = {
     type: searchParams?.get('type') ?? null,
     points: Number(searchParams?.get('points')) ?? null,
@@ -48,9 +57,19 @@ const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
     },
     playerTwo: {
       army: null,
-      user: '',
+      user: null,
     },
   };
+
+  useEffect(() => {
+    const localPlayer = localStorage.getItem('guest');
+    if (localPlayer && !opponent.user) {
+      const { user, armies } = JSON.parse(localPlayer);
+      console.log('user', user);
+      handleOpponent({ user, armies, isLocal: true });
+    }
+  }, [opponent]);
+
   const onSubmit = async (data: FormValues) => {
     const { type, points, playerOne, playerTwo, battlepack } = data;
     const game = {
@@ -75,9 +94,10 @@ const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
     router.push(`/play/${game.id}`);
   };
 
-  const { control, watch, handleSubmit, getValues } = useForm<FormValues>({
-    defaultValues,
-  });
+  const { control, watch, handleSubmit, getValues, setValue } =
+    useForm<FormValues>({
+      defaultValues,
+    });
   const watchedType = watch('type');
   const watchedBattlePack = watch('battlepack');
   const watchedPoints = watch('points');
@@ -90,7 +110,27 @@ const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
     return false;
   };
 
-  const BuildArmyButton = ({ playerId }: { playerId: string }) => (
+  const handleOpponent = (player: {
+    user: string;
+    armies: PlayerArmy[];
+    isLocal: boolean;
+  }) => {
+    const { user, isLocal, armies } = player;
+    setOpponent({
+      user,
+      isLocal,
+      armies,
+    });
+    setValue('playerTwo.user', user);
+  };
+
+  const BuildArmyButton = ({
+    playerId,
+    isLocal,
+  }: {
+    playerId: string;
+    isLocal?: boolean;
+  }) => (
     <Link
       href={{
         pathname: '/build',
@@ -99,10 +139,17 @@ const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
           battlepack: getValues('battlepack')?.id,
           points: getValues('points'),
           player: playerId,
+          local: isLocal,
         },
       }}
     >
       <button
+        onClick={(e) => {
+          if (!playerId) {
+            e.preventDefault();
+            setCreatePlayerModalOpen(true);
+          }
+        }}
         className="cursor-pointer rounded bg-green-500 py-2 px-4 font-bold text-white hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-500"
         disabled={handleBuildArmyDisabled()}
       >
@@ -176,12 +223,15 @@ const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
           <div className="flex flex-col items-center">
             <ArmySelectorRadioGroup
               control={control}
-              options={playerTwoArmies}
-              rules={{ required: false }}
+              options={opponent.armies}
+              rules={{ required: true }}
               label="Army"
               name="playerTwo.army"
             />
-            <BuildArmyButton playerId={getValues('playerTwo.user')!} />
+            <BuildArmyButton
+              playerId={getValues('playerTwo.user')!}
+              isLocal={opponent.isLocal}
+            />
           </div>
         </div>
       </div>
@@ -189,6 +239,11 @@ const NewGameForm = ({ battlepacks, userArmies, userId }: NewGameFormProps) => {
       <button className="button mt-auto mb-10" onClick={handleSubmit(onSubmit)}>
         Submit
       </button>
+      <CreatePlayerModal
+        isOpen={createPlayerModalOpen}
+        setIsOpen={setCreatePlayerModalOpen}
+        handleOpponent={handleOpponent}
+      />
     </>
   );
 };
