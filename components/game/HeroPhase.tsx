@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { GameBattleTactic, PlayerArmyUnit } from '@/firestore/types';
+import { GameBattleTactic } from '@/firestore/types';
 import GameUnit from '@/components/GameUnit';
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/components/tooltips/Tooltip';
+import { useGameContext } from '@/context/GameContext';
 
 type HeroPhaseProps = {
-  playerInfo: {
-    [key: number]: { commandPoints: number; units: PlayerArmyUnit[] };
-  };
-  currentPlayer: 1 | 2;
   heroicActions: { description: string; name: string }[];
   onBattleTacticSelect: (battleTactic: GameBattleTactic) => void;
   battleTactics: GameBattleTactic[];
@@ -24,13 +21,13 @@ type HeroPhaseProps = {
 // cast spells
 
 const HeroPhase = ({
-  currentPlayer,
-  playerInfo,
   heroicActions,
   onBattleTacticSelect,
   endPhase,
   battleTactics,
 }: HeroPhaseProps) => {
+  const { gameInfo, playerInfo } = useGameContext();
+  const currentPlayer = gameInfo.priority as 1 | 2;
   const [stage, setStage] = useState(1);
 
   // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
@@ -41,7 +38,7 @@ const HeroPhase = ({
       {stage === 1 && (
         <>
           <h3 className="text-lg font-bold">Choose your battle tactic</h3>
-          <div className="mt-2 flex h-full w-full flex-wrap gap-4">
+          <div className="mt-2 flex w-full flex-wrap gap-4">
             {battleTactics.map((battleTactic) => (
               <button
                 key={battleTactic.name}

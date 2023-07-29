@@ -1,20 +1,14 @@
 import React from 'react';
 import GameUnit from '@/components/GameUnit';
-import { Player } from '@/types/firestore/firestore';
+import { useGameContext } from '@/context/GameContext';
 
 type ShootingPhaseProps = {
-  playerInfo: {
-    [key in 1 | 2]: Player;
-  };
-  currentPlayer: 1 | 2;
   endPhase: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const ShootingPhase = ({
-  currentPlayer,
-  playerInfo,
-  endPhase,
-}: ShootingPhaseProps) => {
+const ShootingPhase = ({ endPhase }: ShootingPhaseProps) => {
+  const { playerInfo, gameInfo } = useGameContext();
+  const currentPlayer = gameInfo.priority as 1 | 2;
   return (
     <section className="flex w-full flex-col">
       <h3 className="text-lg font-bold">

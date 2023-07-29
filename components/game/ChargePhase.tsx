@@ -1,20 +1,14 @@
 import React from 'react';
 import GameUnit from '@/components/GameUnit';
-import { Player } from '@/types/firestore/firestore';
+import { useGameContext } from '@/context/GameContext';
 
 type ChargePhaseProps = {
-  playerInfo: {
-    [key in 1 | 2]: Player;
-  };
-  currentPlayer: 1 | 2;
   endPhase: React.Dispatch<React.SetStateAction<number>>;
 };
 
-const ChargePhase = ({
-  currentPlayer,
-  playerInfo,
-  endPhase,
-}: ChargePhaseProps) => {
+const ChargePhase = ({ endPhase }: ChargePhaseProps) => {
+  const { gameInfo, playerInfo } = useGameContext();
+  const currentPlayer = gameInfo.priority as 1 | 2;
   // TODO: check for monstrous rampages that the current player has
   return (
     <section className="flex w-full flex-col">

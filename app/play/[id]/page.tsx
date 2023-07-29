@@ -10,6 +10,7 @@ import {
   PlayerArmyUnit,
 } from '@/firestore/types';
 import { BattleTrait, Game, Player } from '@/types/firestore/firestore';
+import { GameProvider } from '@/context/GameContext';
 
 type GamePageProps = {
   params: { id: string };
@@ -128,7 +129,9 @@ export default async function PlayGamePage({ params }: GamePageProps) {
 
   return (
     <div className="mx-10 flex h-screen flex-col items-center">
-      <PlayGame gameData={game} phaseData={phases} playerData={players} />
+      <GameProvider game={game} players={players}>
+        <PlayGame phaseData={phases} />
+      </GameProvider>
     </div>
   );
 }

@@ -5,11 +5,13 @@ import HeroPhase from '@/components/game/HeroPhase';
 import CommandAbilities from '@/components/CommandAbilities';
 import MovementPhase from '@/components/game/MovementPhase';
 import ShootingPhase from '@/components/game/ShootingPhase';
-import { Game, Phase, Player } from '@/types/firestore/firestore';
+import { Phase, Player } from '@/types/firestore/firestore';
 import ReceivedCommandPointAlert from '@/components/alerts/ReceivedCommandPointAlert';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import ChargePhase from '@/components/game/ChargePhase';
 import UnitAbilities from '@/components/UnitAbilities';
+import PlayerDashboard from '@/components/game/PlayerDashboard';
+import { useGameContext } from '@/context/GameContext';
 
 declare module 'notistack' {
   interface VariantOverrides {
@@ -18,9 +20,7 @@ declare module 'notistack' {
 }
 
 type PlayGameProps = {
-  gameData: Game;
   phaseData: Phase[];
-  playerData: { [key in 1 | 2]: Player };
 };
 
 const phases = [
@@ -32,10 +32,10 @@ const phases = [
   'combat',
   'battleshock',
 ];
-const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
-  const [playerInfo, setPlayerInfo] =
-    useState<{ [key in 1 | 2]: Player }>(playerData);
-  const [gameInfo, setGameInfo] = useState<Game>(gameData);
+const PlayGame = ({ phaseData }: PlayGameProps) => {
+  const { gameInfo, setGameInfo, playerInfo, setPlayerInfo } = useGameContext();
+
+  const [maximizePlayerOne, setMaximizePlayerOne] = useState(false);
 
   const setUpUnits = (priorityPlayer: 1 | 2) => {
     setGameInfo((prev) => ({
@@ -158,34 +158,14 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
         commandPoint: ReceivedCommandPointAlert,
       }}
     >
-      <section className="grid h-full w-full grid-cols-12">
-        <div className="col-span-3">
-          <div
-            className={`${
-              gameInfo.priority === 1
-                ? 'bg-red-500  text-white'
-                : 'bg-none text-red-500'
-            } font-2xl flex-start -mb-1 flex justify-between rounded-t-lg px-4 pb-0.5 font-bold`}
-          >
-            <span>Player 1</span>
-            <span>
-              {playerInfo[1].commandPoints}
-              <span className="text-[10px] uppercase">cp</span>
-            </span>
-          </div>
-          {gameInfo.phase > 0 && (
-            <div className="flex h-full flex-col rounded-md border-t-4 border-red-500 py-4 shadow-xl">
-              <CommandAbilities
-                abilities={playerInfo[1].commandAbilities[gameInfo.phase] ?? []}
-              />
-              <UnitAbilities
-                playerUnits={playerInfo[1]?.units ?? []}
-                currentPhase={phases[gameInfo.phase] ?? ''}
-              />
-            </div>
-          )}
-        </div>
-        <div className="col-span-3 col-start-10 flex flex-col">
+      <section className="flex h-full w-full">
+        {gameInfo.phase > 0 && (
+          <PlayerDashboard
+            maximizePlayerOne={maximizePlayerOne}
+            setMaximizePlayerOne={setMaximizePlayerOne}
+          />
+        )}
+        <div className="order-2 ml-auto flex h-full w-1/5 flex-shrink-0 flex-col">
           <div
             className={`${
               gameInfo.priority === 2
@@ -208,17 +188,15 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
           )}
         </div>
         <div
-          className={
-            'col-span-6 col-start-4 row-start-1 mt-[22px] flex w-full px-6'
-          }
+          className={`${
+            maximizePlayerOne ? 'hidden' : 'w-3/5 flex-shrink-0'
+          } order-1 mt-[22px] px-6`}
         >
           {gameInfo.phase === 0 && !gameInfo.priority && (
             <Setup setUp={setUpUnits} />
           )}
           {gameInfo.phase === 1 && (
             <HeroPhase
-              currentPlayer={gameInfo.priority as 1 | 2}
-              playerInfo={playerInfo}
               heroicActions={
                 phaseData.find((phase) => phase.name === 'hero')
                   ?.heroicActions || []
@@ -229,26 +207,13 @@ const PlayGame = ({ gameData, phaseData, playerData }: PlayGameProps) => {
             />
           )}
           {gameInfo.phase === 2 && (
-            <MovementPhase
-              currentPlayer={gameInfo.priority as 1 | 2}
-              playerInfo={playerInfo}
-              setPlayerInfo={setPlayerInfo}
-              endPhase={() => incrementPhase()}
-            />
+            <MovementPhase endPhase={() => incrementPhase()} />
           )}
           {gameInfo.phase === 3 && (
-            <ShootingPhase
-              currentPlayer={gameInfo.priority as 1 | 2}
-              playerInfo={playerInfo}
-              endPhase={() => incrementPhase()}
-            />
+            <ShootingPhase endPhase={() => incrementPhase()} />
           )}
           {gameInfo.phase === 4 && (
-            <ChargePhase
-              currentPlayer={gameInfo.priority as 1 | 2}
-              playerInfo={playerInfo}
-              endPhase={() => incrementPhase()}
-            />
+            <ChargePhase endPhase={() => incrementPhase()} />
           )}
         </div>
       </section>

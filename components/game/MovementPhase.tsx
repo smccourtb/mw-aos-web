@@ -1,18 +1,9 @@
 import React from 'react';
 import { PlayerArmyUnit } from '@/firestore/types';
 import GameUnit from '@/components/GameUnit';
-import { Player } from '@/types/firestore/firestore';
+import { useGameContext } from '@/context/GameContext';
 
 type MovementPhaseProps = {
-  playerInfo: {
-    [key: number]: { commandPoints: number; units: PlayerArmyUnit[] };
-  };
-  setPlayerInfo: React.Dispatch<
-    React.SetStateAction<{
-      [key in 1 | 2]: Player;
-    }>
-  >;
-  currentPlayer: 1 | 2;
   endPhase: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -21,12 +12,9 @@ type MovementPhaseProps = {
 // perform heroic actions
 // cast spells
 
-const MovementPhase = ({
-  currentPlayer,
-  playerInfo,
-  setPlayerInfo,
-  endPhase,
-}: MovementPhaseProps) => {
+const MovementPhase = ({ endPhase }: MovementPhaseProps) => {
+  const { gameInfo, playerInfo, setPlayerInfo } = useGameContext();
+  const currentPlayer = gameInfo.priority as 1 | 2;
   const handleUnitMovement = (unit: PlayerArmyUnit, movementAction: string) => {
     setPlayerInfo((prev) => ({
       ...prev,
