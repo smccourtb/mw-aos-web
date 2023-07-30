@@ -6,10 +6,10 @@ import {
   ChevronUpIcon,
   MinusIcon,
 } from '@heroicons/react/outline';
-import CommandAbilities from '@/components/CommandAbilities';
 
 import UnitCard from '@/components/UnitCard';
 import { useGameContext } from '@/context/GameContext';
+import Abilities from '@/components/Abilities';
 type PlayerDashboardProps = {
   maximized: boolean;
   setMaximize: React.Dispatch<React.SetStateAction<boolean>>;
@@ -20,7 +20,7 @@ const PlayerDashboard = ({
   setMaximize,
   player,
 }: PlayerDashboardProps) => {
-  const { gameInfo, playerInfo } = useGameContext();
+  const { playerInfo } = useGameContext();
   return (
     <div
       className={`${
@@ -48,16 +48,7 @@ const PlayerDashboard = ({
         {/* Data Disclosures */}
         <div className="mb-20 flex w-full flex-wrap overflow-y-auto transition-all duration-300 ease-in-out scrollbar-none scrollbar-track-gray-900/90 scrollbar-thumb-gray-800 hover:scrollbar-thin">
           <BattleTacticsDisclosure maximized={maximized} player={player} />
-          <PlayerDashboardSection
-            maximized={maximized}
-            label={'Command Abilities'}
-          >
-            <CommandAbilities
-              abilities={
-                playerInfo[player].commandAbilities[gameInfo.phase] ?? []
-              }
-            />
-          </PlayerDashboardSection>
+          <CommandAbilitiesDisclosure maximized={maximized} player={player} />
           <PlayerDashboardSection maximized={maximized} label={'Army Roster'}>
             <div className="flex w-full min-w-0 flex-col gap-4 overflow-hidden p-4">
               {playerInfo[player].units.map((unit) => (
@@ -100,7 +91,23 @@ const BattleTacticsDisclosure = ({
   const { playerInfo } = useGameContext();
   return (
     <PlayerDashboardSection maximized={maximized} label={'Battle Tactics'}>
-      <CommandAbilities abilities={playerInfo[player].battleTactics ?? []} />
+      <Abilities abilities={playerInfo[player].battleTactics ?? []} />
+    </PlayerDashboardSection>
+  );
+};
+const CommandAbilitiesDisclosure = ({
+  maximized,
+  player,
+}: {
+  maximized: boolean;
+  player: 1 | 2;
+}) => {
+  const { playerInfo, gameInfo } = useGameContext();
+  return (
+    <PlayerDashboardSection maximized={maximized} label={'Battle Tactics'}>
+      <Abilities
+        abilities={playerInfo[player].commandAbilities[gameInfo.phase] ?? []}
+      />
     </PlayerDashboardSection>
   );
 };

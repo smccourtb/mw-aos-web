@@ -13,12 +13,10 @@ type AbilitiesProps = {
     active: boolean;
     chosen: boolean;
   }[];
-  label: string;
 };
-const Abilities = ({ abilities, label }: AbilitiesProps) => {
+const Abilities = ({ abilities }: AbilitiesProps) => {
   return (
     <div className="flex flex-wrap justify-start px-1">
-      <h3 className="font-bold">{label}</h3>
       {abilities.map((ability) => (
         <Tooltip>
           <TooltipTrigger>
