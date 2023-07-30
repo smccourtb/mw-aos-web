@@ -15,6 +15,18 @@ body {
 }
 
 @layer components {
+  .game-background {
+    background-color: rgb(49, 46, 129);
+    background-image: radial-gradient(
+        at 3% 97%,
+        rgb(15, 23, 42) 0,
+        transparent 100%
+      ),
+      radial-gradient(at 100% 83%, rgb(15, 23, 42) 0, transparent 100%),
+      radial-gradient(at 10% 17%, rgb(15, 23, 42) 0, transparent 89%),
+      radial-gradient(at 59% 40%, rgb(15, 23, 42) 0, transparent 100%);
+    overscroll-behavior: contain;
+  }
   .button {
     display: flex;
     align-items: center;

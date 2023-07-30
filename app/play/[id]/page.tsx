@@ -95,8 +95,14 @@ export default async function PlayGamePage({ params }: GamePageProps) {
         .flat()
         .filter((ability) => ability?.type === 'command') ?? [];
 
+    // remove all duplicates from the array
+    const uniqueUnitAbilities = unitCommandAbilities.filter(
+      (ability, index, self) =>
+        index === self.findIndex((t) => t.name === ability.name),
+    );
+
     phases.forEach((phase) => {
-      const unitAbilities = unitCommandAbilities.filter(
+      const unitAbilities = uniqueUnitAbilities.filter(
         (ability) => ability.phase === phase.name || ability.phase === 'all',
       );
       const universalAbilities = phase.commandAbilities ?? [];

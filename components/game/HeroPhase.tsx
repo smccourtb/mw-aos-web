@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { GameBattleTactic } from '@/firestore/types';
+import React, { useMemo, useState } from 'react';
 import GameUnit from '@/components/GameUnit';
 import {
   Tooltip,
@@ -7,11 +6,10 @@ import {
   TooltipTrigger,
 } from '@/components/tooltips/Tooltip';
 import { useGameContext } from '@/context/GameContext';
+import { Player } from '@/types/firestore/firestore';
 
 type HeroPhaseProps = {
   heroicActions: { description: string; name: string }[];
-  onBattleTacticSelect: (battleTactic: GameBattleTactic) => void;
-  battleTactics: GameBattleTactic[];
   endPhase: React.Dispatch<React.SetStateAction<number>>;
 };
 
@@ -20,18 +18,39 @@ type HeroPhaseProps = {
 // perform heroic actions
 // cast spells
 
-const HeroPhase = ({
-  heroicActions,
-  onBattleTacticSelect,
-  endPhase,
-  battleTactics,
-}: HeroPhaseProps) => {
-  const { gameInfo, playerInfo } = useGameContext();
+const HeroPhase = ({ heroicActions, endPhase }: HeroPhaseProps) => {
+  const { gameInfo, playerInfo, setPlayerInfo } = useGameContext();
   const currentPlayer = gameInfo.priority as 1 | 2;
   const [stage, setStage] = useState(1);
 
-  // add 1 command point if general is on the battlefield. maybe a popup to ask if they want to use it?
   // TODO: add in reserve to units for heroes -> they cannot perform heroic actions if they are in reserve
+  const battleTactics = useMemo(() => {
+    const player = gameInfo.priority!;
+    const playerTactics = playerInfo[player]?.battleTactics ?? [];
+    return playerTactics.filter((tactic) => !tactic.chosen);
+  }, [gameInfo.priority, playerInfo]);
+
+  const selectBattleTactic = (tactic: {
+    name: string;
+    description: string;
+  }) => {
+    const player = gameInfo.priority;
+    if (!player) return;
+    const playerTactics = playerInfo[player]?.battleTactics ?? [];
+    const chosenTactic = playerTactics.find((t) => t.name === tactic.name);
+    if (!chosenTactic) return;
+    chosenTactic.active = true;
+    chosenTactic.chosen = true;
+    setPlayerInfo((prev: { [key in 1 | 2]: Player }) => {
+      return {
+        ...prev,
+        [player as 1 | 2]: {
+          ...prev[player],
+          battleTactics: [...playerTactics],
+        },
+      };
+    });
+  };
 
   return (
     <section className="flex w-full flex-col">
@@ -44,7 +63,7 @@ const HeroPhase = ({
                 key={battleTactic.name}
                 className="min-w-1/4 flex flex-col rounded-md border border-gray-500 p-2 shadow-md"
                 onClick={() => {
-                  onBattleTacticSelect(battleTactic);
+                  selectBattleTactic(battleTactic);
                   setStage(2);
                 }}
               >

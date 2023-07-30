@@ -3,7 +3,6 @@ import '@/styles/global.css';
 import { redirect } from 'next/navigation';
 import { userSession } from '@/firebase/serverUserSessionUtils';
 import React from 'react';
-import AppHeader from '@/components/header/AppHeader';
 
 export default async function FirebaseLayout({
   children,
@@ -16,8 +15,7 @@ export default async function FirebaseLayout({
   }
 
   return (
-    <div className="flex h-screen w-screen flex-col">
-      <AppHeader />
+    <div className="game-background flex h-screen w-screen flex-col ">
       {children}
     </div>
   );

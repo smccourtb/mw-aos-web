@@ -2,14 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import Setup from '@/components/game/Setup';
 import HeroPhase from '@/components/game/HeroPhase';
-import CommandAbilities from '@/components/CommandAbilities';
 import MovementPhase from '@/components/game/MovementPhase';
 import ShootingPhase from '@/components/game/ShootingPhase';
 import { Phase, Player } from '@/types/firestore/firestore';
 import ReceivedCommandPointAlert from '@/components/alerts/ReceivedCommandPointAlert';
 import { enqueueSnackbar, SnackbarProvider } from 'notistack';
 import ChargePhase from '@/components/game/ChargePhase';
-import UnitAbilities from '@/components/UnitAbilities';
 import PlayerDashboard from '@/components/game/PlayerDashboard';
 import { useGameContext } from '@/context/GameContext';
 
@@ -33,9 +31,10 @@ const phases = [
   'battleshock',
 ];
 const PlayGame = ({ phaseData }: PlayGameProps) => {
-  const { gameInfo, setGameInfo, playerInfo, setPlayerInfo } = useGameContext();
+  const { gameInfo, setGameInfo, setPlayerInfo } = useGameContext();
 
   const [maximizePlayerOne, setMaximizePlayerOne] = useState(false);
+  const [maximizePlayerTwo, setMaximizePlayerTwo] = useState(false);
 
   const setUpUnits = (priorityPlayer: 1 | 2) => {
     setGameInfo((prev) => ({
@@ -124,73 +123,27 @@ const PlayGame = ({ phaseData }: PlayGameProps) => {
     }));
   };
 
-  const selectBattleTactic = (tactic: {
-    name: string;
-    description: string;
-  }) => {
-    const player = gameInfo.priority;
-    if (!player) return;
-    const playerTactics = playerInfo[player]?.battleTactics ?? [];
-    const chosenTactic = playerTactics.find((t) => t.name === tactic.name);
-    if (!chosenTactic) return;
-    chosenTactic.active = true;
-    chosenTactic.chosen = true;
-    setPlayerInfo((prev: { [key in 1 | 2]: Player }) => {
-      return {
-        ...prev,
-        [player as 1 | 2]: {
-          ...prev[player],
-          battleTactics: [...playerTactics],
-        },
-      };
-    });
-  };
-
-  const getAvailablePlayerBattleTactics = () => {
-    const player = gameInfo.priority!;
-    const playerTactics = playerInfo[player]?.battleTactics ?? [];
-    return playerTactics.filter((tactic) => !tactic.chosen);
-  };
-
   return (
     <SnackbarProvider
       Components={{
         commandPoint: ReceivedCommandPointAlert,
       }}
     >
-      <section className="flex h-full w-full">
+      <section className="flex h-screen w-full overscroll-none ">
         {gameInfo.phase > 0 && (
           <PlayerDashboard
-            maximizePlayerOne={maximizePlayerOne}
-            setMaximizePlayerOne={setMaximizePlayerOne}
+            maximized={maximizePlayerOne}
+            setMaximize={setMaximizePlayerOne}
+            player={1}
           />
         )}
-        <div className="order-2 ml-auto flex h-full w-1/5 flex-shrink-0 flex-col">
-          <div
-            className={`${
-              gameInfo.priority === 2
-                ? 'bg-blue-500 text-white'
-                : 'bg-none text-blue-500'
-            } font-2xl -mb-1 w-fit self-end rounded-t-lg px-4 pb-0.5 font-bold`}
-          >
-            Player 2
-          </div>
-          {gameInfo.phase > 0 && (
-            <div className="flex h-full flex-col rounded-md border-t-4 border-blue-500 py-4 shadow-xl">
-              <CommandAbilities
-                abilities={playerInfo[2].commandAbilities[gameInfo.phase] ?? []}
-              />
-              <UnitAbilities
-                playerUnits={playerInfo[2]?.units ?? []}
-                currentPhase={phases[gameInfo.phase] ?? ''}
-              />
-            </div>
-          )}
-        </div>
+
         <div
           className={`${
-            maximizePlayerOne ? 'hidden' : 'w-3/5 flex-shrink-0'
-          } order-1 mt-[22px] px-6`}
+            maximizePlayerOne || maximizePlayerTwo
+              ? 'w-0 scale-0 opacity-0'
+              : 'w-3/5 flex-shrink-0 scale-100 opacity-100'
+          } px-6 transition-all duration-300`}
         >
           {gameInfo.phase === 0 && !gameInfo.priority && (
             <Setup setUp={setUpUnits} />
@@ -201,8 +154,6 @@ const PlayGame = ({ phaseData }: PlayGameProps) => {
                 phaseData.find((phase) => phase.name === 'hero')
                   ?.heroicActions || []
               }
-              onBattleTacticSelect={selectBattleTactic}
-              battleTactics={getAvailablePlayerBattleTactics()}
               endPhase={() => incrementPhase()}
             />
           )}
@@ -216,6 +167,13 @@ const PlayGame = ({ phaseData }: PlayGameProps) => {
             <ChargePhase endPhase={() => incrementPhase()} />
           )}
         </div>
+        {gameInfo.phase > 0 && (
+          <PlayerDashboard
+            maximized={maximizePlayerTwo}
+            setMaximize={setMaximizePlayerTwo}
+            player={2}
+          />
+        )}
       </section>
     </SnackbarProvider>
   );
