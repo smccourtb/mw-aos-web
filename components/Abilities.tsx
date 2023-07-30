@@ -5,19 +5,29 @@ import {
   TooltipTrigger,
 } from '@/components/tooltips/Tooltip';
 
-type CommandAbilitiesProps = {
-  abilities: { name: string; text?: string; description?: string }[];
+type AbilitiesProps = {
+  abilities: {
+    name: string;
+    text?: string;
+    description?: string;
+    active: boolean;
+    chosen: boolean;
+  }[];
+  label: string;
 };
-const CommandAbilities = ({ abilities }: CommandAbilitiesProps) => {
+const Abilities = ({ abilities, label }: AbilitiesProps) => {
   return (
-    <div className="mb-4 flex flex-col gap-3 px-3">
-      <h3 className="font-bold">Command Abilities</h3>
+    <div className="flex flex-wrap justify-start px-1">
+      <h3 className="font-bold">{label}</h3>
       {abilities.map((ability) => (
         <Tooltip>
           <TooltipTrigger>
             <button
               key={ability.name}
-              className="flex w-full flex-col rounded-md border border-gray-500 p-2 text-xs shadow-md"
+              disabled={ability?.chosen}
+              className={`${
+                ability.active ? 'shadow-inner' : 'shadow-md'
+              } m-1 flex rounded-md bg-white/10 p-2 text-xs text-sky-400 ring-1 ring-gray-600 transition-colors duration-300 ease-in-out hover:bg-sky-400/70 hover:text-white disabled:opacity-50`}
               onClick={() => {
                 console.log('clicked');
               }}
@@ -36,4 +46,4 @@ const CommandAbilities = ({ abilities }: CommandAbilitiesProps) => {
   );
 };
 
-export default CommandAbilities;
+export default Abilities;
