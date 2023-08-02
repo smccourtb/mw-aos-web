@@ -26,11 +26,28 @@ export default async function PlayGamePage({ params }: GamePageProps) {
 
   const formatUnits = (units: PlayerArmyUnit[] | null) => {
     if (!units) return [];
-    return units.map((unit) => ({
-      ...unit,
-      movement: null,
-      id: crypto.randomUUID(),
-    }));
+    return units.map((unit) => {
+      const spells = [
+        ...(unit.spells ?? []),
+        ...([unit.enhancements.spellLores] ?? []),
+      ];
+      const formattedSpells =
+        spells.length > 0 &&
+        spells.map((spell) => ({
+          ...spell,
+          canCast: true,
+        }));
+
+      return {
+        ...unit,
+        movement: null,
+        spells: formattedSpells,
+        spellsAttempted: 0,
+        unbindsAttempted: 0,
+        prayersAttempted: 0,
+        id: crypto.randomUUID(),
+      };
+    });
   };
 
   const formatBattleTactics = (

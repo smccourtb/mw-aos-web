@@ -10,11 +10,12 @@ type AbilitiesProps = {
     name: string;
     text?: string;
     description?: string;
-    active: boolean;
-    chosen: boolean;
+    active?: boolean;
+    chosen?: boolean;
   }[];
+  selectHandler: (e: string) => void;
 };
-const Abilities = ({ abilities }: AbilitiesProps) => {
+const Abilities = ({ abilities, selectHandler }: AbilitiesProps) => {
   return (
     <div className="flex flex-wrap justify-start px-1">
       {abilities.map((ability) => (
@@ -24,10 +25,14 @@ const Abilities = ({ abilities }: AbilitiesProps) => {
               key={ability.name}
               disabled={ability?.chosen}
               className={`${
-                ability.active ? 'shadow-inner' : 'shadow-md'
-              } m-1 flex rounded-md bg-white/10 p-2 text-xs text-sky-400 ring-1 ring-gray-600 transition-colors duration-300 ease-in-out hover:bg-sky-400/70 hover:text-white disabled:opacity-50`}
-              onClick={() => {
-                console.log('clicked');
+                ability.active
+                  ? 'text-white shadow-inner ring-rose-400'
+                  : 'text-sky-400 shadow-md ring-gray-600'
+              } m-1 flex rounded-md bg-white/10 p-2 text-xs ring-1 transition-colors duration-300 ease-in-out hover:bg-sky-400/70 hover:text-white disabled:opacity-50 disabled:hover:bg-white/10`}
+              onClick={(e) => {
+                const name = e.currentTarget.textContent;
+                if (!name) return;
+                selectHandler(name);
               }}
             >
               <p className={'font-bold capitalize'}>{ability.name}</p>

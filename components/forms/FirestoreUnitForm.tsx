@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Control, useForm } from 'react-hook-form';
 import AlertDatabaseError from '@/components/AlertDatabaseError';
-import Select from '@/components/inputs/Select';
+import FormSelect from '@/components/inputs/FormSelect';
 import Input from '@/components/inputs/Input';
 import InputArray from '@/components/forms/InputArray';
 import { Faction } from '@/types/firestore/factions';
@@ -94,11 +94,11 @@ const FirestoreUnitForm = ({ factions }: FirestoreUnitFormProps) => {
     <div className="m-5 grid grid-cols-12 gap-5">
       {/* Faction */}
       <div className="col-span-12 row-span-2 w-2/12 place-self-center">
-        <Select
+        <FormSelect
           control={control as Control<FormValues>}
           rules={{ required: true }}
           name="faction"
-          placeholder="Select Faction"
+          placeholder="FormSelect Faction"
           options={factions.map((faction) => faction.name)}
         />
       </div>
@@ -125,7 +125,7 @@ const FirestoreUnitForm = ({ factions }: FirestoreUnitFormProps) => {
           rules={{ required: true }}
           type={'number'}
         />
-        <Select
+        <FormSelect
           name={'role'}
           placeholder={'Role'}
           options={['Battleline', 'Leader', 'Behemoth', 'Artillery', 'None']}

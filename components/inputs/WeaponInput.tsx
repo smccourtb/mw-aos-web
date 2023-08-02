@@ -1,6 +1,6 @@
 import Input from '@/components/inputs/Input';
 import { Control } from 'react-hook-form';
-import Select from '@/components/inputs/Select';
+import FormSelect from '@/components/inputs/FormSelect';
 import React from 'react';
 import Toggle from '@/components/inputs/Toggle';
 
@@ -18,21 +18,21 @@ const WeaponInput = ({ entryNumber, control }: WeaponInputProps) => {
         label={`Name`}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.type`}
         placeholder={'Type'}
         options={['missile', 'melee']}
         control={control}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.stats.range`}
         placeholder={'Range'}
         options={['1', '2', '3', '4', '5', '6', '18', '12', '24', '30']}
         control={control}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.stats.attacks`}
         placeholder={'Attacks'}
         options={[
@@ -50,28 +50,28 @@ const WeaponInput = ({ entryNumber, control }: WeaponInputProps) => {
         control={control}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.stats.toHit`}
         placeholder={'To Hit'}
         options={['1+', '2+', '3+', '4+', '5+', '6', '*']}
         control={control}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.stats.toWound`}
         placeholder={'To Wound'}
         options={['1+', '2+', '3+', '4+', '5+', '6']}
         control={control}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.stats.rend`}
         placeholder={'Rend'}
         options={['-1', '-2', '-3', '-']}
         control={control}
         rules={{ required: true }}
       />
-      <Select
+      <FormSelect
         name={`weapons.${entryNumber}.stats.damage`}
         placeholder={'Damage'}
         options={[

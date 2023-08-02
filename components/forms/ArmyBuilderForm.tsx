@@ -1,7 +1,7 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import Select from '@/components/inputs/Select';
+import FormSelect from '@/components/inputs/FormSelect';
 import { Tab } from '@headlessui/react';
 import UnitCard from '@/components/forms/army-builder-form/UnitCard';
 import {
@@ -387,7 +387,7 @@ const ArmyBuilderForm = ({
         } flex w-full flex-col items-center justify-center justify-evenly gap-4 self-center transition-all`}
       >
         <div className="w-1/3">
-          <Select
+          <FormSelect
             placeholder="Choose your faction"
             name="factionName"
             control={control}
@@ -405,7 +405,7 @@ const ArmyBuilderForm = ({
                 name="type"
               />
               {watchedType && (
-                <Select
+                <FormSelect
                   placeholder="Choose your subfaction"
                   name="subFaction"
                   control={control}
@@ -416,7 +416,7 @@ const ArmyBuilderForm = ({
             </>
           ) : (
             watchedFactionName && (
-              <Select
+              <FormSelect
                 placeholder="Choose your subfaction"
                 name="subFaction"
                 control={control}
@@ -453,7 +453,7 @@ const ArmyBuilderForm = ({
             {fieldSections.map((section, index) => (
               <Tab
                 key={index}
-                className="mt-4 flex w-full flex-col items-center gap-2 rounded-t-md px-2 py-1 pb-2 font-bold capitalize text-gray-500 transition-all duration-200 ease-in-out focus:outline-none ui-selected:bg-gray-700 ui-selected:text-white"
+                className="mt-4 flex w-full flex-col items-center gap-2 rounded-t-md px-2 py-1 pb-2 font-bold capitalize text-gray-500 transition-all duration-200 ease-in-out ui-selected:bg-gray-700 ui-selected:text-white focus:outline-none"
               >
                 {section.displayName}
 

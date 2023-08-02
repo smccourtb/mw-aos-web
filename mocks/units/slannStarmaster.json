@@ -104,5 +104,5 @@
     }
   ],
   "spellCastLimit": 3,
-  "unBindAttempts": 3
+  "unbindAttempts": 3
 }

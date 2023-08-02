@@ -9,6 +9,7 @@ import {
 type ExcludedUnitProperties = 'weapons' | 'equipOptions' | 'specialModels';
 
 export interface PlayerArmyUnit extends Omit<Unit, ExcludedUnitProperties> {
+  unbindAttempts: number;
   isGeneral: boolean;
   equippedSpecialModels: SpecialUnitModel[];
   weapons: Omit<UnitWeapon, 'choice'>[];
@@ -29,6 +30,8 @@ export type ArmyBuilderEnhancement = {
   isUnique?: boolean;
   chosen: boolean;
   source: string;
+  castingValue?: number;
+  range?: string;
 };
 
 export type PlayerArmy = {

@@ -8,7 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import BattlepackSelect from '@/components/inputs/BattlepackSelect';
 import { Battlepack } from '@/types/firestore/firestore';
-import CreatePlayerModal from '@/app/modals/CreatePlayerModal';
+import CreatePlayerModal from '@/components/modals/CreatePlayerModal';
 
 type FormValues = {
   type: string | null;

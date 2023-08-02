@@ -241,7 +241,7 @@ const UnitCard = ({
               options={unit.equipOptions}
               control={control}
               rules={{ required: true }}
-              placeholder={'Select Weapon'}
+              placeholder={'FormSelect Weapon'}
             />
           </div>
         )}

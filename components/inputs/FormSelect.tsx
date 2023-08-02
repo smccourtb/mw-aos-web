@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { useController, UseControllerProps } from 'react-hook-form';
 import {
@@ -6,24 +6,30 @@ import {
   CheckIcon,
   ChevronUpIcon,
 } from '@heroicons/react/solid';
-import { PlayerArmyUnit } from '@/firestore/types';
 
-type SelectProps = {
-  options: PlayerArmyUnit[];
+type FormSelectProps = {
+  options: any[];
+  multiple?: boolean;
   placeholder?: string;
-  value: PlayerArmyUnit | null;
-  setValue: (value: PlayerArmyUnit) => void;
 };
-const Select = ({ options, placeholder, value, setValue }: SelectProps) => {
-  const label = value?.name;
+const FormSelect = (props: UseControllerProps<any> & FormSelectProps) => {
+  const { field } = useController(props);
+  const { value, onChange } = field;
 
+  const label = !props?.multiple
+    ? value?.charAt(0).toUpperCase() + value?.slice(1)
+    : value
+        ?.map((v: string) => v?.charAt(0).toUpperCase() + v?.slice(1))
+        .join(', ');
   return (
-    <Listbox value={value} onChange={setValue}>
+    <Listbox value={value} onChange={onChange} multiple={props?.multiple}>
       {({ open }) => (
         <>
-          <div className={'relative h-full w-full text-black'}>
+          <div className={'relative h-full w-full'}>
             <Listbox.Button className="relative h-full w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm">
-              <span className="block truncate">{label || placeholder}</span>
+              <span className="block truncate">
+                {label || props.placeholder}
+              </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                 {open ? (
                   <ChevronUpIcon
@@ -47,33 +53,32 @@ const Select = ({ options, placeholder, value, setValue }: SelectProps) => {
               enterFrom="opacity-0"
               enterTo="opacity-100"
             >
-              <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                {options.map((option, index) => (
+              <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                {props.options.map((option, index) => (
                   <Listbox.Option
                     key={index}
                     className={({ active }) =>
-                      `relative w-full cursor-default select-none py-2 pl-10 pr-4 capitalize ${
+                      `relative cursor-default select-none py-2 pl-10 pr-4 capitalize ${
                         active ? 'bg-amber-100 text-amber-900' : 'text-gray-900'
                       }`
                     }
                     value={option}
                   >
                     {({ selected }) => (
-                      <div className="flex w-full">
+                      <>
                         <span
-                          className={`flex w-full justify-between  truncate ${
+                          className={`block truncate ${
                             selected ? 'font-medium' : 'font-normal'
                           }`}
                         >
-                          <span>{option.name}</span>
-                          <span>{`${option.unbindsAttempted}/${option.unbindAttempts}`}</span>
+                          {option}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
                             <CheckIcon className="h-5 w-5" aria-hidden="true" />
                           </span>
                         ) : null}
-                      </div>
+                      </>
                     )}
                   </Listbox.Option>
                 ))}
@@ -86,4 +91,4 @@ const Select = ({ options, placeholder, value, setValue }: SelectProps) => {
   );
 };
 
-export default Select;
+export default FormSelect;

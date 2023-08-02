@@ -68,7 +68,30 @@
       "flavor": "The Starpriest summons the blazing light of a distant celestial body and uses its radiance to blind the foe.",
       "description": "Blazing Starlight is a spell that has a casting value of 6 and a range of 18\". If successfully cast, pick 1 enemy unit within range and visible to the caster. Until your next hero phase, subtract 1 from hit rolls for attacks made by that unit.",
       "castingValue": 6,
-      "range": 18
+      "range": 18,
+      "effect": {
+        "onSuccess": {
+          "target": {
+            "type": "unit",
+            "affiliation": "enemy",
+            "amount": 1
+          },
+          "duration": {
+            "phase": "hero",
+            "stage": "start",
+            "until": "next",
+            "owner": "caster"
+          },
+          "result": {
+            "stat": "toHit",
+            "defensive": false,
+            "value": -1,
+            "applicative": true
+          },
+          "type": "weaponModifier"
+        },
+        "onFail": null
+      }
     }
   ],
   "abilities": [
@@ -76,7 +99,39 @@
       "name": "Serpent Staff",
       "description": "In your hero phase, you can pick 1 friendly SERAPHON unit wholly within 12\" of this unit. If you do so, until your next hero phase, if the unmodified wound roll for an attack made by that unit is 6, that attack causes 1 mortal wound to the target in addition to any damage it inflicts.",
       "phase": "hero",
-      "flavor": "Channelling cosmic power through their twin-headed staff, a Starpriest causes their allies’ weapons to drip with deadly venom."
+      "flavor": "Channelling cosmic power through their twin-headed staff, a Starpriest causes their allies’ weapons to drip with deadly venom.",
+      "effect": {
+        "onSuccess": {
+          "target": {
+            "type": "unit",
+            "affiliation": "friendly",
+            "keywords": {
+              "every": ["seraphon"],
+              "some": null,
+              "none": null
+            },
+            "amount": 1
+          },
+          "duration": {
+            "phase": "hero",
+            "stage": "start",
+            "until": "next",
+            "owner": "caster"
+          },
+          "roll": {
+            "during": "toWound",
+            "successOn": 6
+          },
+          "result": {
+            "type": "mortalWounds",
+            "defensive": false,
+            "value": 1,
+            "applicative": false
+          },
+          "type": "roll"
+        },
+        "onFail": null
+      }
     }
   ]
 }

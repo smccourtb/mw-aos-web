@@ -5,8 +5,8 @@ module.exports = {
     extend: {
       fontFamily: {
         minion: ['Minion Pro', 'serif'],
+        averia: 'var(--font-averia)',
       },
-      backgroundImage: {},
       colors: {
         gray: {
           100: '#f7fafc',

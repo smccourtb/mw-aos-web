@@ -27,6 +27,69 @@ body {
       radial-gradient(at 59% 40%, rgb(15, 23, 42) 0, transparent 100%);
     overscroll-behavior: contain;
   }
+
+  .game-bar {
+    background-color: rgba(255, 255, 255, 10%);
+    background-image: radial-gradient(
+        circle at 0% 50%,
+        rgba(56, 189, 248, 30%) 0,
+        transparent 2%
+      ),
+      radial-gradient(
+        circle at 1% 30%,
+        rgba(56, 189, 248, 30%) 0,
+        transparent 2%
+      ),
+      radial-gradient(circle at 100% 50%, rgb(244, 114, 182) 0, transparent 2%),
+      radial-gradient(circle at 99% 30%, rgb(244, 114, 182) 0, transparent 2%);
+    background-size: 100% 100%;
+  }
+
+  .frosted {
+    background-color: rgb(15, 23, 42);
+    background-image: radial-gradient(
+      at 95% 5%,
+      rgba(113, 113, 122, 10%) 0,
+      transparent 40%
+    );
+  }
+
+  .playerOne {
+    background-image: radial-gradient(
+        circle at 45% 50%,
+        rgb(56, 189, 248, 50%) 0,
+        transparent 22%
+      ),
+      radial-gradient(
+        circle at 50% 60%,
+        rgb(56, 189, 248, 30%) 0,
+        transparent 22%
+      ),
+      radial-gradient(
+        circle at 65% 40%,
+        rgb(56, 189, 248, 15%) 0,
+        transparent 21%
+      );
+  }
+
+  .playerTwo {
+    background-image: radial-gradient(
+        circle at 45% 50%,
+        rgba(244, 114, 182, 50%) 0,
+        transparent 22%
+      ),
+      radial-gradient(
+        circle at 55% 60%,
+        rgba(244, 114, 182, 25%) 0,
+        transparent 22%
+      ),
+      radial-gradient(
+        circle at 65% 40%,
+        rgba(244, 114, 182, 30%) 0,
+        transparent 21%
+      );
+  }
+
   .button {
     display: flex;
     align-items: center;

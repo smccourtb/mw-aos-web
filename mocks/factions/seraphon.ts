@@ -488,6 +488,9 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Domination',
+      range: null,
+      castingValue: 7,
+      effect: null,
     },
     {
       name: 'Tepok’s Beneficence',
@@ -499,6 +502,31 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Domination',
+      range: 18,
+      castingValue: 5,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            affiliation: 'friendly',
+            keywords: { every: ['skink'], some: [], exclude: [] },
+          },
+          result: {
+            stat: 'toWound',
+            value: -1,
+            defensive: true,
+            applicative: true,
+          },
+          duration: {
+            stage: 'start',
+            phase: 'hero',
+            until: 'next',
+            owner: 'caster',
+          },
+          type: 'damageModifier',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Drain Magic',
@@ -510,6 +538,12 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Domination',
+      range: null,
+      castingValue: 6,
+      effect: {
+        onSuccess: {},
+        onFail: null,
+      },
     },
     {
       name: 'Mystical Unforging',
@@ -521,6 +555,32 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Domination',
+      range: 12,
+      castingValue: 8,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            amount: 1,
+            affiliation: 'enemy',
+            range: 12,
+          },
+          duration: {
+            stage: 'start',
+            phase: 'hero',
+            until: 'next',
+            owner: 'caster',
+          },
+          result: {
+            defensive: false,
+            stat: 'rend',
+            value: 0,
+            applicative: false,
+          },
+          type: 'weaponModifier',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Stellar Tempest',
@@ -532,6 +592,29 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Domination',
+      range: 24,
+      castingValue: 8,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            amount: 1,
+            affiliation: 'enemy',
+            range: 12,
+          },
+          roll: {
+            amount: 'targetSize',
+            successOn: 5,
+          },
+          result: {
+            type: 'mortalWound',
+            value: 1,
+          },
+          displayMessage: 'Enter the number of successful rolls',
+          type: 'roll',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Cosmic Crush',
@@ -543,6 +626,30 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Manipulation',
+      range: 12,
+      castingValue: 7,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            amount: 1,
+            affiliation: 'enemy',
+            keywords: null,
+            range: 12,
+          },
+          roll: {
+            amount: 'targetSize',
+            successOn: 'targetSave',
+          },
+          result: {
+            type: 'mortalWound',
+            value: 1,
+          },
+          displayMessage: 'Enter the number of successful rolls',
+          type: 'roll',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Celestial Harmony',
@@ -554,6 +661,33 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Manipulation',
+      range: 18,
+      castingValue: 5,
+      effect: {
+        onSuccess: {
+          target: {
+            affiliation: 'friendly',
+            keywords: ['seraphon'],
+            type: 'unit',
+            amount: 'all',
+          },
+          duration: {
+            stage: 'start',
+            phase: 'hero',
+            until: 'next',
+            owner: 'caster',
+          },
+          result: {
+            stat: 'bravery',
+            value: 10,
+            applicative: false,
+          },
+          displayMessage:
+            'Choose 1 unit to improve bravery. If 10+ pick all wholly within range',
+          type: 'baseStatModifier',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Speed of Huanchi',
@@ -565,6 +699,25 @@ export const seraphon = {
       includeUnique: true,
       applicableSubfactions: ['fangs of sotek', 'dracothion’s tail'],
       source: 'Lore of Celestial Manipulation',
+      range: 18,
+      castingValue: 6,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            amount: 1,
+            affiliation: 'friendly',
+            keywords: {
+              some: ['kroxigor', 'skink'],
+              every: [],
+              exclude: ['monster'],
+            },
+          },
+          type: 'simple',
+          displayMessage: 'Choose 1 unit to make a normal move',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'The Earth Trembles',
@@ -576,6 +729,12 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Ancient Domains',
+      range: null,
+      castingValue: 8,
+      effect: {
+        onSuccess: {},
+        onFail: null,
+      },
     },
     {
       name: 'Empowered Celestite',
@@ -587,6 +746,31 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Ancient Domains',
+      range: 18,
+      castingValue: 7,
+      effect: {
+        onSuccess: {
+          target: {
+            affiliation: 'friendly',
+            keywords: ['saurus'],
+            range: 18,
+            type: 'unit',
+            amount: 1,
+            duration: {
+              stage: 'start',
+              phase: 'hero',
+              until: 'next',
+              description: 'until the start of the next hero phase',
+            },
+            result: {
+              type: 'improveRend',
+              value: 1,
+            },
+          },
+          type: 'weaponModifier',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Drain Magic',
@@ -598,6 +782,12 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Ancient Domains',
+      range: null,
+      castingValue: 6,
+      effect: {
+        onSuccess: {},
+        onFail: null,
+      },
     },
     {
       name: 'Itzl’s Invigoration',
@@ -609,6 +799,31 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Ancient Domains',
+      range: 12,
+      castingValue: 6,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'model',
+            amount: 1,
+            affiliation: 'friendly',
+            keywords: ['monster'],
+            range: 12,
+            duration: {
+              stage: 'start',
+              phase: 'hero',
+              until: 'next',
+              description: 'until the start of the next hero phase',
+            },
+            result: {
+              type: 'damageTable',
+              value: 1,
+            },
+          },
+          type: 'damageTable',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Telepathic Summons',
@@ -620,6 +835,29 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Ancient Domains',
+      range: 9,
+      castingValue: 6,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            amount: 1,
+            affiliation: 'friendly',
+            keywords: ['!monster'],
+            duration: {
+              stage: 'start',
+              phase: 'movement',
+              until: 'next',
+              description: 'until the next movement phase',
+            },
+            result: {
+              type: 'cannotMove',
+            },
+          },
+          type: 'teleport',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Light of Chotec',
@@ -631,6 +869,28 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Primal Jungles',
+      range: 12,
+      castingValue: 7,
+      effect: {
+        onSuccess: {
+          target: {
+            targetType: 'model',
+            affiliation: 'friendly',
+            keywords: ['seraphon'],
+            range: 12,
+            roll: {
+              amount: 'woundsAllocated',
+              successOn: 5,
+              result: {
+                type: 'heal',
+                value: 1,
+              },
+            },
+          },
+          type: 'roll',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Heavenly Frenzy',
@@ -642,6 +902,27 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Primal Jungles',
+      range: 18,
+      castingValue: 7,
+      effect: {
+        onSuccess: {
+          target: {
+            targetType: 'unit',
+            amount: 1,
+            affiliation: 'friendly',
+            keywords: ['seraphon'],
+            range: 18,
+            duration: {
+              stage: 'end',
+              phase: 'battleshock',
+              until: 'current',
+              description: 'until the end of the turn',
+            },
+          },
+          type: 'runAndCharge',
+        },
+        onFail: null,
+      },
     },
     {
       name: 'Tide of Serpents',
@@ -653,6 +934,28 @@ export const seraphon = {
       applicableSubfactions: ['thunder lizard', 'koatl’s claw'],
       includeUnique: true,
       source: 'Lore of Primal Jungles',
+      range: 15,
+      castingValue: 7,
+      effect: {
+        onSuccess: {
+          target: {
+            type: 'unit',
+            affiliation: 'enemy',
+            amount: 1,
+            range: 15,
+            roll: {
+              amount: 'unitSize',
+              successOn: 5,
+              result: {
+                type: 'mortalWounds',
+                value: 1,
+              },
+            },
+          },
+          type: 'roll',
+        },
+        onFail: null,
+      },
     },
   ],
   prayers: [],

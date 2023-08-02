@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ModalWrapper from '@/app/modals/ModalWrapper';
+import ModalWrapper from '@/components/modals/ModalWrapper';
 import FirebaseSignUpForm from '@/components/forms/FirebaseSignUpForm';
 import { PlayerArmy } from '@/firestore/types';
 
